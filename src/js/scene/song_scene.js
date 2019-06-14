@@ -1,4 +1,4 @@
-class General_Scene extends Phaser.State {
+class Song_Scene extends Phaser.State {
   create() {
     const GAME = this.game;
 
