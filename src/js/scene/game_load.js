@@ -17,7 +17,7 @@ class Game_Load extends Phaser.State {
 
     LOAD.image("mode_button", "assets/main_scene/mode_button.png");
 
-    LOAD.image("infinite_synthesis", "assets/general_scene/infinite_synthesis.png");
+    LOAD.image("infinite_synthesis", "assets/song_scene/fripside/infinite_synthesis/infinite_synthesis.png");
   }
 
   update() {

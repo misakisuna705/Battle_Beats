@@ -115,7 +115,6 @@ class Main_Scene extends Phaser.State {
 
     switch (this.mode_buttons.active) {
       case 0:
-        GAME.bgm.stop();
         GAME.state.start("Song_Scene");
         break;
 
