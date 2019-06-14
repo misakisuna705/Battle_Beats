@@ -5,7 +5,7 @@ class Songs extends Phaser.Group {
 }
 
 class Song extends Phaser.Text {
-  constructor({ game, x, y, text, style }, { album }) {
+  constructor({ game }, { x, y, text, style, album }) {
     super(game, x, y, text, style);
 
     this.game.add.existing(this);

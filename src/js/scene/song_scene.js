@@ -6,27 +6,13 @@ class Song_Scene extends Phaser.State {
   create() {
     const GAME = this.game;
     const KEYCODE = Phaser.Keyboard;
+    const CONF = config.song_scene;
 
     this.songs = new Songs({ game: GAME });
+    this.songs.addMultiple([new Song({ game: GAME }, CONF.only_my_railgun)]);
 
-    this.songs.addMultiple([
-      new Song(
-        { game: GAME, x: GAME.width / 2, y: (GAME.height / 4) * 3, text: "only my railgun\n\nfripside\n\ninfinite synthesis" },
-        {
-          album: "infinite_synthesis"
-        }
-      )
-    ]);
-
-    this.enter_button = new Button(
-      { game: GAME, x: 444, y: 604, key: "enter_button", callback: this.enter_scene, callbackContext: this },
-      { word: "確認", form: { fill: "#008cff" }, keycode: KEYCODE.ENTER }
-    );
-
-    this.exit_button = new Button(
-      { game: GAME, x: 36, y: 36, key: "exit_button", callback: this.exit_scene, callbackContext: this },
-      { word: "返回", form: { fill: "#008cff" }, keycode: KEYCODE.ESC }
-    );
+    this.enter_button = new Button({ game: GAME, callback: this.enter_scene, callbackContext: this, form: { fill: "#008cff" } }, CONF.enter_button);
+    this.exit_button = new Button({ game: GAME, callback: this.exit_scene, callbackContext: this, form: { fill: "#008cff" } }, CONF.exit_button);
   }
 
   enter_scene() {}

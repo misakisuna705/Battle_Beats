@@ -19,7 +19,7 @@ class Img extends Phaser.Image {
 }
 
 class Button extends Phaser.Button {
-  constructor({ game, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame }, { word, form, keycode }) {
+  constructor({ game, callback, callbackContext, overFrame, outFrame, downFrame, upFrame, form }, { x, y, key, word, keycode }) {
     super(game, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame);
 
     const GAME = this.game;
@@ -39,7 +39,7 @@ class Button extends Phaser.Button {
 }
 
 class Buttons {
-  constructor({ game, normal_style, active_style }) {
+  constructor({ game }, { normal_style, active_style }) {
     const KEYBOARD = game.input.keyboard;
     const KEYCODE = Phaser.Keyboard;
 
@@ -94,7 +94,7 @@ class Buttons {
 }
 
 class Article extends Phaser.Text {
-  constructor({ game, x, y, text, style }) {
+  constructor({ game }, { x, y, text, style }) {
     super(game, x, y, text, style);
 
     this.visible = false;
