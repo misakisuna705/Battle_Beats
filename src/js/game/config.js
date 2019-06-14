@@ -1,7 +1,26 @@
 const config = {
+  firebase: {
+    apiKey: "AIzaSyA9sHPfgh4g_iCWQ4Y6Et8EQLCl78-J-FA",
+    authDomain: "battle-beats.firebaseapp.com",
+    databaseURL: "https://battle-beats.firebaseio.com",
+    projectId: "battle-beats",
+    storageBucket: "battle-beats.appspot.com",
+    messagingSenderId: "403617795892",
+    appId: "1:403617795892:web:f139698f3f2936fe"
+  },
+
   game: {
     width: 480,
     height: 640
+  },
+
+  game_login: {
+    login_button: {
+      x: 240,
+      y: 560,
+      key: "login_button",
+      keycode: Phaser.Keyboard.ENTER
+    }
   },
 
   main_scene: {
