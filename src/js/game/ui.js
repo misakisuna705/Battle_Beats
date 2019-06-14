@@ -38,58 +38,22 @@ class Button extends Phaser.Button {
   }
 }
 
-class Buttons {
-  constructor({ game }, { normal_style, active_style }) {
-    const KEYBOARD = game.input.keyboard;
-    const KEYCODE = Phaser.Keyboard;
+class Buttons extends Phaser.Group {
+  constructor(
+    { game, parent, name, addToStage, enableBody, physicsBodyType, pre_callback, nxt_callback, callbackContext },
+    { normal_style, active_style, pre_keycode, nxt_keycode }
+  ) {
+    super(game, parent, name, addToStage, enableBody, physicsBodyType);
 
-    this.game = game;
+    const KEYBOARD = game.input.keyboard;
 
     this.normal_style = normal_style;
     this.active_style = active_style;
 
-    this.btns = [];
-
-    this.enable = true;
-
     this.active = 0;
 
-    this.length = 0;
-
-    this.UP = KEYBOARD.addKey(KEYCODE.UP);
-    this.DOWN = KEYBOARD.addKey(KEYCODE.DOWN);
-
-    this.UP.onDown.add(this.move_up, this);
-    this.DOWN.onDown.add(this.move_down, this);
-  }
-
-  add_button(btns) {
-    this.btns = btns;
-    this.length = btns.length;
-  }
-
-  move_up() {
-    if (this.enable) {
-      this.btns[this.active].text.setStyle(this.normal_style);
-      this.game.state.getCurrentState().mode_article[this.active].visible = false;
-
-      this.active = (this.active - 1 + this.length) % this.length;
-
-      this.btns[this.active].text.setStyle(this.active_style);
-      this.game.state.getCurrentState().mode_article[this.active].visible = true;
-    }
-  }
-
-  move_down() {
-    if (this.enable) {
-      this.btns[this.active].text.setStyle(this.normal_style);
-      this.game.state.getCurrentState().mode_article[this.active].visible = false;
-
-      this.active = (this.active + 1) % this.length;
-
-      this.btns[this.active].text.setStyle(this.active_style);
-      this.game.state.getCurrentState().mode_article[this.active].visible = true;
-    }
+    KEYBOARD.addKey(pre_keycode).onDown.add(pre_callback, callbackContext);
+    KEYBOARD.addKey(nxt_keycode).onDown.add(nxt_callback, callbackContext);
   }
 }
 

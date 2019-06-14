@@ -7,9 +7,15 @@ class Main_Scene extends Phaser.State {
     const GAME = this.game;
     const CONF = config.main_scene;
 
-    this.mode_buttons = new Buttons({ game: GAME }, CONF.mode_buttons);
+    this.enter_button = new Button({ game: GAME, callback: this.enter_scene, callbackContext: this, form: { fill: "#008cff" } }, CONF.enter_button);
+    this.exit_button = new Button({ game: GAME, callback: this.exit_scene, callbackContext: this, form: { fill: "#008cff" } }, CONF.exit_button);
 
-    this.mode_buttons.add_button([
+    this.mode_buttons = new Buttons(
+      { game: GAME, pre_callback: this.choose_pre_mode, nxt_callback: this.choose_nxt_mode, callbackContext: this },
+      CONF.mode_buttons
+    );
+
+    this.mode_buttons.addMultiple([
       new Button(
         { game: GAME, callback: this.choose_general_mode, callbackContext: this, form: { fill: this.mode_buttons.active_style.fill } },
         CONF.general_mode_button
@@ -33,21 +39,45 @@ class Main_Scene extends Phaser.State {
     ];
 
     this.mode_article[0].visible = true;
+  }
 
-    this.enter_button = new Button({ game: GAME, callback: this.enter_scene, callbackContext: this, form: { fill: "#008cff" } }, CONF.enter_button);
-    this.exit_button = new Button({ game: GAME, callback: this.exit_scene, callbackContext: this, form: { fill: "#008cff" } }, CONF.exit_button);
+  choose_pre_mode() {
+    const MODE_BUTTONS = this.mode_buttons;
+    const MODE_ARTICLE = this.mode_article;
+    const LENGTH = MODE_BUTTONS.length;
+
+    MODE_BUTTONS.getAt(MODE_BUTTONS.active).text.setStyle(MODE_BUTTONS.normal_style);
+    MODE_ARTICLE[MODE_BUTTONS.active].visible = false;
+
+    MODE_BUTTONS.active = (MODE_BUTTONS.active - 1 + LENGTH) % LENGTH;
+
+    MODE_BUTTONS.getAt(MODE_BUTTONS.active).text.setStyle(MODE_BUTTONS.active_style);
+    MODE_ARTICLE[MODE_BUTTONS.active].visible = true;
+  }
+
+  choose_nxt_mode() {
+    const MODE_BUTTONS = this.mode_buttons;
+    const MODE_ARTICLE = this.mode_article;
+
+    MODE_BUTTONS.getAt(MODE_BUTTONS.active).text.setStyle(MODE_BUTTONS.normal_style);
+    MODE_ARTICLE[MODE_BUTTONS.active].visible = false;
+
+    MODE_BUTTONS.active = (MODE_BUTTONS.active + 1) % MODE_BUTTONS.length;
+
+    MODE_BUTTONS.getAt(MODE_BUTTONS.active).text.setStyle(MODE_BUTTONS.active_style);
+    MODE_ARTICLE[MODE_BUTTONS.active].visible = true;
   }
 
   choose_general_mode() {
     const MODE_BUTTONS = this.mode_buttons;
     const MODE_ARTICLE = this.mode_article;
 
-    MODE_BUTTONS.btns[MODE_BUTTONS.active].text.setStyle(MODE_BUTTONS.normal_style);
+    MODE_BUTTONS.getAt(MODE_BUTTONS.active).text.setStyle(MODE_BUTTONS.normal_style);
     MODE_ARTICLE[MODE_BUTTONS.active].visible = false;
 
     MODE_BUTTONS.active = 0;
 
-    MODE_BUTTONS.btns[MODE_BUTTONS.active].text.setStyle(MODE_BUTTONS.active_style);
+    MODE_BUTTONS.getAt(MODE_BUTTONS.active).text.setStyle(MODE_BUTTONS.active_style);
     MODE_ARTICLE[MODE_BUTTONS.active].visible = true;
   }
 
@@ -55,12 +85,12 @@ class Main_Scene extends Phaser.State {
     const MODE_BUTTONS = this.mode_buttons;
     const MODE_ARTICLE = this.mode_article;
 
-    MODE_BUTTONS.btns[MODE_BUTTONS.active].text.setStyle(MODE_BUTTONS.normal_style);
+    MODE_BUTTONS.getAt(MODE_BUTTONS.active).text.setStyle(MODE_BUTTONS.normal_style);
     MODE_ARTICLE[MODE_BUTTONS.active].visible = false;
 
     MODE_BUTTONS.active = 1;
 
-    MODE_BUTTONS.btns[MODE_BUTTONS.active].text.setStyle(MODE_BUTTONS.active_style);
+    MODE_BUTTONS.getAt(MODE_BUTTONS.active).text.setStyle(MODE_BUTTONS.active_style);
     MODE_ARTICLE[MODE_BUTTONS.active].visible = true;
   }
 
@@ -68,12 +98,12 @@ class Main_Scene extends Phaser.State {
     const MODE_BUTTONS = this.mode_buttons;
     const MODE_ARTICLE = this.mode_article;
 
-    MODE_BUTTONS.btns[MODE_BUTTONS.active].text.setStyle(MODE_BUTTONS.normal_style);
+    MODE_BUTTONS.getAt(MODE_BUTTONS.active).text.setStyle(MODE_BUTTONS.normal_style);
     MODE_ARTICLE[MODE_BUTTONS.active].visible = false;
 
     MODE_BUTTONS.active = 2;
 
-    MODE_BUTTONS.btns[MODE_BUTTONS.active].text.setStyle(MODE_BUTTONS.active_style);
+    MODE_BUTTONS.getAt(MODE_BUTTONS.active).text.setStyle(MODE_BUTTONS.active_style);
     MODE_ARTICLE[MODE_BUTTONS.active].visible = true;
   }
 
