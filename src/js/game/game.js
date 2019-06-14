@@ -6,12 +6,8 @@ class Game extends Phaser.Game {
 
     STATE.add("Game_Login", new Game_Login());
     STATE.add("Game_Load", new Game_Load());
-
     STATE.add("Main_Scene", new Main_Scene());
-
     STATE.add("Song_Scene", new Song_Scene());
-
-    //STATE.add("Play_Scene", Play_Scene);
-    //STATE.add("Game_End", Game_End);
+    STATE.add("Play_Scene", new Play_Scene());
   }
 }

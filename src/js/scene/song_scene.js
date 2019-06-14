@@ -65,7 +65,9 @@ class Song_Scene extends Phaser.State {
     SONG_INFOS.getAt(SONG_INFOS.active).album.visible = true;
   }
 
-  enter_scene() {}
+  enter_scene() {
+    this.game.state.start("Play_Scene");
+  }
 
   exit_scene() {
     this.game.state.start("Main_Scene");
