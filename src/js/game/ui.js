@@ -32,8 +32,6 @@ class Button extends Phaser.Button {
       GAME.input.keyboard.addKey(keycode).onDown.add(callback, callbackContext);
     }
 
-    this.onInputDown.add(callback, callbackContext);
-
     this.text = new Txt({ game: GAME, x: this.x, y: this.y, text: word, style: form });
   }
 }
