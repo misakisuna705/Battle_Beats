@@ -1,0 +1,1 @@
+class Game extends Phaser.Game{constructor({width:e,height:a,renderer:n,parent:t,state:s,transparent:d,antialias:r,physicsConfig:i}){super(e,a,n,t,s,d,r,i);const c=this.state;c.add("Game_Login",new Game_Login),c.add("Game_Load",new Game_Load),c.add("Main_Scene",new Main_Scene),c.add("General_Scene",new General_Scene)}}

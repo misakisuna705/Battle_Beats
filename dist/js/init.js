@@ -1,0 +1,1 @@
+window.addEventListener("DOMContentLoaded",()=>{new Game({width:480,height:640}).state.start("Game_Login")},!1);
