@@ -111,14 +111,14 @@ const config = {
     left_song_button: {
       x: 48,
       y: 180,
-      key: "mode_button",
+      key: "song_button",
       word: "上一首"
     },
 
     right_song_button: {
       x: 432,
       y: 180,
-      key: "mode_button",
+      key: "song_button",
       word: "下一首"
     },
 
