@@ -15,6 +15,9 @@ class Game_Load extends Phaser.State {
     LOAD.image("enter_button", "assets/game/enter_button.png");
     LOAD.image("exit_button", "assets/game/exit_button.png");
 
+    LOAD.audio("only_my_railgun.mp3", "assets/game/song/fripside/infinite_synthesis/only_my_railgun.mp3");
+    LOAD.audio("senbonzakura.mp3", "assets/game/song/和樂器樂團/VOCALOID之箇中三眛/senbonzakura.mp3");
+
     LOAD.image("mode_button", "assets/main_scene/mode_button.png");
 
     LOAD.image("song_button", "assets/song_scene/song_button.png");

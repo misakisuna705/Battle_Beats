@@ -135,11 +135,12 @@ class Main_Scene extends Phaser.State {
   }
 
   exit_scene() {
+    //alert(this.game.bgm.isPlaying);
+
     firebase
       .auth()
       .signOut()
       .then(() => {
-        this.game.bgm.stop();
         this.game.state.start("Game_Login");
       })
       .catch(error => {

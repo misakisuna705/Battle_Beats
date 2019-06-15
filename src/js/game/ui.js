@@ -8,15 +8,15 @@ class Txt extends Phaser.Text {
   }
 }
 
-class Img extends Phaser.Image {
-  constructor({ game, x, y, key, frame }) {
-    super(game, x, y, key, frame);
+//class Img extends Phaser.Image {
+//constructor({ game, frame }, { x, y, key }) {
+//super(game, x, y, key, frame);
 
-    this.game.add.existing(this);
+//this.game.add.existing(this);
 
-    this.anchor.setTo(0.5, 0.5);
-  }
-}
+//this.anchor.setTo(0.5, 0.5);
+//}
+//}
 
 class Button extends Phaser.Button {
   constructor({ game, callback, callbackContext, overFrame, outFrame, downFrame, upFrame, form }, { x, y, key, word, keycode }) {

@@ -1,5 +1,6 @@
 class Song_Scene extends Phaser.State {
   init() {
+    this.game.bgm.stop();
     this.game.bgv.addToWorld(-400, 0, 0, 0, 1, 1);
   }
 
@@ -36,9 +37,31 @@ class Song_Scene extends Phaser.State {
     ]);
 
     this.song_infos = new Song_Infos({ game: GAME });
-    this.song_infos.addMultiple([new Song_Info({ game: GAME }, only_my_railgun_config), new Song_Info({ game: GAME }, senbonzakura_config)]);
+
+    this.song_infos.addMultiple([
+      new Song_Info({ game: this.game }, only_my_railgun_config.info, only_my_railgun_config.audio),
+      new Song_Info({ game: this.game }, senbonzakura_config.info, senbonzakura_config.audio)
+    ]);
+
     this.song_infos.getAt(0).visible = true;
+    this.song_infos.getAt(0).title.visible = true;
+    this.song_infos.getAt(0).artist.visible = true;
     this.song_infos.getAt(0).album.visible = true;
+    this.song_infos.getAt(0).audio.play();
+  }
+
+  enter_scene() {
+    this.game.state.start("Level_Scene");
+  }
+
+  exit_scene() {
+    const GAME = this.game;
+    const SONG_INFOS = this.song_infos;
+
+    SONG_INFOS.getAt(SONG_INFOS.active).audio.stop();
+    GAME.bgm.play();
+
+    GAME.state.start("Main_Scene");
   }
 
   choose_pre_song() {
@@ -51,10 +74,19 @@ class Song_Scene extends Phaser.State {
     SONG_BUTTONS.getAt(0).text.setStyle(SONG_BUTTONS.active_style);
 
     SONG_INFOS.getAt(SONG_INFOS.active).visible = false;
+    SONG_INFOS.getAt(SONG_INFOS.active).title.visible = false;
+    SONG_INFOS.getAt(SONG_INFOS.active).artist.visible = false;
     SONG_INFOS.getAt(SONG_INFOS.active).album.visible = false;
+    SONG_INFOS.getAt(SONG_INFOS.active).audio.stop();
+
     SONG_INFOS.active = (SONG_INFOS.active - 1 + LENGTH) % LENGTH;
+    this.game.active_song = SONG_INFOS.active;
+
     SONG_INFOS.getAt(SONG_INFOS.active).visible = true;
+    SONG_INFOS.getAt(SONG_INFOS.active).title.visible = true;
+    SONG_INFOS.getAt(SONG_INFOS.active).artist.visible = true;
     SONG_INFOS.getAt(SONG_INFOS.active).album.visible = true;
+    SONG_INFOS.getAt(SONG_INFOS.active).audio.play();
   }
 
   choose_nxt_song() {
@@ -66,17 +98,18 @@ class Song_Scene extends Phaser.State {
     SONG_BUTTONS.getAt(1).text.setStyle(SONG_BUTTONS.active_style);
 
     SONG_INFOS.getAt(SONG_INFOS.active).visible = false;
+    SONG_INFOS.getAt(SONG_INFOS.active).title.visible = false;
+    SONG_INFOS.getAt(SONG_INFOS.active).artist.visible = false;
     SONG_INFOS.getAt(SONG_INFOS.active).album.visible = false;
+    SONG_INFOS.getAt(SONG_INFOS.active).audio.stop();
+
     SONG_INFOS.active = (SONG_INFOS.active + 1) % SONG_INFOS.length;
+    this.game.active_song = SONG_INFOS.active;
+
     SONG_INFOS.getAt(SONG_INFOS.active).visible = true;
+    SONG_INFOS.getAt(SONG_INFOS.active).title.visible = true;
+    SONG_INFOS.getAt(SONG_INFOS.active).artist.visible = true;
     SONG_INFOS.getAt(SONG_INFOS.active).album.visible = true;
-  }
-
-  enter_scene() {
-    this.game.state.start("Play_Scene");
-  }
-
-  exit_scene() {
-    this.game.state.start("Main_Scene");
+    SONG_INFOS.getAt(SONG_INFOS.active).audio.play();
   }
 }
