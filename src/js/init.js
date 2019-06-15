@@ -1,9 +1,9 @@
 window.addEventListener(
   "DOMContentLoaded",
   () => {
-    firebase.initializeApp(config.firebase);
+    firebase.initializeApp(firebase_config);
 
-    const GAME = new Game(config.game);
+    const GAME = new Game(game_config);
     GAME.state.start("Game_Login");
   },
   false

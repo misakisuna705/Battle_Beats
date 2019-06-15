@@ -16,7 +16,6 @@ class Game_Login extends Phaser.State {
 
   create() {
     const GAME = this.game;
-    const CONF = config.game_login;
 
     //GAME.bgv = new Game_Load_Bgv({ game: GAME, key: "game_load_bgv" });
     const BGV = (GAME.bgv = GAME.add.video("game_load_bgv"));
@@ -29,17 +28,15 @@ class Game_Login extends Phaser.State {
 
     GAME.add.image(0, 0, "game_load_title");
 
-    this.login_button = new Button({ game: GAME, callback: this.login, callbackContext: this }, CONF.login_button);
+    this.login_button = new Button({ game: GAME, callback: this.login, callbackContext: this }, button_config.game_login.login_button);
 
     this.enter_scene();
   }
 
   login() {
-    let provider = new firebase.auth.GoogleAuthProvider();
-
     firebase
       .auth()
-      .signInWithPopup(provider)
+      .signInWithPopup(new firebase.auth.GoogleAuthProvider())
       .then(result => {})
       .catch(error => {
         alert(error.message);

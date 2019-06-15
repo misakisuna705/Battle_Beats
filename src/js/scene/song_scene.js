@@ -6,30 +6,37 @@ class Song_Scene extends Phaser.State {
   create() {
     const GAME = this.game;
     const KEYCODE = Phaser.Keyboard;
-    const CONF = config.song_scene;
+    const BUTTON_CONF = button_config.song_scene;
 
-    this.enter_button = new Button({ game: GAME, callback: this.enter_scene, callbackContext: this, form: { fill: "#008cff" } }, CONF.enter_button);
-    this.exit_button = new Button({ game: GAME, callback: this.exit_scene, callbackContext: this, form: { fill: "#008cff" } }, CONF.exit_button);
+    this.enter_button = new Button(
+      { game: GAME, callback: this.enter_scene, callbackContext: this, form: { fill: "#008cff" } },
+      BUTTON_CONF.enter_button
+    );
+
+    this.exit_button = new Button(
+      { game: GAME, callback: this.exit_scene, callbackContext: this, form: { fill: "#008cff" } },
+      BUTTON_CONF.exit_button
+    );
 
     this.song_buttons = new Buttons(
       { game: GAME, pre_callback: this.choose_pre_song, nxt_callback: this.choose_nxt_song, callbackContext: this },
-      CONF.song_buttons
+      BUTTON_CONF.song_buttons
     );
 
     this.song_buttons.addMultiple([
       new Button(
         { game: GAME, callback: this.choose_pre_song, callbackContext: this, form: { fill: this.song_buttons.normal_style.fill } },
-        CONF.left_song_button
+        BUTTON_CONF.left_song_button
       ),
 
       new Button(
         { game: GAME, callback: this.choose_nxt_song, callbackContext: this, form: { fill: this.song_buttons.normal_style.fill } },
-        CONF.right_song_button
+        BUTTON_CONF.right_song_button
       )
     ]);
 
     this.song_infos = new Song_Infos({ game: GAME });
-    this.song_infos.addMultiple([new Song_Info({ game: GAME }, CONF.only_my_railgun), new Song_Info({ game: GAME }, CONF.senbonzakura)]);
+    this.song_infos.addMultiple([new Song_Info({ game: GAME }, only_my_railgun_config), new Song_Info({ game: GAME }, senbonzakura_config)]);
     this.song_infos.getAt(0).visible = true;
     this.song_infos.getAt(0).album.visible = true;
   }
