@@ -23,6 +23,13 @@ class Game_Load extends Phaser.State {
     LOAD.image("song_button", "assets/song_scene/song_button.png");
     LOAD.image("infinite_synthesis", "assets/song_scene/fripside/infinite_synthesis/infinite_synthesis.png");
     LOAD.image("VOCALOID之箇中三眛", "assets/song_scene/和樂器樂團/VOCALOID之箇中三眛/VOCALOID之箇中三眛.png");
+
+    LOAD.image("level_button", "assets/level_scene/level_button.png");
+  }
+
+  create() {
+    this.game.active_song = -1;
+    this.game.active_level = 0;
   }
 
   update() {

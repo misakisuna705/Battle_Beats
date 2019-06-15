@@ -1,7 +1,9 @@
 class Song_Scene extends Phaser.State {
   init() {
-    this.game.bgm.stop();
-    this.game.bgv.addToWorld(-400, 0, 0, 0, 1, 1);
+    const GAME = this.game;
+
+    GAME.bgm.stop();
+    GAME.bgv.addToWorld(-400, 0, 0, 0, 1, 1);
   }
 
   create() {
@@ -42,13 +44,10 @@ class Song_Scene extends Phaser.State {
 
     this.song_infos = new Songs({ game: GAME });
 
-    this.song_infos.addMultiple([
-      new Song_Info({ game: this.game }, only_my_railgun_config.info),
-      new Song_Info({ game: this.game }, senbonzakura_config.info)
-    ]);
+    this.song_infos.addMultiple([new Song_Info({ game: this.game }, song_config[0].info), new Song_Info({ game: this.game }, song_config[1].info)]);
 
     if (!this.song_audios) {
-      this.song_audios = [GAME.add.audio(only_my_railgun_config.AudioFilename, 1, true), GAME.add.audio(senbonzakura_config.AudioFilename, 1, true)];
+      this.song_audios = [GAME.add.audio(song_config[0].AudioFilename, 1, true), GAME.add.audio(song_config[1].AudioFilename, 1, true)];
     }
 
     this.song_infos.getAt(this.game.active_song).visible = true;

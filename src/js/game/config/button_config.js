@@ -120,7 +120,7 @@ const button_config = {
       keycode: Phaser.Keyboard.ESC
     },
 
-    mode_buttons: {
+    level_buttons: {
       normal_style: {
         fill: "#008cff"
       },
@@ -132,21 +132,21 @@ const button_config = {
       nxt_keycode: Phaser.Keyboard.DOWN
     },
 
-    general_mode_button: {
+    easy_level_button: {
       x: 360,
       y: 120,
       key: "mode_button",
       word: "簡單"
     },
 
-    story_mode_button: {
+    normal_level_button: {
       x: 360,
       y: 180,
       key: "mode_button",
       word: "一般"
     },
 
-    method_button: {
+    hard_level_button: {
       x: 360,
       y: 240,
       key: "mode_button",

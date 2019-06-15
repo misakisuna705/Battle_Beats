@@ -34,8 +34,6 @@ class Game_Login extends Phaser.State {
       GAME.bgm.play();
     }
 
-    this.game.active_song = -1;
-
     this.enter_scene();
   }
 

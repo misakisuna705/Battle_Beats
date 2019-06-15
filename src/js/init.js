@@ -1,3 +1,5 @@
+let song_config = [];
+
 window.addEventListener(
   "DOMContentLoaded",
   () => {

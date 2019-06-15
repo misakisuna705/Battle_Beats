@@ -1,4 +1,4 @@
-const only_my_railgun_config = {
+song_config[0] = {
   info: {
     x: 240,
     y: 200,
@@ -6,15 +6,13 @@ const only_my_railgun_config = {
     Title: "only my railgun",
     Artist: "fripSide",
     Album: "infinite_synthesis"
+    //PreviewTime: 9434
   },
 
   AudioFilename: "only_my_railgun.mp3",
 
-  beatmap_easy: {
-    BeatmapSetID: 1,
-    BeatmapID: 1,
-    PreviewTime: 9434,
-    Beatmap: [
+  beatmap: [
+    [
       [0, 3350],
       [0, 3770],
       [0, 4189],
@@ -232,6 +230,10 @@ const only_my_railgun_config = {
       [3, 90098],
       [0, 90413, 97336],
       [3, 90413, 97336]
-    ]
-  }
+    ],
+
+    [],
+
+    []
+  ]
 };
