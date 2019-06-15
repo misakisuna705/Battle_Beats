@@ -12,17 +12,3 @@
 //this.play(true);
 //}
 //}
-
-//class Game_Load_Bgm extends Phaser.Sound {
-//constructor({ game, key, volume, loop }) {
-//super(game, key, volume, loop);
-
-//this.autoplay = true;
-
-//this.renew();
-//}
-
-//renew() {
-//this.play();
-//}
-//}
