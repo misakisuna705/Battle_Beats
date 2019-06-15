@@ -101,5 +101,56 @@ const button_config = {
       word: "返回",
       keycode: Phaser.Keyboard.ESC
     }
+  },
+
+  level_scene: {
+    enter_button: {
+      x: 444,
+      y: 604,
+      key: "enter_button",
+      word: "確認",
+      keycode: Phaser.Keyboard.ENTER
+    },
+
+    exit_button: {
+      x: 36,
+      y: 36,
+      key: "exit_button",
+      word: "返回",
+      keycode: Phaser.Keyboard.ESC
+    },
+
+    mode_buttons: {
+      normal_style: {
+        fill: "#008cff"
+      },
+      active_style: {
+        fill: "#ffffff"
+      },
+
+      pre_keycode: Phaser.Keyboard.UP,
+      nxt_keycode: Phaser.Keyboard.DOWN
+    },
+
+    general_mode_button: {
+      x: 360,
+      y: 120,
+      key: "mode_button",
+      word: "簡單"
+    },
+
+    story_mode_button: {
+      x: 360,
+      y: 180,
+      key: "mode_button",
+      word: "一般"
+    },
+
+    method_button: {
+      x: 360,
+      y: 240,
+      key: "mode_button",
+      word: "困難"
+    }
   }
 };

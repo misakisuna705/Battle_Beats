@@ -17,6 +17,8 @@
 //constructor({ game, key, volume, loop }) {
 //super(game, key, volume, loop);
 
+//this.autoplay = true;
+
 //this.renew();
 //}
 

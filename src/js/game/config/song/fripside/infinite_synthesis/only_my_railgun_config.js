@@ -1,5 +1,3 @@
-//song_config[0] = {};
-
 const only_my_railgun_config = {
   info: {
     x: 240,
@@ -10,9 +8,7 @@ const only_my_railgun_config = {
     Album: "infinite_synthesis"
   },
 
-  audio: {
-    AudioFilename: "only_my_railgun.mp3"
-  },
+  AudioFilename: "only_my_railgun.mp3",
 
   beatmap_easy: {
     BeatmapSetID: 1,

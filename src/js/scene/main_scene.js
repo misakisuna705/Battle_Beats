@@ -49,6 +49,37 @@ class Main_Scene extends Phaser.State {
     this.mode_article[0].visible = true;
   }
 
+  enter_scene() {
+    const GAME = this.game;
+
+    switch (this.mode_buttons.active) {
+      case 0:
+        GAME.state.start("Song_Scene");
+        break;
+
+      case 1:
+        break;
+
+      case 2:
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  exit_scene() {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        this.game.state.start("Game_Login");
+      })
+      .catch(error => {
+        alert(error.message);
+      });
+  }
+
   choose_pre_mode() {
     const MODE_BUTTONS = this.mode_buttons;
     const MODE_ARTICLE = this.mode_article;
@@ -113,38 +144,5 @@ class Main_Scene extends Phaser.State {
 
     MODE_BUTTONS.getAt(MODE_BUTTONS.active).text.setStyle(MODE_BUTTONS.active_style);
     MODE_ARTICLE[MODE_BUTTONS.active].visible = true;
-  }
-
-  enter_scene() {
-    const GAME = this.game;
-
-    switch (this.mode_buttons.active) {
-      case 0:
-        GAME.state.start("Song_Scene");
-        break;
-
-      case 1:
-        break;
-
-      case 2:
-        break;
-
-      default:
-        break;
-    }
-  }
-
-  exit_scene() {
-    //alert(this.game.bgm.isPlaying);
-
-    firebase
-      .auth()
-      .signOut()
-      .then(() => {
-        this.game.state.start("Game_Login");
-      })
-      .catch(error => {
-        alert(error.message);
-      });
   }
 }

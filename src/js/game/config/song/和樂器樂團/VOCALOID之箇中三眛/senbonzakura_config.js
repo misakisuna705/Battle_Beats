@@ -8,9 +8,7 @@ const senbonzakura_config = {
     Album: "VOCALOID之箇中三眛"
   },
 
-  audio: {
-    AudioFilename: "senbonzakura.mp3"
-  },
+  AudioFilename: "senbonzakura.mp3",
 
   beatmap_easy: {
     //BeatmapSetID: 1,

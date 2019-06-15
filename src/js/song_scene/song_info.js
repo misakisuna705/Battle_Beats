@@ -1,13 +1,13 @@
-class Song_Infos extends Phaser.Group {
+class Songs extends Phaser.Group {
   constructor({ game, parent, name, addToStage, enableBody, physicsBodyType }) {
     super(game, parent, name, addToStage, enableBody, physicsBodyType);
 
-    this.active = 0;
+    this.active = this.game.active_song;
   }
 }
 
 class Song_Info extends Phaser.Image {
-  constructor({ game, frame }, { x, y, key, Title, Artist, Album }, { AudioFilename }) {
+  constructor({ game, frame }, { x, y, key, Title, Artist, Album }) {
     super(game, x, y, key, frame);
 
     const GAME = this.game;
@@ -23,7 +23,5 @@ class Song_Info extends Phaser.Image {
 
     this.album = new Txt({ game: GAME, x: 240, y: 540, text: Album, style: { fill: "#008cff" } });
     this.album.visible = false;
-
-    this.audio = GAME.add.audio(AudioFilename, 1, true);
   }
 }
