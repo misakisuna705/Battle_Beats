@@ -25,6 +25,8 @@ class Game_Load extends Phaser.State {
     LOAD.image("VOCALOID之箇中三眛", "assets/song_scene/和樂器樂團/VOCALOID之箇中三眛/VOCALOID之箇中三眛.png");
 
     LOAD.image("level_button", "assets/level_scene/level_button.png");
+
+    LOAD.video("only_my_railgun.mp4", "assets/game_start/only_my_railgun.mp4");
   }
 
   create() {

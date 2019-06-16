@@ -41,7 +41,12 @@ class Level_Scene extends Phaser.State {
   }
 
   enter_scene() {
-    this.game.state.start("Play_Scene");
+    this.camera.fade(0x000000, 1000, false);
+    this.game.song_audios[this.game.active_song].fadeOut(1000);
+
+    this.game.song_audios[this.game.active_song].onFadeComplete.add(() => {
+      this.game.state.start("Game_Start");
+    }, this);
   }
 
   exit_scene() {

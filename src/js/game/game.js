@@ -9,6 +9,7 @@ class Game extends Phaser.Game {
     STATE.add("Main_Scene", new Main_Scene());
     STATE.add("Song_Scene", new Song_Scene());
     STATE.add("Level_Scene", new Level_Scene());
+    STATE.add("Game_Start", new Game_Start());
     STATE.add("Play_Scene", new Play_Scene());
   }
 }
