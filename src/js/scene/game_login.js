@@ -17,12 +17,12 @@ class Game_Login extends Phaser.State {
   create() {
     const GAME = this.game;
 
-    this.login_button = new Button({ game: GAME, callback: this.login, callbackContext: this }, button_config.game_login.login_button);
-
     //GAME.bgv = new Game_Load_Bgv({ game: GAME, key: "game_load_bgv" });
     const BGV = (GAME.bgv = GAME.add.video("game_load_bgv"));
     BGV.addToWorld(-400, 0, 0, 0, 1, 1);
     BGV.play(true);
+
+    this.login_button = new Button({ game: GAME, callback: this.login, callbackContext: this }, button_config.game_login.login_button);
 
     GAME.add.image(0, 0, "game_load_title");
 
