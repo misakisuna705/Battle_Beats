@@ -1,0 +1,1 @@
+class Game_Start extends Phaser.State{create(){this.game;const t=this.video=this.add.video("only_my_railgun.mp4");t.addToWorld(-300,0,0,0,1,1),t.play(),t.onComplete.add(()=>{this.game.state.start("Play_Scene")},this)}}

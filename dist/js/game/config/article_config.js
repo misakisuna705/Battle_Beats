@@ -1,0 +1,1 @@
+const article_config={main_scene:{general_mode_article:{x:80,y:120,text:"aaa\naaa\naaa\naaa",style:{fill:"#008cff"}},story_mode_article:{x:80,y:120,text:"bbb\nbbb\nbbb\nbbb",style:{fill:"#008cff"}},method_article:{x:80,y:120,text:"ccc\nccc\nccc\nccc",style:{fill:"#008cff"}}}};

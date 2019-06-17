@@ -27,6 +27,8 @@ class Game_Load extends Phaser.State {
     LOAD.image("level_button", "assets/level_scene/level_button.png");
 
     LOAD.video("only_my_railgun.mp4", "assets/game_start/only_my_railgun.mp4");
+
+    LOAD.image("bg", "assets/play_scene/bg.png");
   }
 
   create() {

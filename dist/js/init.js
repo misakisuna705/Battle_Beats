@@ -1,1 +1,1 @@
-window.addEventListener("DOMContentLoaded",()=>{firebase.initializeApp(config.firebase),new Game(config.game).state.start("Game_Login")},!1);
+let song_config=[];window.addEventListener("DOMContentLoaded",()=>{firebase.initializeApp(firebase_config),new Game(game_config).state.start("Game_Login")},!1);
