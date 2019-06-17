@@ -49,9 +49,9 @@ class Game_Login extends Phaser.State {
 
   enter_scene() {
     firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        this.game.state.start("Game_Load");
-      }
+      //if (user) {
+      this.game.state.start("Game_Load");
+      //}
     });
   }
 }
