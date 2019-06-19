@@ -152,5 +152,37 @@ const button_config = {
       key: "mode_button",
       word: "困難"
     }
+  },
+
+  play_scene: {
+    target_buttons: [
+      {
+        x: 96,
+        y: 640,
+        key: "target_button",
+        keycode: Phaser.Keyboard.D
+      },
+
+      {
+        x: 192,
+        y: 640,
+        key: "target_button",
+        keycode: Phaser.Keyboard.F
+      },
+
+      {
+        x: 288,
+        y: 640,
+        key: "target_button",
+        keycode: Phaser.Keyboard.J
+      },
+
+      {
+        x: 384,
+        y: 640,
+        key: "target_button",
+        keycode: Phaser.Keyboard.K
+      }
+    ]
   }
 };

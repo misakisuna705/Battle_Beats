@@ -21,7 +21,7 @@ class Game_Load extends Phaser.State {
     LOAD.image("mode_button", "assets/main_scene/mode_button.png");
 
     LOAD.image("song_button", "assets/song_scene/song_button.png");
-    LOAD.image("infinite_synthesis", "assets/song_scene/fripside/infinite_synthesis/infinite_synthesis.png");
+    LOAD.image("infinite_synthesis.png", "assets/song_scene/fripside/infinite_synthesis/infinite_synthesis.png");
     LOAD.image("VOCALOID之箇中三眛", "assets/song_scene/和樂器樂團/VOCALOID之箇中三眛/VOCALOID之箇中三眛.png");
 
     LOAD.image("level_button", "assets/level_scene/level_button.png");
@@ -29,6 +29,9 @@ class Game_Load extends Phaser.State {
     LOAD.video("only_my_railgun.mp4", "assets/game_start/only_my_railgun.mp4");
 
     LOAD.image("bg", "assets/play_scene/bg.png");
+    LOAD.image("target_button", "assets/play_scene/target_button.png");
+    LOAD.image("note", "assets/play_scene/note.png");
+    LOAD.image("tail", "assets/play_scene/tail.png");
   }
 
   create() {
