@@ -39,23 +39,6 @@ class Timer extends Phaser.Text {
   }
 }
 
-//class Timer extends Phaser.Time {
-//constructor({ game }) {
-//super(game);
-
-//this.game.time.events.loop(Phaser.Timer.SECOND, this.count, this);
-
-//this.second = 0;
-//this.content = new Txt({ game: this.game, x: 50, y: 30, text: "time: 0", style: { font: "18px Arial", fill: "#ffffff" } });
-//this.content.visible = true;
-//}
-
-//count() {
-//const SECOND = ++this.second;
-//this.content.setText("time: " + SECOND);
-//}
-//}
-
 class Score extends Phaser.Image {
   constructor({ game, x, y, key, frame }) {
     super(game, x, y, key, frame);
