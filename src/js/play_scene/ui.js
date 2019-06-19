@@ -10,20 +10,49 @@ class BG extends Phaser.TileSprite {
   }
 }
 
+class Timer extends Phaser.Text {
+  constructor({ game, x, y, text, style }) {
+    super(game, x, y, text, style);
+
+    this.game.add.existing(this);
+
+    this.anchor.setTo(0, 0.5);
+    this.game.time.events.loop(Phaser.Timer.SECOND, this.count, this);
+
+    this.second = 0;
+    this.minute = 0;
+  }
+
+  count() {
+    ++this.second;
+
+    if (this.second % 60 === 0) {
+      ++this.minute;
+      this.second = 0;
+    }
+
+    if (this.second < 10) {
+      this.setText("time: " + this.minute + " : 0" + this.second);
+    } else {
+      this.setText("time: " + this.minute + " : " + this.second);
+    }
+  }
+}
+
 //class Timer extends Phaser.Time {
 //constructor({ game }) {
 //super(game);
 
 //this.game.time.events.loop(Phaser.Timer.SECOND, this.count, this);
 
-//this.counter = 0;
+//this.second = 0;
 //this.content = new Txt({ game: this.game, x: 50, y: 30, text: "time: 0", style: { font: "18px Arial", fill: "#ffffff" } });
 //this.content.visible = true;
 //}
 
 //count() {
-//const COUNTER = ++this.counter;
-//this.content.setText("time: " + COUNTER);
+//const SECOND = ++this.second;
+//this.content.setText("time: " + SECOND);
 //}
 //}
 

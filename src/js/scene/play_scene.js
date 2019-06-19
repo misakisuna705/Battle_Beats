@@ -44,7 +44,7 @@ class Play_Scene extends Phaser.State {
     this.song_audio = GAME.add.audio(song_config[ACTIVE_SONG].AudioFilename, 1, false);
     EVENTS.add((GAME.height / SPEED) * 1000, this.play, this);
 
-    //this.timer = new Timer({ game: GAME });
+    this.timer = new Timer({ game: GAME, x: 12, y: 36, text: "time: 0 : 00", style: { fill: "#ffffff" } });
   }
 
   update() {
