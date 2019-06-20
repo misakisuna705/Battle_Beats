@@ -25,14 +25,19 @@ class Note extends Phaser.Sprite {
   constructor({ game, x, y, key, frame }) {
     super(game, x, y, key, frame);
 
+    this.index = -1;
     this.perfect_time = 0;
     this.point = 0;
-
-    this.events.onKilled.add(this.point_upgrade, this);
+    this.tail = null;
   }
 
-  point_upgrade() {
-    this.game.state.getCurrentState().score.upgrade(this.point);
+  hit() {
+    this.game.state.getCurrentState().score.point_upgrade(this.point);
+    if (this.tail) {
+      this.tail.hit(this.index);
+    }
+
+    this.kill();
   }
 }
 
@@ -64,6 +69,47 @@ class Tail extends Phaser.Sprite {
     super(game, x, y, key, frame);
 
     this.ispressed = false;
+    this.timer = null;
+    this.bonus = 2;
     this.bonus_time = 0;
+    this.decrement = ((this.game.state.getCurrentState().song_speed / 1000) * 20) / this.height;
+  }
+
+  hit(index) {
+    this.ispressed = true;
+
+    this.timer = this.game.time.create();
+
+    this.timer.repeat(
+      20,
+      this.bonus_time / 20,
+      () => {
+        if (this.ispressed) {
+          if (this.game.state.getCurrentState().target_buttons[index].presskey.isDown) {
+            this.body.velocity.y = 0;
+
+            if (this.scale.y < 0) {
+              this.scale.y = 0;
+            } else {
+              this.scale.y -= this.decrement;
+            }
+
+            this.game.state.getCurrentState().score.bonus_upgrade(this.bonus);
+          } else {
+            this.ispressed = false;
+          }
+        }
+      },
+      this
+    );
+
+    this.timer.onComplete.add(() => {
+      if (this.game.state.getCurrentState().target_buttons[index].presskey.isDown) {
+        this.scale.y = 0;
+      }
+      this.body.velocity.y = this.game.state.getCurrentState().song_speed;
+    });
+
+    this.timer.start();
   }
 }

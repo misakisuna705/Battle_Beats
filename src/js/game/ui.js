@@ -29,7 +29,8 @@ class Button extends Phaser.Button {
     this.anchor.setTo(0.5, 0.5);
 
     if (keycode != undefined) {
-      GAME.input.keyboard.addKey(keycode).onDown.add(callback, callbackContext);
+      this.presskey = GAME.input.keyboard.addKey(keycode);
+      this.presskey.onDown.add(callback, callbackContext);
     }
 
     this.text = new Txt({ game: GAME, x: this.x, y: this.y, text: word, style: form });

@@ -62,7 +62,7 @@ class Score extends Phaser.Image {
     this.total_score_txt = new Txt({ game: this.game, x: 240, y: 36, text: "score: 0", style: { fill: "#ffffff" } });
   }
 
-  upgrade(point) {
+  point_upgrade(point) {
     switch (point) {
       case 300:
         ++this.perfect;
@@ -93,6 +93,13 @@ class Score extends Phaser.Image {
     this.total_score += point;
     this.perfect_score += 300;
     this.precision = this.total_score / this.perfect_score;
+
+    this.total_score_txt.setText("score: " + this.total_score);
+  }
+
+  bonus_upgrade(bonus) {
+    this.total_score += bonus;
+    this.perfect_score += bonus;
 
     this.total_score_txt.setText("score: " + this.total_score);
   }

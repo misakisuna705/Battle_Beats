@@ -72,7 +72,7 @@ class Play_Scene extends Phaser.State {
     nearest_note.point = 0;
 
     if (BEAT.length === 3) {
-      const TAIL = this.tails[TRACK].getFirstExists(false, false, POS, 0);
+      const TAIL = (nearest_note.tail = this.tails[TRACK].getFirstExists(false, false, POS, 0));
 
       TAIL.exists = true;
       TAIL.body.velocity.y = SPEED;
@@ -95,18 +95,20 @@ class Play_Scene extends Phaser.State {
     if (nearest_note) {
       const GAP_TIME = Math.abs(this.game.time.now - this.song_start_time - nearest_note.perfect_time);
 
-      if (GAP_TIME < 1000) {
-        if (GAP_TIME < 100) {
+      if (GAP_TIME < 300) {
+        if (GAP_TIME < 30) {
           nearest_note.point = 300;
-        } else if (GAP_TIME < 250) {
+        } else if (GAP_TIME < 150) {
           nearest_note.point = 200;
-        } else if (GAP_TIME < 500) {
+        } else if (GAP_TIME < 270) {
           nearest_note.point = 100;
         } else {
           nearest_note.point = 50;
         }
 
-        nearest_note.kill();
+        nearest_note.index = 1;
+        //nearest_note.kill();
+        nearest_note.hit();
       }
     }
   }
@@ -125,18 +127,20 @@ class Play_Scene extends Phaser.State {
     if (nearest_note) {
       const GAP_TIME = Math.abs(this.game.time.now - this.song_start_time - nearest_note.perfect_time);
 
-      if (GAP_TIME < 1000) {
-        if (GAP_TIME < 100) {
+      if (GAP_TIME < 300) {
+        if (GAP_TIME < 30) {
           nearest_note.point = 300;
-        } else if (GAP_TIME < 250) {
+        } else if (GAP_TIME < 150) {
           nearest_note.point = 200;
-        } else if (GAP_TIME < 500) {
+        } else if (GAP_TIME < 270) {
           nearest_note.point = 100;
         } else {
           nearest_note.point = 50;
         }
 
-        nearest_note.kill();
+        nearest_note.index = 1;
+        //nearest_note.kill();
+        nearest_note.hit();
       }
     }
   }
@@ -155,18 +159,20 @@ class Play_Scene extends Phaser.State {
     if (nearest_note) {
       const GAP_TIME = Math.abs(this.game.time.now - this.song_start_time - nearest_note.perfect_time);
 
-      if (GAP_TIME < 1000) {
-        if (GAP_TIME < 100) {
+      if (GAP_TIME < 300) {
+        if (GAP_TIME < 30) {
           nearest_note.point = 300;
-        } else if (GAP_TIME < 250) {
+        } else if (GAP_TIME < 150) {
           nearest_note.point = 200;
-        } else if (GAP_TIME < 500) {
+        } else if (GAP_TIME < 270) {
           nearest_note.point = 100;
         } else {
           nearest_note.point = 50;
         }
 
-        nearest_note.kill();
+        nearest_note.index = 1;
+        //nearest_note.kill();
+        nearest_note.hit();
       }
     }
   }
@@ -185,18 +191,20 @@ class Play_Scene extends Phaser.State {
     if (nearest_note) {
       const GAP_TIME = Math.abs(this.game.time.now - this.song_start_time - nearest_note.perfect_time);
 
-      if (GAP_TIME < 1000) {
-        if (GAP_TIME < 100) {
+      if (GAP_TIME < 300) {
+        if (GAP_TIME < 30) {
           nearest_note.point = 300;
-        } else if (GAP_TIME < 250) {
+        } else if (GAP_TIME < 150) {
           nearest_note.point = 200;
-        } else if (GAP_TIME < 500) {
+        } else if (GAP_TIME < 270) {
           nearest_note.point = 100;
         } else {
           nearest_note.point = 50;
         }
 
-        nearest_note.kill();
+        nearest_note.index = 1;
+        //nearest_note.kill();
+        nearest_note.hit();
       }
     }
   }
