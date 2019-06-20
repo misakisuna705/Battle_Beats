@@ -39,63 +39,61 @@ class Timer extends Phaser.Text {
   }
 }
 
-//class Score extends Phaser.Image {
-//constructor({ game, x, y, key, frame }) {
-//super(game, x, y, key, frame);
+class Score extends Phaser.Image {
+  constructor({ game, x, y, key, frame }) {
+    super(game, x, y, key, frame);
 
-//this.game.add.existing(this);
+    this.game.add.existing(this);
 
-//this.anchor.setTo(0.5, 0);
-//this.fixedToCamera = true;
-//this.setStyle({ fill: "white", font: "18px Arial" });
-//this.setText("score: 0");
+    this.anchor.setTo(0.5, 0.5);
 
-//this.total_score = 0;
-//this.perfect_score = 0;
+    this.total_score = 0;
+    this.perfect_score = 0;
 
-//this.precision = 0;
-//this.combo = 0;
+    this.precision = 0;
+    this.combo = 0;
 
-//this.pefect = 0;
-//this.great = 0;
-//this.good = 0;
-//this.bad = 0;
-//this.miss = 0;
-//}
+    this.pefect = 0;
+    this.great = 0;
+    this.good = 0;
+    this.bad = 0;
+    this.miss = 0;
 
-//upgrade(point) {
-//const score = this.game.score;
+    this.total_score_txt = new Txt({ game: this.game, x: 240, y: 36, text: "score: 0", style: { fill: "#ffffff" } });
+  }
 
-//switch (point) {
-//case 300:
-//++this.perfect;
-//++this.combo;
-//break;
+  upgrade(point) {
+    switch (point) {
+      case 300:
+        ++this.perfect;
+        ++this.combo;
+        break;
 
-//case 200:
-//++this.great;
-//++this.combo;
-//break;
+      case 200:
+        ++this.great;
+        ++this.combo;
+        break;
 
-//case 100:
-//++this.good;
-//++this.combo;
-//break;
+      case 100:
+        ++this.good;
+        ++this.combo;
+        break;
 
-//case 50:
-//++this.bad;
-//this.combo = 0;
-//break;
+      case 50:
+        ++this.bad;
+        this.combo = 0;
+        break;
 
-//default:
-//++this.miss;
-//this.combo = 0;
-//this.game.state.getCurrentState().note_btn[this.col].note_queue.pop();
-//break;
-//}
+      default:
+        ++this.miss;
+        this.combo = 0;
+        break;
+    }
 
-//this.total_score += point;
-//this.perfect_score += 300;
-//this.precision = this.total_score / this.perfect_score;
-//}
-//}
+    this.total_score += point;
+    this.perfect_score += 300;
+    this.precision = this.total_score / this.perfect_score;
+
+    this.total_score_txt.setText("score: " + this.total_score);
+  }
+}

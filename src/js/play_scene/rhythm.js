@@ -25,10 +25,14 @@ class Note extends Phaser.Sprite {
   constructor({ game, x, y, key, frame }) {
     super(game, x, y, key, frame);
 
-    //this.events.onKilled.add(this.game.state.getCurrentState().score.upgrade, this, 0, this.point);
-
     this.perfect_time = 0;
     this.point = 0;
+
+    this.events.onKilled.add(this.point_upgrade, this);
+  }
+
+  point_upgrade() {
+    this.game.state.getCurrentState().score.upgrade(this.point);
   }
 }
 
