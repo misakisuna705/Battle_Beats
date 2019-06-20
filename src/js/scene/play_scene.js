@@ -138,8 +138,6 @@ class Play_Scene extends Phaser.State {
 
         nearest_note.kill();
       }
-
-      console.log(nearest_note.point);
     }
   }
 
@@ -170,8 +168,6 @@ class Play_Scene extends Phaser.State {
 
         nearest_note.kill();
       }
-
-      console.log(nearest_note.point);
     }
   }
 
@@ -202,8 +198,6 @@ class Play_Scene extends Phaser.State {
 
         nearest_note.kill();
       }
-
-      console.log(nearest_note.point);
     }
   }
 }

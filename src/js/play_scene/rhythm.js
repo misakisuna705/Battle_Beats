@@ -63,6 +63,7 @@ class Tail extends Phaser.Sprite {
   constructor({ game, x, y, key, frame }) {
     super(game, x, y, key, frame);
 
+    this.ispressed = false;
     this.bonus_time = 0;
   }
 }
