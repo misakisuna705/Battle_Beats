@@ -14,10 +14,12 @@ class Timer extends Phaser.Text {
   constructor({ game, x, y, text, style }) {
     super(game, x, y, text, style);
 
-    this.game.add.existing(this);
+    const GAME = this.game;
+
+    GAME.add.existing(this);
+    GAME.time.events.loop(Phaser.Timer.SECOND, this.count, this);
 
     this.anchor.setTo(0, 0.5);
-    this.game.time.events.loop(Phaser.Timer.SECOND, this.count, this);
 
     this.second = 0;
     this.minute = 0;
@@ -31,10 +33,13 @@ class Timer extends Phaser.Text {
       this.second = 0;
     }
 
-    if (this.second < 10) {
-      this.setText("time: " + this.minute + ":0" + this.second);
+    const MINUTE = this.minute;
+    const SECOND = this.second;
+
+    if (SECOND < 10) {
+      this.setText("time: " + MINUTE + ":0" + SECOND);
     } else {
-      this.setText("time: " + this.minute + ":" + this.second);
+      this.setText("time: " + MINUTE + ":" + SECOND);
     }
   }
 }
@@ -43,7 +48,9 @@ class Score extends Phaser.Image {
   constructor({ game, x, y, key, frame }) {
     super(game, x, y, key, frame);
 
-    this.game.add.existing(this);
+    const GAME = this.game;
+
+    GAME.add.existing(this);
 
     this.anchor.setTo(0.5, 0.5);
 
@@ -59,7 +66,7 @@ class Score extends Phaser.Image {
     this.bad = 0;
     this.miss = 0;
 
-    this.total_score_txt = new Txt({ game: this.game, x: 240, y: 36, text: "score: 0", style: { fill: "#ffffff" } });
+    this.total_score_txt = new Txt({ game: GAME, x: 240, y: 36, text: "score: 0", style: { fill: "#ffffff" } });
   }
 
   point_upgrade(point) {

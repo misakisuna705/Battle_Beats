@@ -43,11 +43,15 @@ class Song_Scene extends Phaser.State {
     }
 
     this.song_infos = new Songs({ game: GAME });
-
-    this.song_infos.addMultiple([new Song_Info({ game: this.game }, song_config[0].info), new Song_Info({ game: this.game }, song_config[1].info)]);
+    for (let i = 0; i < song_size; ++i) {
+      this.song_infos.add(new Song_Info({ game: this.game }, song_config[i].info));
+    }
 
     if (!this.game.song_audios) {
-      this.game.song_audios = [GAME.add.audio(song_config[0].AudioFilename, 1, true), GAME.add.audio(song_config[1].AudioFilename, 1, true)];
+      this.game.song_audios = [];
+      for (let i = 0; i < song_size; i++) {
+        this.game.song_audios[i] = GAME.add.audio(song_config[i].AudioFilename, 1, true);
+      }
     }
 
     this.song_infos.getAt(this.game.active_song).visible = true;

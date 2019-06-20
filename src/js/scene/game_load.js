@@ -12,22 +12,17 @@ class Game_Load extends Phaser.State {
   preload() {
     const LOAD = this.game.load;
 
+    for (let i = 0; i < song_size; ++i) {
+      LOAD.image(song_config[i].info.key, cover_path + song_config[i].info.key);
+      LOAD.audio(song_config[i].AudioFilename, song_path + song_config[i].AudioFilename);
+    }
+
     LOAD.image("enter_button", "assets/game/enter_button.png");
     LOAD.image("exit_button", "assets/game/exit_button.png");
-
-    LOAD.audio("only_my_railgun.mp3", "assets/game/song/fripside/infinite_synthesis/only_my_railgun.mp3");
-    LOAD.audio("senbonzakura.mp3", "assets/game/song/和樂器樂團/VOCALOID之箇中三眛/senbonzakura.mp3");
-
     LOAD.image("mode_button", "assets/main_scene/mode_button.png");
-
     LOAD.image("song_button", "assets/song_scene/song_button.png");
-    LOAD.image("infinite_synthesis.png", "assets/song_scene/fripside/infinite_synthesis/infinite_synthesis.png");
-    LOAD.image("VOCALOID之箇中三眛", "assets/song_scene/和樂器樂團/VOCALOID之箇中三眛/VOCALOID之箇中三眛.png");
-
     LOAD.image("level_button", "assets/level_scene/level_button.png");
-
     LOAD.video("only_my_railgun.mp4", "assets/game_start/only_my_railgun.mp4");
-
     LOAD.image("bg", "assets/play_scene/bg.png");
     LOAD.image("target_button", "assets/play_scene/target_button.png");
     LOAD.image("note", "assets/play_scene/note.png");

@@ -77,7 +77,11 @@ class Play_Scene extends Phaser.State {
       TAIL.exists = true;
       TAIL.body.velocity.y = SPEED;
       TAIL.bonus_time = BEAT[2] - TIME;
-      TAIL.scale.setTo(1, ((SPEED * TAIL.bonus_time) / 1000 / TAIL.height) * TAIL.scale.y);
+
+      TAIL.scale.setTo(1, 1);
+      TAIL.scale.setTo(1, (SPEED * TAIL.bonus_time) / TAIL.height / 1000);
+    } else {
+      nearest_note.tail = null;
     }
   }
 
@@ -106,8 +110,7 @@ class Play_Scene extends Phaser.State {
           nearest_note.point = 50;
         }
 
-        nearest_note.index = 1;
-        //nearest_note.kill();
+        nearest_note.index = 0;
         nearest_note.hit();
       }
     }
@@ -139,7 +142,6 @@ class Play_Scene extends Phaser.State {
         }
 
         nearest_note.index = 1;
-        //nearest_note.kill();
         nearest_note.hit();
       }
     }
@@ -170,8 +172,7 @@ class Play_Scene extends Phaser.State {
           nearest_note.point = 50;
         }
 
-        nearest_note.index = 1;
-        //nearest_note.kill();
+        nearest_note.index = 2;
         nearest_note.hit();
       }
     }
@@ -202,8 +203,7 @@ class Play_Scene extends Phaser.State {
           nearest_note.point = 50;
         }
 
-        nearest_note.index = 1;
-        //nearest_note.kill();
+        nearest_note.index = 3;
         nearest_note.hit();
       }
     }

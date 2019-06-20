@@ -17,7 +17,7 @@ class Notes extends Phaser.Group {
     this.setAll("checkWorldBounds", true);
     this.setAll("outOfBoundsKill", true);
     this.setAll("anchor.x", 0.5);
-    this.setAll("anchor.y", 0.5);
+    this.setAll("anchor.y", 1);
   }
 }
 
@@ -32,12 +32,12 @@ class Note extends Phaser.Sprite {
   }
 
   hit() {
+    this.kill();
     this.game.state.getCurrentState().score.point_upgrade(this.point);
+
     if (this.tail) {
       this.tail.hit(this.index);
     }
-
-    this.kill();
   }
 }
 
@@ -97,6 +97,7 @@ class Tail extends Phaser.Sprite {
             this.game.state.getCurrentState().score.bonus_upgrade(this.bonus);
           } else {
             this.ispressed = false;
+            this.body.velocity.y = this.game.state.getCurrentState().song_speed;
           }
         }
       },
@@ -107,7 +108,6 @@ class Tail extends Phaser.Sprite {
       if (this.game.state.getCurrentState().target_buttons[index].presskey.isDown) {
         this.scale.y = 0;
       }
-      this.body.velocity.y = this.game.state.getCurrentState().song_speed;
     });
 
     this.timer.start();
