@@ -37,13 +37,19 @@ class Main_Scene extends Phaser.State {
       new Button(
         { game: GAME, callback: this.choose_method_button, callbackContext: this, form: { fill: this.mode_buttons.normal_style.fill } },
         BUTTON_CONF.method_button
+      ),
+
+      new Button(
+        { game: GAME, callback: this.choose_npc_button, callbackContext: this, form: { fill: this.mode_buttons.normal_style.fill } },
+        BUTTON_CONF.npc_button
       )
     ]);
 
     this.mode_article = [
       new Article({ game: GAME }, ARTICLE_CONF.general_mode_article),
       new Article({ game: GAME }, ARTICLE_CONF.story_mode_article),
-      new Article({ game: GAME }, ARTICLE_CONF.method_article)
+      new Article({ game: GAME }, ARTICLE_CONF.method_article),
+      new Article({ game: GAME }, ARTICLE_CONF.npc_article)
     ];
 
     this.mode_article[0].visible = true;
@@ -61,6 +67,10 @@ class Main_Scene extends Phaser.State {
         break;
 
       case 2:
+        break;
+
+      case 3:
+        GAME.state.start("NPC_Scene");
         break;
 
       default:
@@ -141,6 +151,19 @@ class Main_Scene extends Phaser.State {
     MODE_ARTICLE[MODE_BUTTONS.active].visible = false;
 
     MODE_BUTTONS.active = 2;
+
+    MODE_BUTTONS.getAt(MODE_BUTTONS.active).text.setStyle(MODE_BUTTONS.active_style);
+    MODE_ARTICLE[MODE_BUTTONS.active].visible = true;
+  }
+
+  choose_npc_button() {
+    const MODE_BUTTONS = this.mode_buttons;
+    const MODE_ARTICLE = this.mode_article;
+
+    MODE_BUTTONS.getAt(MODE_BUTTONS.active).text.setStyle(MODE_BUTTONS.normal_style);
+    MODE_ARTICLE[MODE_BUTTONS.active].visible = false;
+
+    MODE_BUTTONS.active = 3;
 
     MODE_BUTTONS.getAt(MODE_BUTTONS.active).text.setStyle(MODE_BUTTONS.active_style);
     MODE_ARTICLE[MODE_BUTTONS.active].visible = true;

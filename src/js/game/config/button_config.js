@@ -48,7 +48,7 @@ const button_config = {
       x: 360,
       y: 180,
       key: "mode_button",
-      word: "故事模式"
+      word: "劇情模式"
     },
 
     method_button: {
@@ -56,6 +56,13 @@ const button_config = {
       y: 240,
       key: "mode_button",
       word: "玩法說明"
+    },
+
+    npc_button: {
+      x: 360,
+      y: 300,
+      key: "mode_button",
+      word: "角色圖鑑"
     }
   },
 

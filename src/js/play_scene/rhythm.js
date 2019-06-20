@@ -6,8 +6,8 @@ class Notes extends Phaser.Group {
       this.add(
         new Note({
           game: this.game,
-          x: button_config.play_scene.target_buttons[index].x,
-          y: 0,
+          //x: button_config.play_scene.target_buttons[index].x,
+          //y: 0,
           key: "note"
         })
       );
