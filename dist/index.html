@@ -2,47 +2,77 @@
 
 <html lang="zh-tw">
   <head>
+    <!--meta-->
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 
+    <!--title-->
+
     <title>Battle Beats</title>
 
+    <!--css-->
+
     <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    <!--api-->
 
     <script src="https://cdn.jsdelivr.net/npm/phaser-ce@2.13.0"></script>
     <script src="https://www.gstatic.com/firebasejs/6.1.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.1.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.1.1/firebase-database.js"></script>
 
+    <!--init-->
+
     <script src="js/init.js"></script>
+
+    <!--game-->
 
     <script src="js/game/game.js"></script>
     <script src="js/game/ui.js"></script>
+
+    <!--general config-->
 
     <script src="js/game/config/firebase_config.js"></script>
     <script src="js/game/config/game_config.js"></script>
     <script src="js/game/config/button_config.js"></script>
     <script src="js/game/config/article_config.js"></script>
 
+    <!--song config-->
+
     <script src="js/game/config/song/0_only_my_railgun.js"></script>
     <script src="js/game/config/song/1_senbonzakura.js"></script>
     <script src="js/game/config/song/2_abc.js"></script>
 
+    <!--npc_config-->
+
+    <script src="js/game/config/rpg/npc_config.js"></script>
+
+    <!--scene-->
+
     <script src="js/scene/game_login.js"></script>
     <script src="js/scene/game_load.js"></script>
     <script src="js/scene/main_scene.js"></script>
+    <script src="js/scene/npc_scene.js"></script>
     <script src="js/scene/song_scene.js"></script>
     <script src="js/scene/level_scene.js"></script>
     <script src="js/scene/game_start.js"></script>
     <script src="js/scene/play_scene.js"></script>
 
+    <!--game load-->
+
     <script src="js/game_load/bg.js"></script>
     <script src="js/game_load/loader.js"></script>
 
-    <script src="js/song_scene/song_info.js"></script>
-    <script src="js/play_scene/ui.js"></script>
+    <!--song scene-->
 
+    <script src="js/song_scene/song_info.js"></script>
+
+    <!--play scene-->
+
+    <script src="js/play_scene/ui.js"></script>
     <script src="js/play_scene/rhythm.js"></script>
+    <script src="js/play_scene/hero.js"></script>
   </head>
 
   <body></body>
