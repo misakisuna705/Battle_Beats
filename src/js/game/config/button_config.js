@@ -66,6 +66,50 @@ const button_config = {
     }
   },
 
+  npc_scene: {
+    npc_buttons: {
+      normal_style: {
+        fill: "#008cff"
+      },
+      active_style: {
+        fill: "#ffffff"
+      },
+
+      pre_keycode: Phaser.Keyboard.LEFT,
+      nxt_keycode: Phaser.Keyboard.RIGHT
+    },
+
+    left_npc_button: {
+      x: 48,
+      y: 180,
+      key: "song_button",
+      word: "上一位"
+    },
+
+    right_npc_button: {
+      x: 432,
+      y: 180,
+      key: "song_button",
+      word: "下一位"
+    },
+
+    enter_button: {
+      x: 444,
+      y: 604,
+      key: "enter_button",
+      word: "確認",
+      keycode: Phaser.Keyboard.ENTER
+    },
+
+    exit_button: {
+      x: 36,
+      y: 36,
+      key: "exit_button",
+      word: "返回",
+      keycode: Phaser.Keyboard.ESC
+    }
+  },
+
   song_scene: {
     song_buttons: {
       normal_style: {

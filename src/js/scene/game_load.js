@@ -35,6 +35,10 @@ class Game_Load extends Phaser.State {
 
     LOAD.image("mode_button", "assets/main_scene/mode_button.png");
 
+    //npc scene
+
+    LOAD.image("npc_button", "assets/npc_scene/npc_button.png");
+
     //song scene
 
     LOAD.image("song_button", "assets/song_scene/song_button.png");

@@ -52,13 +52,9 @@ const article_config = {
         "還是邏設\n" +
         "nWave都看不出來bug\n" +
         "都難不了她\n" +
-        "只要先把手指對準\n" +
-        "D F J K\n" +
-        "滑鼠、鍵盤幾次來回後按下\n" +
-        "Enter\n" +
-        "滿分不過手到擒來，半個小時就能\n" +
-        "ESC\n" +
-        "離開教室\n",
+        "只要先把手指對準 D F J K\n" +
+        "滑鼠、鍵盤幾次來回後按下 Enter\n" +
+        "滿分輕鬆拿，半個小時就能 ESC\n",
       style: { fill: "#008cff", fontSize: 24 }
     },
 
@@ -78,8 +74,7 @@ const article_config = {
         "這時他才想起\n" +
         "battle beats的圖鑑中\n" +
         "有著滿滿的老婆\n" +
-        "以及尚未解鎖的情人\n" +
-        "於是，他就釋懷了...\n",
+        "以及尚未解鎖的情人...\n",
       style: { fill: "#008cff", fontSize: 24 }
     }
   }

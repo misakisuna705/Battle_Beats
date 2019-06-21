@@ -1,8 +1,11 @@
 class NPC_Scene extends Phaser.State {
+  init() {
+    this.game.bgv.addToWorld(-400, 0, 0, 0, 1, 1);
+  }
+
   create() {
     const GAME = this.game;
-    this.idx = 0;
-    const BUTTON_CONF = button_config.song_scene;
+    const BUTTON_CONF = button_config.npc_scene;
 
     this.exit_button = new Button(
       { game: GAME, callback: this.exit_scene, callbackContext: this, form: { fill: "#008cff" } },
@@ -10,69 +13,68 @@ class NPC_Scene extends Phaser.State {
     );
 
     this.npc_buttons = new Buttons(
-      { game: GAME, pre_callback: this.choose_pre_song, nxt_callback: this.choose_nxt_song, callbackContext: this },
-      BUTTON_CONF.song_buttons
+      { game: GAME, pre_callback: this.choose_pre_npc, nxt_callback: this.choose_nxt_npc, callbackContext: this },
+      BUTTON_CONF.npc_buttons
     );
 
     this.npc_buttons.addMultiple([
       new Button(
-        { game: GAME, callback: this.choose_pre_song, callbackContext: this, form: { fill: this.npc_buttons.normal_style.fill } },
-        BUTTON_CONF.left_song_button
+        { game: GAME, callback: this.choose_pre_npc, callbackContext: this, form: { fill: this.npc_buttons.normal_style.fill } },
+        BUTTON_CONF.left_npc_button
       ),
 
       new Button(
-        { game: GAME, callback: this.choose_nxt_song, callbackContext: this, form: { fill: this.npc_buttons.normal_style.fill } },
-        BUTTON_CONF.right_song_button
+        { game: GAME, callback: this.choose_nxt_npc, callbackContext: this, form: { fill: this.npc_buttons.normal_style.fill } },
+        BUTTON_CONF.right_npc_button
       )
     ]);
 
-    this.npc_infos = [];
+    this.npcs = [];
+    npcs_config.forEach(config => {
+      const I = this.npcs.push(new HERO(300, 300, 240, 150, GAME, this, config, Phaser.Keyboard.D, false));
 
-    npcs_config.forEach(n => {
-      let i = this.npc_infos.push(new HERO(200, 200, this.game.width / 2, this.game.height / 2, GAME, this, n, Phaser.Keyboard.D, false));
-
-      this.npc_infos[i - 1].start();
-      this.npc_infos[i - 1].visible = false;
+      this.npcs[I - 1].start();
+      this.npcs[I - 1].visible = false;
+      this.npcs[I - 1].info.visible = false;
     });
+
+    this.idx = 0;
+    this.npcs[this.idx].visible = true;
+    this.npcs[this.idx].info.visible = true;
+    this.npcs[this.idx].atkKey.onHoldContext = this.npcs[this.idx];
+    this.npcs[this.idx].atkKey.onHoldCallback = this.npcs[this.idx].skill;
   }
+
   exit_scene() {
-    const GAME = this.game;
-
-    GAME.bgm.play();
-    GAME.state.start("Main_Scene");
+    this.game.state.start("Main_Scene");
   }
 
-  choose_pre_song() {
-    const heros = this.npc_infos;
-    let curHero = heros[this.idx];
-    curHero.visible = false;
+  choose_pre_npc() {
+    const NPCS = this.npcs;
+    const LENGTH = NPCS.length;
 
-    if (this.idx - 1 < 0) {
-      this.idx = heros.length - 1;
-      var nextHero = heros[this.idx];
-    } else {
-      this.idx = this.idx - 1;
-      var nextHero = heros[this.idx];
-    }
-    nextHero.visible = true;
-    nextHero.atkKey.onHoldContext = nextHero;
-    nextHero.atkKey.onHoldCallback = nextHero.skill;
+    NPCS[this.idx].visible = false;
+    NPCS[this.idx].info.visible = false;
+
+    this.idx = (this.idx - 1 + LENGTH) % LENGTH;
+
+    NPCS[this.idx].visible = true;
+    NPCS[this.idx].info.visible = true;
+    NPCS[this.idx].atkKey.onHoldContext = NPCS[this.idx];
+    NPCS[this.idx].atkKey.onHoldCallback = NPCS[this.idx].skill;
   }
 
-  choose_nxt_song() {
-    const heros = this.npc_infos;
-    let curHero = heros[this.idx];
-    curHero.visible = false;
+  choose_nxt_npc() {
+    const NPCS = this.npcs;
 
-    if (this.idx + 1 >= heros.length) {
-      this.idx = 0;
-      var nextHero = heros[this.idx];
-    } else {
-      this.idx = this.idx + 1;
-      var nextHero = heros[this.idx];
-    }
-    nextHero.visible = true;
-    nextHero.atkKey.onHoldContext = nextHero;
-    nextHero.atkKey.onHoldCallback = nextHero.skill;
+    NPCS[this.idx].visible = false;
+    NPCS[this.idx].info.visible = false;
+
+    this.idx = (this.idx + 1) % NPCS.length;
+
+    NPCS[this.idx].visible = true;
+    NPCS[this.idx].info.visible = true;
+    NPCS[this.idx].atkKey.onHoldContext = NPCS[this.idx];
+    NPCS[this.idx].atkKey.onHoldCallback = NPCS[this.idx].skill;
   }
 }
