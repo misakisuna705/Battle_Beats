@@ -7,7 +7,10 @@ class Play_Scene extends Phaser.State {
 
     this.physics.startSystem(Phaser.Physics.ARCADE);
 
-    this.bg = new BG({ game: GAME, x: -300, y: -640, width: 1124, height: 1280, key: "bg" });
+    this.bg_back = new BG({ game: GAME, x: 240, y: 0, key: "bg_back" });
+    this.game.time.events.loop(20, this.bg_rotate, this);
+    this.bg_middle = new BG({ game: GAME, x: 240, y: 320, key: "bg_middle" });
+    this.bg_front = new BG({ game: GAME, x: 240, y: 320, key: "bg_front" });
 
     const SPEED = (this.song_speed = song_config[ACTIVE_SONG].info.bpm * song_config[ACTIVE_SONG].info.nX);
 
@@ -48,8 +51,8 @@ class Play_Scene extends Phaser.State {
     this.timer = new Timer({ game: GAME, x: 12, y: 36, text: "time: 0:00", style: { fill: "#ffffff" } });
   }
 
-  update() {
-    this.bg.renew();
+  bg_rotate() {
+    this.bg_back.angle += 5;
   }
 
   play() {
@@ -110,8 +113,7 @@ class Play_Scene extends Phaser.State {
           nearest_note.point = 50;
         }
 
-        nearest_note.index = 0;
-        nearest_note.hit();
+        nearest_note.kill();
       }
     }
   }
@@ -141,8 +143,7 @@ class Play_Scene extends Phaser.State {
           nearest_note.point = 50;
         }
 
-        nearest_note.index = 1;
-        nearest_note.hit();
+        nearest_note.kill();
       }
     }
   }
@@ -172,8 +173,7 @@ class Play_Scene extends Phaser.State {
           nearest_note.point = 50;
         }
 
-        nearest_note.index = 2;
-        nearest_note.hit();
+        nearest_note.kill();
       }
     }
   }
@@ -203,8 +203,7 @@ class Play_Scene extends Phaser.State {
           nearest_note.point = 50;
         }
 
-        nearest_note.index = 3;
-        nearest_note.hit();
+        nearest_note.kill();
       }
     }
   }

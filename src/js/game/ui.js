@@ -49,7 +49,7 @@ class Buttons extends Phaser.Group {
     this.normal_style = normal_style;
     this.active_style = active_style;
 
-    this.active = this.game.active_level;
+    this.active = 0;
 
     KEYBOARD.addKey(pre_keycode).onDown.add(pre_callback, callbackContext);
     KEYBOARD.addKey(nxt_keycode).onDown.add(nxt_callback, callbackContext);

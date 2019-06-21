@@ -53,10 +53,20 @@ class Game_Load extends Phaser.State {
 
     //play scene
 
-    LOAD.image("bg", "assets/play_scene/bg.png");
+    LOAD.image("bg_front", "assets/play_scene/bg_front.png");
+    LOAD.image("bg_middle", "assets/play_scene/bg_middle.png");
+    LOAD.image("bg_back", "assets/play_scene/bg_back.png");
+
     LOAD.image("target_button", "assets/play_scene/target_button.png");
     LOAD.image("note", "assets/play_scene/note.png");
     LOAD.image("tail", "assets/play_scene/tail.png");
+
+    LOAD.image("excellent", "assets/play_scene/precision/excellent.png");
+    LOAD.image("great", "assets/play_scene/precision/great.png");
+    LOAD.image("good", "assets/play_scene/precision/good.png");
+    LOAD.image("bad", "assets/play_scene/precision/bad.png");
+    LOAD.image("miss", "assets/play_scene/precision/miss.png");
+    LOAD.spritesheet("number", "assets/play_scene/combo/number.png", 74, 81);
   }
 
   create() {

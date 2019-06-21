@@ -3,14 +3,7 @@ class Notes extends Phaser.Group {
     super(game, parent, name, addToStage, enableBody, physicsBodyType, index);
 
     for (let i = 0; i < 25; ++i) {
-      this.add(
-        new Note({
-          game: this.game,
-          //x: button_config.play_scene.target_buttons[index].x,
-          //y: 0,
-          key: "note"
-        })
-      );
+      this.add(new Note({ game: this.game, key: "note", index: index }));
     }
 
     this.setAll("exists", false);
@@ -22,21 +15,22 @@ class Notes extends Phaser.Group {
 }
 
 class Note extends Phaser.Sprite {
-  constructor({ game, x, y, key, frame }) {
+  constructor({ game, x, y, key, frame, index }) {
     super(game, x, y, key, frame);
 
-    this.index = -1;
+    this.index = index;
     this.perfect_time = 0;
     this.point = 0;
     this.tail = null;
+
+    this.events.onKilled.add(this.hit, this);
   }
 
   hit() {
-    this.kill();
     this.game.state.getCurrentState().score.point_upgrade(this.point);
 
     if (this.tail) {
-      this.tail.hit(this.index);
+      this.tail.hit();
     }
   }
 }
@@ -46,14 +40,7 @@ class Tails extends Phaser.Group {
     super(game, parent, name, addToStage, enableBody, physicsBodyType, index);
 
     for (let i = 0; i < 25; ++i) {
-      this.add(
-        new Tail({
-          game: this.game,
-          x: button_config.play_scene.target_buttons[index].x,
-          y: 0,
-          key: "tail"
-        })
-      );
+      this.add(new Tail({ game: this.game, key: "tail", index }));
     }
 
     this.setAll("exists", false);
@@ -65,9 +52,10 @@ class Tails extends Phaser.Group {
 }
 
 class Tail extends Phaser.Sprite {
-  constructor({ game, x, y, key, frame }) {
+  constructor({ game, x, y, key, frame, index }) {
     super(game, x, y, key, frame);
 
+    this.index = index;
     this.ispressed = false;
     this.timer = null;
     this.bonus = 2;
@@ -75,7 +63,7 @@ class Tail extends Phaser.Sprite {
     this.decrement = ((this.game.state.getCurrentState().song_speed / 1000) * 20) / this.height;
   }
 
-  hit(index) {
+  hit() {
     this.ispressed = true;
 
     this.timer = this.game.time.create();
@@ -85,7 +73,7 @@ class Tail extends Phaser.Sprite {
       this.bonus_time / 20,
       () => {
         if (this.ispressed) {
-          if (this.game.state.getCurrentState().target_buttons[index].presskey.isDown) {
+          if (this.game.state.getCurrentState().target_buttons[this.index].presskey.isDown) {
             this.body.velocity.y = 0;
 
             if (this.scale.y < 0) {
@@ -105,7 +93,7 @@ class Tail extends Phaser.Sprite {
     );
 
     this.timer.onComplete.add(() => {
-      if (this.game.state.getCurrentState().target_buttons[index].presskey.isDown) {
+      if (this.game.state.getCurrentState().target_buttons[this.index].presskey.isDown) {
         this.scale.y = 0;
       }
     });
