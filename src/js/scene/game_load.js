@@ -31,6 +31,7 @@ class Game_Load extends Phaser.State {
     LOAD.spritesheet("Seti", "assets/game/npc/seti.png", 500, 600);
     LOAD.spritesheet("Rita", "assets/game/npc/rita.png", 500, 500);
     LOAD.spritesheet("Hugo", "assets/game/npc/hugo.png", 500, 500);
+    LOAD.spritesheet("Slime", "assets/game/npc/slime.png", 500, 500);
 
     //main scene
 

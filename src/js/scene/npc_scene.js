@@ -25,7 +25,7 @@ class NPC_Scene extends Phaser.State {
     ]);
 
     this.npcs = [];
-    npcs_config.forEach(config => {
+    hero_config.forEach(config => {
       const I = this.npcs.push(new HERO(300, 300, 240, 150, GAME, this, config, Phaser.Keyboard.D, false));
 
       this.npcs[I - 1].start();
