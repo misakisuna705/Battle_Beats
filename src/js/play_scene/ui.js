@@ -32,6 +32,26 @@ class Timer extends Phaser.Text {
   }
 }
 
+//const scoreboard_config = {
+//board: { x: 240, y: 240, key: "score_board" },
+
+//hit_info: [
+//{ text: "excellent: 0", style: { fill: "#ffffff", fontSize: 24 } },
+//{ text: "great: 0", style: { fill: "#ffffff", fontSize: 24 } },
+//{ text: "good: 0", style: { fill: "#ffffff", fontSize: 24 } },
+//{ text: "bad: 0", style: { fill: "#ffffff", fontSize: 24 } },
+//{ text: "miss: 0", style: { fill: "#ffffff", fontSize: 24 } }
+//],
+
+//overall_info: [
+//{ text: "combo: 0", style: { fill: "#ffffff", fontSize: 24 } },
+//{ text: "score: 0", style: { fill: "#ffffff", fontSize: 24 } },
+//{ text: "precision: 0", style: { fill: "#ffffff", fontSize: 24 } },
+//{ text: "rank: F", style: { fill: "#ffffff", fontSize: 24 } },
+//{ text: "result: Fail", style: { fill: "#ffffff", fontSize: 24 } }
+//]
+//};
+
 class Score extends Phaser.Image {
   constructor({ game, x, y, key, frame }) {
     super(game, x, y, key, frame);
@@ -40,14 +60,13 @@ class Score extends Phaser.Image {
 
     GAME.add.existing(this);
 
+    this.visible = false;
     this.anchor.setTo(0.5, 0.5);
 
     this.total_score = 0;
     this.excellent_score = 0;
-
     this.precision = 0;
     this.combo = 0;
-
     this.excellent = 0;
     this.great = 0;
     this.good = 0;
@@ -55,10 +74,16 @@ class Score extends Phaser.Image {
     this.miss = 0;
 
     this.total_score_txt = new Txt({ game: GAME, x: 240, y: 36, text: "score: 0", style: { fill: "#ffffff" } });
-
     this.combo_controller = new Combo(this.game);
     this.boss_controller = new Boss({ game: this.game, x: boss_config.Px, y: boss_config.Py, key: boss_config.key });
     this.boss_controller.start();
+
+    this.hit_info = [];
+    this.overall_info = [];
+    for (let i = 0; i < 5; ++i) {
+      this.hit_info[i] = new Article({ game: GAME, x: this.x - 180, y: this.y - 80 + 40 * i }, scoreboard_config.hit_info[i]);
+      this.overall_info[i] = new Article({ game: GAME, x: this.x, y: this.y - 80 + 40 * i }, scoreboard_config.overall_info[i]);
+    }
   }
 
   point_upgrade(point) {
@@ -108,6 +133,48 @@ class Score extends Phaser.Image {
     this.excellent_score += bonus;
 
     this.total_score_txt.setText("score: " + this.total_score);
+  }
+
+  sore_upload() {
+    // firebase
+
+    this.score_show();
+  }
+
+  score_show() {
+    this.visible = true;
+
+    for (let i = 0; i < 5; ++i) {
+      switch (i) {
+        case 0:
+          this.hit_info[i].setText("excellent: " + this.excellent);
+          this.overall_info[i].setText("combo: " + this.combo);
+          break;
+
+        case 1:
+          this.hit_info[i].setText("great: " + this.great);
+          this.overall_info[i].setText("score: " + this.total_score);
+          break;
+
+        case 2:
+          this.hit_info[i].setText("good: " + this.good);
+          this.overall_info[i].setText("precision: " + (this.precision * 100).toFixed(2) + "%");
+          break;
+
+        case 3:
+          this.hit_info[i].setText("bad: " + this.bad);
+          this.overall_info[i].setText("rank: ");
+          break;
+
+        default:
+          this.hit_info[i].setText("miss: " + this.result);
+          this.overall_info[i].setText("result: ");
+          break;
+      }
+
+      this.hit_info[i].visible = true;
+      this.overall_info[i].visible = true;
+    }
   }
 }
 
@@ -253,38 +320,6 @@ class Combo {
   }
 }
 
-class Score_Board extends Phaser.Image {
-  constructor({ game, frame }, { x, y, key }) {
-    super(game, x, y, key, frame);
-
-    const GAME = this.game;
-
-    GAME.add.existing(this);
-
-    this.anchor.setTo(0.5, 0.5);
-    this.visible = false;
-
-    this.hit_info = [];
-    this.overall_info = [];
-
-    for (let i = 0; i < 5; ++i) {
-      this.hit_info[i] = new Article({ game: GAME, x: this.x - 180, y: this.y - 80 + 40 * i }, scoreboard_config.hit_info[i]);
-      this.overall_info[i] = new Article({ game: GAME, x: this.x, y: this.y - 80 + 40 * i }, scoreboard_config.overall_info[i]);
-    }
-  }
-
-  upload_score() {}
-
-  show() {
-    this.visible = true;
-
-    for (let i = 0; i < 5; ++i) {
-      this.hit_info[i].visible = true;
-      this.overall_info[i].visible = true;
-    }
-  }
-}
-
 class Boss extends Phaser.Sprite {
   constructor({ game, x, y, key, frame }) {
     super(game, x, y, key, frame);
@@ -318,7 +353,6 @@ class Boss extends Phaser.Sprite {
 
   start() {
     try {
-      //console.log(this);
       this.game.add.existing(this);
       if (this.haveIdle) {
         this.animations.play("idle");
