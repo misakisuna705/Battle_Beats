@@ -55,6 +55,22 @@ class Play_Scene extends Phaser.State {
     EVENTS.add((GAME.height / SPEED) * 1000, this.play, this);
 
     this.timer = new Timer({ game: GAME, x: 12, y: 36, text: "time: 0:00", style: { fill: "#ffffff" } });
+
+    this.senia = new HERO(120, 120, 60, 480, GAME, this, hero_config[0], Phaser.Keyboard.D, false);
+    this.seti = new HERO(120, 120, 120, 560, GAME, this, hero_config[1], Phaser.Keyboard.F, false);
+    this.rita = new HERO(100, 120, 420, 480, GAME, this, hero_config[2], Phaser.Keyboard.J, false);
+    this.hugo = new HERO(100, 120, 360, 560, GAME, this, hero_config[3], Phaser.Keyboard.K, false);
+
+    this.rita.scale.x *= -1;
+    this.hugo.scale.x *= -1;
+
+    this.senia.start();
+    this.seti.start();
+    this.rita.start();
+    this.hugo.start();
+
+    //this.npcs[0].scale.x = -1;
+    //this.npcs[1].scale.x = -1;
   }
 
   bg_rotate() {

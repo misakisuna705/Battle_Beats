@@ -4,7 +4,7 @@ class HERO extends Phaser.Sprite {
   constructor(Sx, Sy, Px, Py, game, callbackContext, config, keycode, debug = false, frame) {
     super(game, Px, Py, config.frame, frame);
 
-    this.info = new Txt({ game: this.game, x: 240, y: 480, text: config.info, style: { fill: "#008cff" } });
+    this.info = new Article({ game: this.game, x: 120, y: 360 }, { text: config.info, style: { fill: "#008cff" } });
 
     try {
       this.callbackContext = callbackContext;

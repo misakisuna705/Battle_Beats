@@ -18,8 +18,6 @@ const article_config = {
     },
 
     story_mode_article: {
-      x: 40,
-      y: 120,
       text:
         "期末專題要demo了\n" +
         "阿明負責專題文案\n" +

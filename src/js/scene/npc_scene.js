@@ -30,7 +30,6 @@ class NPC_Scene extends Phaser.State {
 
       this.npcs[I - 1].start();
       this.npcs[I - 1].visible = false;
-      this.npcs[I - 1].info.visible = false;
     });
 
     const INDEX = (this.idx = 0);

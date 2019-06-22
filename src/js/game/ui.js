@@ -8,6 +8,14 @@ class Txt extends Phaser.Text {
   }
 }
 
+class Leader_Score extends Phaser.Text {
+  constructor({ game, x, y, text, style }) {
+    super(game, x, y, text, style);
+
+    this.game.add.existing(this);
+  }
+}
+
 class Img extends Phaser.Image {
   constructor({ game, frame }, { x, y, key }) {
     super(game, x, y, key, frame);

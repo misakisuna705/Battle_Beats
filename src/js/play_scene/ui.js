@@ -32,26 +32,6 @@ class Timer extends Phaser.Text {
   }
 }
 
-//const scoreboard_config = {
-//board: { x: 240, y: 240, key: "score_board" },
-
-//hit_info: [
-//{ text: "excellent: 0", style: { fill: "#ffffff", fontSize: 24 } },
-//{ text: "great: 0", style: { fill: "#ffffff", fontSize: 24 } },
-//{ text: "good: 0", style: { fill: "#ffffff", fontSize: 24 } },
-//{ text: "bad: 0", style: { fill: "#ffffff", fontSize: 24 } },
-//{ text: "miss: 0", style: { fill: "#ffffff", fontSize: 24 } }
-//],
-
-//overall_info: [
-//{ text: "combo: 0", style: { fill: "#ffffff", fontSize: 24 } },
-//{ text: "score: 0", style: { fill: "#ffffff", fontSize: 24 } },
-//{ text: "precision: 0", style: { fill: "#ffffff", fontSize: 24 } },
-//{ text: "rank: F", style: { fill: "#ffffff", fontSize: 24 } },
-//{ text: "result: Fail", style: { fill: "#ffffff", fontSize: 24 } }
-//]
-//};
-
 class Score extends Phaser.Image {
   constructor({ game, x, y, key, frame }) {
     super(game, x, y, key, frame);
@@ -93,13 +73,13 @@ class Score extends Phaser.Image {
         ++this.combo;
         this.combo_controller.hit(this.combo, 0);
         this.boss_controller.beAttacked(300);
-        this.boss_controller.beAttacked(200);
         break;
 
       case 200:
         ++this.great;
         ++this.combo;
         this.combo_controller.hit(this.combo, 1);
+        this.boss_controller.beAttacked(200);
         break;
 
       case 100:
@@ -126,6 +106,13 @@ class Score extends Phaser.Image {
     this.precision = this.total_score / this.excellent_score;
 
     this.total_score_txt.setText("score: " + this.total_score);
+
+    //let flag = true;
+
+    //if (flag && this.total_score > 1000) {
+    //this.score_upload();
+    //flag = false;
+    //}
   }
 
   bonus_upgrade(bonus) {
@@ -135,10 +122,34 @@ class Score extends Phaser.Image {
     this.total_score_txt.setText("score: " + this.total_score);
   }
 
-  sore_upload() {
-    // firebase
+  score_upload() {
+    let song = song_config[this.game.active_song].info.Title;
 
-    this.score_show();
+    let level;
+
+    switch (this.game.active_level) {
+      case 0:
+        level = "easy";
+        break;
+
+      case 1:
+        level = "normal";
+        break;
+
+      case 2:
+        level = "hard";
+        break;
+    }
+
+    leader_board
+      .push_score(song, level, this.total_score)
+      .then(() => {
+        this.score_show();
+      })
+      .catch(e => {
+        console.log(e);
+        this.score_show();
+      });
   }
 
   score_show() {
@@ -167,7 +178,7 @@ class Score extends Phaser.Image {
           break;
 
         default:
-          this.hit_info[i].setText("miss: " + this.result);
+          this.hit_info[i].setText("miss: " + this.miss);
           this.overall_info[i].setText("result: ");
           break;
       }
@@ -324,7 +335,7 @@ class Boss extends Phaser.Sprite {
   constructor({ game, x, y, key, frame }) {
     super(game, x, y, key, frame);
 
-    this.maxHealth = this.hp;
+    this.maxHealth = boss_config.hp;
     this.setHealth(boss_config.hp);
     this.scale.setTo(boss_config.Sx / this.width, boss_config.Sy / this.height);
     this.anchor.setTo(0.5, 0.5);
@@ -335,6 +346,7 @@ class Boss extends Phaser.Sprite {
     } else {
       this.haveIdle = false;
     }
+
     if (boss_config.back != null && boss_config.back != undefined) {
       this.ani_back = this.animations.add("back", boss_config.back[0], boss_config.back[1]);
       if (this.haveIdle) this.ani_back.onComplete.add(this.idle, this, 0);
@@ -342,6 +354,7 @@ class Boss extends Phaser.Sprite {
     } else {
       this.haveBack = false;
     }
+
     if (boss_config.dead != null && boss_config.dead != undefined) {
       this.ani_dead = this.animations.add("dead", boss_config.dead[0], boss_config.dead[1]);
       this.haveDead = true;
@@ -361,6 +374,7 @@ class Boss extends Phaser.Sprite {
       console.log(e);
     }
   }
+
   beAttacked(x) {
     if (this.health > 0) {
       this.health = this.health - x;
@@ -375,6 +389,7 @@ class Boss extends Phaser.Sprite {
       }
     }
   }
+
   idle() {
     if (this.haveIdle) {
       this.ani_idle.play();

@@ -32,6 +32,38 @@ class Level_Scene extends Phaser.State {
       new Button({ game: GAME, callback: this.choose_normal_level, callbackContext: this, form: NORMAL_STYLE }, BUTTON_CONF.normal_level_button),
       new Button({ game: GAME, callback: this.choose_hard_level, callbackContext: this, form: NORMAL_STYLE }, BUTTON_CONF.hard_level_button)
     ]);
+
+    this.show_leaderboard();
+  }
+
+  show_leaderboard() {
+    //new Leader_Score({ game: this.game, x: 40, y: 100, text: "天梯", style: { fill: "#008cff", fontSize: 24 } });
+    //let song = song_config[this.game.active_song].info.Title;
+    //let level;
+    //switch (this.game.active_level) {
+    //case 0:
+    //level = "easy";
+    //break;
+    //case 1:
+    //level = "normal";
+    //break;
+    //case 2:
+    //level = "hard";
+    //break;
+    //}
+    //let infos = [];
+    //leader_board.get_scores(song, level).then(snapshot => {
+    //snapshot.forEach(s => {
+    //infos.push(s);
+    //});
+    //infos.sort((l, r) => {
+    //return r.val() - l.val();
+    //});
+    //for (let no = 1; no <= infos.length; no++) {
+    //let info = infos[no - 1];
+    //new Leader_Score({ game: this.game, x: 40, y: 120 + no * 40, text: info.key + ": " + info.val(), style: { fill: "#008cff", fontSize: 24 } });
+    //}
+    //});
   }
 
   enter_scene() {
