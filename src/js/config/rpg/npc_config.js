@@ -39,7 +39,7 @@ hero_config = [
 
 boss_config = {
   Px: 240,
-  Py: 100,
+  Py: 200,
   Sx: 300,
   Sy: 300,
   hp: 3000,

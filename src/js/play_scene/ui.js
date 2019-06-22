@@ -38,8 +38,6 @@ class Score extends Phaser.Image {
 
     const GAME = this.game;
 
-    GAME.add.existing(this);
-
     this.visible = false;
     this.anchor.setTo(0.5, 0.5);
 
@@ -58,11 +56,13 @@ class Score extends Phaser.Image {
     this.boss_controller = new Boss({ game: this.game, x: boss_config.Px, y: boss_config.Py, key: boss_config.key });
     this.boss_controller.start();
 
+    GAME.add.existing(this);
+
     this.hit_info = [];
     this.overall_info = [];
     for (let i = 0; i < 5; ++i) {
       this.hit_info[i] = new Article({ game: GAME, x: this.x - 180, y: this.y - 80 + 40 * i }, scoreboard_config.hit_info[i]);
-      this.overall_info[i] = new Article({ game: GAME, x: this.x, y: this.y - 80 + 40 * i }, scoreboard_config.overall_info[i]);
+      this.overall_info[i] = new Article({ game: GAME, x: this.x - 20, y: this.y - 80 + 40 * i }, scoreboard_config.overall_info[i]);
     }
   }
 
@@ -106,13 +106,6 @@ class Score extends Phaser.Image {
     this.precision = this.total_score / this.excellent_score;
 
     this.total_score_txt.setText("score: " + this.total_score);
-
-    //let flag = true;
-
-    //if (flag && this.total_score > 1000) {
-    //this.score_upload();
-    //flag = false;
-    //}
   }
 
   bonus_upgrade(bonus) {
@@ -140,6 +133,10 @@ class Score extends Phaser.Image {
         level = "hard";
         break;
     }
+
+    console.log(song);
+    console.log(level);
+    console.log(this.total_score);
 
     leader_board
       .push_score(song, level, this.total_score)
