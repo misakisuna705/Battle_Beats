@@ -248,3 +248,35 @@ class Combo {
     }
   }
 }
+
+class Score_Board extends Phaser.Image {
+  constructor({ game, frame }, { x, y, key }) {
+    super(game, x, y, key, frame);
+
+    const GAME = this.game;
+
+    GAME.add.existing(this);
+
+    this.anchor.setTo(0.5, 0.5);
+    this.visible = false;
+
+    this.hit_info = [];
+    this.overall_info = [];
+
+    for (let i = 0; i < 5; ++i) {
+      this.hit_info[i] = new Article({ game: GAME, x: this.x - 180, y: this.y - 80 + 40 * i }, scoreboard_config.hit_info[i]);
+      this.overall_info[i] = new Article({ game: GAME, x: this.x, y: this.y - 80 + 40 * i }, scoreboard_config.overall_info[i]);
+    }
+  }
+
+  upload_score() {}
+
+  show() {
+    this.visible = true;
+
+    for (let i = 0; i < 5; ++i) {
+      this.hit_info[i].visible = true;
+      this.overall_info[i].visible = true;
+    }
+  }
+}

@@ -36,10 +36,10 @@ class Main_Scene extends Phaser.State {
     ]);
 
     this.mode_article = [
-      new Article({ game: GAME }, ARTICLE_CONF.general_mode_article),
-      new Article({ game: GAME }, ARTICLE_CONF.story_mode_article),
-      new Article({ game: GAME }, ARTICLE_CONF.method_article),
-      new Article({ game: GAME }, ARTICLE_CONF.npc_article)
+      new Article({ game: GAME, x: 40, y: 120 }, ARTICLE_CONF.general_mode_article),
+      new Article({ game: GAME, x: 40, y: 120 }, ARTICLE_CONF.story_mode_article),
+      new Article({ game: GAME, x: 40, y: 120 }, ARTICLE_CONF.method_article),
+      new Article({ game: GAME, x: 40, y: 120 }, ARTICLE_CONF.npc_article)
     ];
 
     this.mode_article[0].visible = true;

@@ -1,8 +1,6 @@
 const article_config = {
   main_scene: {
     general_mode_article: {
-      x: 40,
-      y: 120,
       text:
         "期末考要到了\n" +
         "阿明和小美總是\n" +
@@ -41,8 +39,6 @@ const article_config = {
     },
 
     method_article: {
-      x: 40,
-      y: 120,
       text:
         "期末要上機考了\n" +
         "小美已經將練習題\n" +
@@ -59,8 +55,6 @@ const article_config = {
     },
 
     npc_article: {
-      x: 40,
-      y: 120,
       text:
         "期末考考完了\n" +
         "小美一如往常高分\n" +

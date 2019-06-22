@@ -14,6 +14,7 @@ class Game_Load extends Phaser.State {
 
     //game
 
+    LOAD.image("shadow", "assets/game/shadow.png");
     LOAD.image("enter_button", "assets/game/enter_button.png");
     LOAD.image("exit_button", "assets/game/exit_button.png");
 
@@ -67,6 +68,8 @@ class Game_Load extends Phaser.State {
     LOAD.image("bad", "assets/play_scene/precision/bad.png");
     LOAD.image("miss", "assets/play_scene/precision/miss.png");
     LOAD.spritesheet("number", "assets/play_scene/combo/number.png", 74, 81);
+
+    LOAD.image("score_board", "assets/play_scene/score/score_board.png");
   }
 
   create() {

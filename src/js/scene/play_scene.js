@@ -13,14 +13,14 @@ class Play_Scene extends Phaser.State {
 
     this.physics.startSystem(Phaser.Physics.ARCADE);
 
-    this.bg_back = new Img({ game: GAME }, { x: 240, y: 0, key: "bg_back" });
-    this.game.time.events.loop(20, this.bg_rotate, this);
+    this.bg_back = new Img({ game: GAME }, { x: 240, y: -20, key: "bg_back" });
+    this.game.time.events.loop(30, this.bg_rotate, this);
     this.bg_middle = new Img({ game: GAME }, { x: 240, y: 320, key: "bg_middle" });
     this.bg_front = new Img({ game: GAME }, { x: 240, y: 320, key: "bg_front" });
 
     const SPEED = (this.song_speed = song_config[ACTIVE_SONG].info.bpm * song_config[ACTIVE_SONG].info.nX);
 
-    this.score = new Score({ game: GAME, x: 240, y: 0, key: "target_button" });
+    this.score = new Score({ game: GAME, x: 240, y: 480, key: "" });
 
     this.tails = [
       new Tails({ game: GAME, enableBody: true, index: 0 }),
@@ -55,10 +55,12 @@ class Play_Scene extends Phaser.State {
     EVENTS.add((GAME.height / SPEED) * 1000, this.play, this);
 
     this.timer = new Timer({ game: GAME, x: 12, y: 36, text: "time: 0:00", style: { fill: "#ffffff" } });
+
+    this.scoreborad = new Score_Board({ game: GAME }, scoreboard_config.board);
   }
 
   bg_rotate() {
-    this.bg_back.angle += 5;
+    this.bg_back.angle += 1;
   }
 
   play() {

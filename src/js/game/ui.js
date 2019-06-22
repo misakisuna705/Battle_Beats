@@ -58,7 +58,7 @@ class Button extends Phaser.Button {
 }
 
 class Article extends Phaser.Text {
-  constructor({ game }, { x, y, text, style }) {
+  constructor({ game, x, y }, { text, style }) {
     super(game, x, y, text, style);
 
     this.game.add.existing(this);
