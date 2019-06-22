@@ -1,24 +1,3 @@
-/*config = {
-    size:{
-        x:200,
-        y:200
-    },
-    position:{
-        x:240,
-        y:320
-    },
-    atk:[
-        [[6,7,8,9],12],
-        [[10,11,12],12],
-        [[13,14,15],12]
-    ],
-    skill:[[16,17,18,19,20,21,22,23,24,25,26,27],12],
-    skillSpeed:4,
-    ar:[[3,4,5],11],
-    idle:[[0,1,2],5],
-    frame:'Senia',
-}*/
-
 let debug = false;
 
 class HERO extends Phaser.Sprite {

@@ -1,13 +1,3 @@
-class BG extends Phaser.Image {
-  constructor({ game, x, y, key, frame }) {
-    super(game, x, y, key, frame);
-
-    this.game.add.existing(this);
-
-    this.anchor.setTo(0.5, 0.5);
-  }
-}
-
 class Timer extends Phaser.Text {
   constructor({ game, x, y, text, style }) {
     super(game, x, y, text, style);

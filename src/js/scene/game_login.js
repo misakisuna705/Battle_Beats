@@ -17,14 +17,7 @@ class Game_Login extends Phaser.State {
   create() {
     const GAME = this.game;
 
-    //GAME.bgv = new Game_Load_Bgv({ game: GAME, key: "game_load_bgv" });
-    const BGV = (GAME.bgv = GAME.add.video("game_load_bgv"));
-    BGV.addToWorld(-400, 0, 0, 0, 1, 1);
-    BGV.play(true);
-
-    this.login_button = new Button({ game: GAME, callback: this.login, callbackContext: this }, button_config.game_login.login_button);
-
-    GAME.add.image(0, 0, "game_load_title");
+    //bgm
 
     if (!GAME.bgm) {
       GAME.bgm = GAME.sound.add("game_load_bgm", 1, true);
@@ -33,6 +26,21 @@ class Game_Login extends Phaser.State {
     if (!GAME.bgm.isPlaying) {
       GAME.bgm.play();
     }
+
+    //bgv
+
+    const BGV = (GAME.bgv = GAME.add.video("game_load_bgv"));
+
+    BGV.addToWorld(-400, 0, 0, 0, 1, 1);
+    BGV.play(true);
+
+    //login button
+
+    this.login_button = new Button({ game: GAME, callback: this.login, callbackContext: this }, button_config.game_login.login_button);
+
+    //title
+
+    GAME.add.image(0, 0, "game_load_title");
 
     this.enter_scene();
   }

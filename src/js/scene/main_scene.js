@@ -18,31 +18,21 @@ class Main_Scene extends Phaser.State {
       BUTTON_CONF.exit_button
     );
 
-    this.mode_buttons = new Buttons(
+    const MODE_BUTTONS = (this.mode_buttons = new Buttons(
       { game: GAME, pre_callback: this.choose_pre_mode, nxt_callback: this.choose_nxt_mode, callbackContext: this },
       BUTTON_CONF.mode_buttons
-    );
+    ));
 
-    this.mode_buttons.addMultiple([
+    const NORMAL_STYLE = MODE_BUTTONS.normal_style;
+
+    MODE_BUTTONS.addMultiple([
       new Button(
-        { game: GAME, callback: this.choose_general_mode, callbackContext: this, form: { fill: this.mode_buttons.active_style.fill } },
+        { game: GAME, callback: this.choose_general_mode, callbackContext: this, form: { fill: MODE_BUTTONS.active_style.fill } },
         BUTTON_CONF.general_mode_button
       ),
-
-      new Button(
-        { game: GAME, callback: this.choose_story_mode, callbackContext: this, form: { fill: this.mode_buttons.normal_style.fill } },
-        BUTTON_CONF.story_mode_button
-      ),
-
-      new Button(
-        { game: GAME, callback: this.choose_method_button, callbackContext: this, form: { fill: this.mode_buttons.normal_style.fill } },
-        BUTTON_CONF.method_button
-      ),
-
-      new Button(
-        { game: GAME, callback: this.choose_npc_button, callbackContext: this, form: { fill: this.mode_buttons.normal_style.fill } },
-        BUTTON_CONF.npc_button
-      )
+      new Button({ game: GAME, callback: this.choose_story_mode, callbackContext: this, form: NORMAL_STYLE }, BUTTON_CONF.story_mode_button),
+      new Button({ game: GAME, callback: this.choose_method_button, callbackContext: this, form: NORMAL_STYLE }, BUTTON_CONF.method_button),
+      new Button({ game: GAME, callback: this.choose_npc_button, callbackContext: this, form: NORMAL_STYLE }, BUTTON_CONF.npc_button)
     ]);
 
     this.mode_article = [

@@ -53,9 +53,9 @@ class Game_Load extends Phaser.State {
 
     //play scene
 
-    LOAD.image("bg_front", "assets/play_scene/bg_front.png");
-    LOAD.image("bg_middle", "assets/play_scene/bg_middle.png");
-    LOAD.image("bg_back", "assets/play_scene/bg_back.png");
+    LOAD.image("bg_front", "assets/play_scene/bg/bg_front.png");
+    LOAD.image("bg_middle", "assets/play_scene/bg/bg_middle.png");
+    LOAD.image("bg_back", "assets/play_scene/bg/bg_back.png");
 
     LOAD.image("target_button", "assets/play_scene/target_button.png");
     LOAD.image("note", "assets/play_scene/note.png");

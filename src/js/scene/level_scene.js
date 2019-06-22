@@ -17,35 +17,32 @@ class Level_Scene extends Phaser.State {
       BUTTON_CONF.exit_button
     );
 
-    this.level_buttons = new Buttons(
+    const LEVEL_BUTTONS = (this.level_buttons = new Buttons(
       { game: GAME, pre_callback: this.choose_pre_level, nxt_callback: this.choose_nxt_level, callbackContext: this },
       BUTTON_CONF.level_buttons
-    );
+    ));
 
-    this.level_buttons.addMultiple([
+    const NORMAL_STYLE = LEVEL_BUTTONS.normal_style;
+
+    LEVEL_BUTTONS.addMultiple([
       new Button(
-        { game: GAME, callback: this.choose_easy_level, callbackContext: this, form: { fill: this.level_buttons.active_style.fill } },
+        { game: GAME, callback: this.choose_easy_level, callbackContext: this, form: LEVEL_BUTTONS.active_style },
         BUTTON_CONF.easy_level_button
       ),
-
-      new Button(
-        { game: GAME, callback: this.choose_normal_level, callbackContext: this, form: { fill: this.level_buttons.normal_style.fill } },
-        BUTTON_CONF.normal_level_button
-      ),
-
-      new Button(
-        { game: GAME, callback: this.choose_hard_level, callbackContext: this, form: { fill: this.level_buttons.normal_style.fill } },
-        BUTTON_CONF.hard_level_button
-      )
+      new Button({ game: GAME, callback: this.choose_normal_level, callbackContext: this, form: NORMAL_STYLE }, BUTTON_CONF.normal_level_button),
+      new Button({ game: GAME, callback: this.choose_hard_level, callbackContext: this, form: NORMAL_STYLE }, BUTTON_CONF.hard_level_button)
     ]);
   }
 
   enter_scene() {
-    this.camera.fade(0x000000, 1000, false);
-    this.game.song_audios[this.game.active_song].fadeOut(1000);
+    const GAME = this.game;
+    const ACTIVE_AUDIO = GAME.song_audios[GAME.active_song];
 
-    this.game.song_audios[this.game.active_song].onFadeComplete.add(() => {
-      this.game.state.start("Game_Start");
+    this.camera.fade(0x000000, 1000, false);
+
+    ACTIVE_AUDIO.fadeOut(1000);
+    ACTIVE_AUDIO.onFadeComplete.add(() => {
+      GAME.state.start("Game_Start");
     }, this);
   }
 

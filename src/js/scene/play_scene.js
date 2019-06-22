@@ -7,10 +7,10 @@ class Play_Scene extends Phaser.State {
 
     this.physics.startSystem(Phaser.Physics.ARCADE);
 
-    this.bg_back = new BG({ game: GAME, x: 240, y: 0, key: "bg_back" });
+    this.bg_back = new Img({ game: GAME }, { x: 240, y: 0, key: "bg_back" });
     this.game.time.events.loop(20, this.bg_rotate, this);
-    this.bg_middle = new BG({ game: GAME, x: 240, y: 320, key: "bg_middle" });
-    this.bg_front = new BG({ game: GAME, x: 240, y: 320, key: "bg_front" });
+    this.bg_middle = new Img({ game: GAME }, { x: 240, y: 320, key: "bg_middle" });
+    this.bg_front = new Img({ game: GAME }, { x: 240, y: 320, key: "bg_front" });
 
     const SPEED = (this.song_speed = song_config[ACTIVE_SONG].info.bpm * song_config[ACTIVE_SONG].info.nX);
 

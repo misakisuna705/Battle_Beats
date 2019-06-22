@@ -12,21 +12,16 @@ class NPC_Scene extends Phaser.State {
       BUTTON_CONF.exit_button
     );
 
-    this.npc_buttons = new Buttons(
+    const NPC_BUTTONS = (this.npc_buttons = new Buttons(
       { game: GAME, pre_callback: this.choose_pre_npc, nxt_callback: this.choose_nxt_npc, callbackContext: this },
       BUTTON_CONF.npc_buttons
-    );
+    ));
+
+    const NORMAL_STYLE = NPC_BUTTONS.normal_style;
 
     this.npc_buttons.addMultiple([
-      new Button(
-        { game: GAME, callback: this.choose_pre_npc, callbackContext: this, form: { fill: this.npc_buttons.normal_style.fill } },
-        BUTTON_CONF.left_npc_button
-      ),
-
-      new Button(
-        { game: GAME, callback: this.choose_nxt_npc, callbackContext: this, form: { fill: this.npc_buttons.normal_style.fill } },
-        BUTTON_CONF.right_npc_button
-      )
+      new Button({ game: GAME, callback: this.choose_pre_npc, callbackContext: this, form: NORMAL_STYLE }, BUTTON_CONF.left_npc_button),
+      new Button({ game: GAME, callback: this.choose_nxt_npc, callbackContext: this, form: NORMAL_STYLE }, BUTTON_CONF.right_npc_button)
     ]);
 
     this.npcs = [];
@@ -38,11 +33,14 @@ class NPC_Scene extends Phaser.State {
       this.npcs[I - 1].info.visible = false;
     });
 
-    this.idx = 0;
-    this.npcs[this.idx].visible = true;
-    this.npcs[this.idx].info.visible = true;
-    this.npcs[this.idx].atkKey.onHoldContext = this.npcs[this.idx];
-    this.npcs[this.idx].atkKey.onHoldCallback = this.npcs[this.idx].skill;
+    const INDEX = (this.idx = 0);
+    const NPC = this.npcs[this.idx];
+    const ATKKEY = NPC.atkKey;
+
+    NPC.visible = true;
+    NPC.info.visible = true;
+    ATKKEY.onHoldContext = NPC;
+    ATKKEY.onHoldCallback = NPC.skill;
   }
 
   exit_scene() {
@@ -50,8 +48,13 @@ class NPC_Scene extends Phaser.State {
   }
 
   choose_pre_npc() {
+    const NPC_BUTTONS = this.npc_buttons;
     const NPCS = this.npcs;
     const LENGTH = NPCS.length;
+
+    NPC_BUTTONS.getAt(NPC_BUTTONS.active).text.setStyle(NPC_BUTTONS.normal_style);
+    NPC_BUTTONS.active = 0;
+    NPC_BUTTONS.getAt(0).text.setStyle(NPC_BUTTONS.active_style);
 
     NPCS[this.idx].visible = false;
     NPCS[this.idx].info.visible = false;
@@ -65,7 +68,12 @@ class NPC_Scene extends Phaser.State {
   }
 
   choose_nxt_npc() {
+    const NPC_BUTTONS = this.npc_buttons;
     const NPCS = this.npcs;
+
+    NPC_BUTTONS.getAt(NPC_BUTTONS.active).text.setStyle(NPC_BUTTONS.normal_style);
+    NPC_BUTTONS.active = 1;
+    NPC_BUTTONS.getAt(1).text.setStyle(NPC_BUTTONS.active_style);
 
     NPCS[this.idx].visible = false;
     NPCS[this.idx].info.visible = false;
