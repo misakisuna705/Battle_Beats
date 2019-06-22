@@ -183,6 +183,11 @@ class Score extends Phaser.Image {
       this.hit_info[i].visible = true;
       this.overall_info[i].visible = true;
     }
+
+    this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(() => {
+      this.game.bgm.play();
+      this.game.state.start("Main_Scene");
+    }, this);
   }
 }
 

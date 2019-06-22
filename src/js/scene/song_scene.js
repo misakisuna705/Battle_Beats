@@ -61,6 +61,14 @@ class Song_Scene extends Phaser.State {
 
     if (!ACTIVE_AUDIO.isPlaying) {
       ACTIVE_AUDIO.play();
+      let stopTime = ACTIVE_AUDIO.totalDuration;
+      ACTIVE_AUDIO.stop();
+      ACTIVE_AUDIO.addMarker(
+        "preview",
+        song_config[SONG_INFOS.active].info.PreviewTime / 1000,
+        (stopTime * 1000 - song_config[SONG_INFOS.active].info.PreviewTime) / 1000
+      );
+      ACTIVE_AUDIO.play("preview");
     }
   }
 
@@ -99,6 +107,14 @@ class Song_Scene extends Phaser.State {
     SONG_INFOS.active = (SONG_INFOS.active - 1 + LENGTH) % LENGTH;
 
     SONG_AUDIOS[SONG_INFOS.active].play();
+    let stopTime = SONG_AUDIOS[SONG_INFOS.active].totalDuration;
+    SONG_AUDIOS[SONG_INFOS.active].stop();
+    SONG_AUDIOS[SONG_INFOS.active].addMarker(
+      "preview",
+      song_config[SONG_INFOS.active].info.PreviewTime / 1000,
+      (stopTime * 1000 - song_config[SONG_INFOS.active].info.PreviewTime) / 1000
+    );
+    SONG_AUDIOS[SONG_INFOS.active].play("preview");
 
     SONG_INFOS.getAt(SONG_INFOS.active).visible = true;
     SONG_INFOS.getAt(SONG_INFOS.active).title.visible = true;
@@ -133,6 +149,14 @@ class Song_Scene extends Phaser.State {
     SONG_INFOS.getAt(SONG_INFOS.active).album.visible = true;
 
     SONG_AUDIOS[SONG_INFOS.active].play();
+    let stopTime = SONG_AUDIOS[SONG_INFOS.active].totalDuration;
+    SONG_AUDIOS[SONG_INFOS.active].stop();
+    SONG_AUDIOS[SONG_INFOS.active].addMarker(
+      "preview",
+      song_config[SONG_INFOS.active].info.PreviewTime / 1000,
+      (stopTime * 1000 - song_config[SONG_INFOS.active].info.PreviewTime) / 1000
+    );
+    SONG_AUDIOS[SONG_INFOS.active].play("preview");
 
     GAME.active_song = SONG_INFOS.active;
   }

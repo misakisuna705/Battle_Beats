@@ -6,7 +6,7 @@ song_config[0] = {
     Title: "only my railgun",
     Artist: "fripSide",
     Album: "infinite synthesis",
-    //PreviewTime: 9434
+    PreviewTime: 9434,
     bpm: 145,
     nX: 5
   },

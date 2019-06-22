@@ -6,7 +6,7 @@ song_config[2] = {
     Title: "def",
     Artist: "ghi",
     Album: "jkl",
-    //PreviewTime: 9434
+    PreviewTime: 9434,
     bpm: 110.092,
     nX: 5
   },
