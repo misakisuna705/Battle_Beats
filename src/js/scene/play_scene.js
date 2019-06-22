@@ -1,4 +1,10 @@
 class Play_Scene extends Phaser.State {
+  init() {
+    const GAME = this.game;
+
+    this.song_beatmap = song_config[GAME.active_song].beatmap[GAME.active_level];
+  }
+
   create() {
     const GAME = this.game;
     const EVENTS = GAME.time.events;
@@ -37,7 +43,7 @@ class Play_Scene extends Phaser.State {
       new Button({ game: GAME, callback: this.hit_button_3, callbackContext: this }, BUTTON_CONF.target_buttons[3])
     ];
 
-    const BEATMAP = (this.song_beatmap = song_config[ACTIVE_SONG].beatmap[GAME.active_level]);
+    const BEATMAP = this.song_beatmap;
     const LENGTH = BEATMAP.length;
 
     for (let i = 0; i < LENGTH; ++i) {
