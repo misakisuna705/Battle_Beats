@@ -8,7 +8,7 @@ song_config[2] = {
     Album: "???",
     PreviewTime: 9434,
     bpm: 110.092,
-    nX: 5
+    nX: 7
   },
 
   AudioFilename: "abc.mp3",
