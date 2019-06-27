@@ -1,1 +1,0 @@
-let song_config=[];const song_size=3,song_path="assets/game/song/audio/",cover_path="assets/game/song/cover/";window.addEventListener("DOMContentLoaded",()=>{new Game(game_config).state.start("Game_Login")},!1);
