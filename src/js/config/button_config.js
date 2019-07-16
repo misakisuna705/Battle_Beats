@@ -19,14 +19,12 @@ const button_config = {
   main_scene: {
     enter_button: {
       key: "enter_button",
-      keycode: Phaser.Keyboard.ENTER,
       word: "確認",
       form: { fontSize: 64, fill: "#008cff" }
     },
 
     exit_button: {
       key: "exit_button",
-      keycode: Phaser.Keyboard.ESC,
       word: "登出",
       form: { fontSize: 64, fill: "#008cff" }
     },
@@ -61,7 +59,6 @@ const button_config = {
   hero_scene: {
     exit_button: {
       key: "exit_button",
-      keycode: Phaser.Keyboard.ESC,
       word: "返回",
       form: { fontSize: 64, fill: "#008cff" }
     },

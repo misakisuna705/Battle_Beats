@@ -10,28 +10,21 @@ class Hero_Scene extends Phaser.State {
     const GAME = this.game;
     const WIDTH = GAME.width;
     const HEIGHT = GAME.height;
-
     const ADD = this.add;
-
     const KEYBOARD = this.input.keyboard;
     const KEYCODE = Phaser.Keyboard;
     const SPACEBAR = KEYCODE.SPACEBAR;
-
     const ACTIVE = this.active_hero;
-
     const BUTTON_CONF = button_config.hero_scene;
     const HERO_BUTTONS_CONF = BUTTON_CONF.hero_buttons;
-
     const HERO_BUTTONS_LENGTH = HERO_BUTTONS_CONF.length;
     const HEROS_LENGTH = heros_config.length;
+    const NORMAL_STYLE = button_config.normal_style;
 
     //==============================new==============================//
 
     //exit button
-    const EXIT_BUTTON = (this.exit_button = new Button(
-      { game: GAME, x: WIDTH / 16, y: HEIGHT / 16, callback: this.exit_scene, callbackContext: this },
-      BUTTON_CONF.exit_button
-    ));
+    const EXIT_BUTTON = (this.exit_button = new Button({ game: GAME, x: WIDTH / 16, y: HEIGHT / 16 }, BUTTON_CONF.exit_button));
     //hero button
     const HERO_BUTTONS = (this.hero_buttons = []);
 
@@ -46,9 +39,11 @@ class Hero_Scene extends Phaser.State {
       HEROS[i] = new Hero({ game: GAME, x: WIDTH / 4, y: HEIGHT / 2, key: heros_config[i].key, keycode: SPACEBAR, idx: i });
       HERO_INFOS[i] = new Article({ game: GAME, x: (WIDTH / 8) * 3, y: (HEIGHT / 8) * 3 }, heros_config[i].info);
     }
-
-    //key
+    //exit key
+    const ESC_KEY = (this.esc_key = KEYBOARD.addKey(KEYCODE.ESC));
+    //left key
     const LEFT_KEY = (this.left_key = KEYBOARD.addKey(KEYCODE.LEFT));
+    //right key
     const RIGHT_KEY = (this.right_key = KEYBOARD.addKey(KEYCODE.RIGHT));
 
     //==============================add==============================//
@@ -74,7 +69,7 @@ class Hero_Scene extends Phaser.State {
     //hero
     HEROS[ACTIVE].visible = true;
     HERO_INFOS[this.active_hero].visible = true;
-
+    //key
     ATKKEY.onHoldContext = HEROS[ACTIVE];
     ATKKEY.onHoldCallback = HEROS[ACTIVE].skill;
 
@@ -84,29 +79,29 @@ class Hero_Scene extends Phaser.State {
     for (let i = 0; i < HEROS_LENGTH; ++i) {
       HEROS[i].animations.play("idle");
     }
-    //mouse
+    //hero button
     for (let i = 0; i < HERO_BUTTONS_LENGTH; ++i) {
       HERO_BUTTONS[i].onInputDown.add(this.select_hero, this);
       HERO_BUTTONS[i].onInputUp.add(() => {
         for (let i = 0; i < HERO_BUTTONS_LENGTH; ++i) {
-          HERO_BUTTONS[i].txt.setStyle(button_config.normal_style);
+          HERO_BUTTONS[i].txt.setStyle(NORMAL_STYLE);
         }
       }, this);
     }
-    //key
-
+    //esc key
+    ESC_KEY.onDown.add(this.exit_scene, this);
     //left key
     LEFT_KEY.onDown.add(this.tour_hero, this);
     LEFT_KEY.onUp.add(() => {
       for (let i = 0; i < HERO_BUTTONS_LENGTH; ++i) {
-        HERO_BUTTONS[i].txt.setStyle(button_config.normal_style);
+        HERO_BUTTONS[i].txt.setStyle(NORMAL_STYLE);
       }
     }, this);
     //right key
     RIGHT_KEY.onDown.add(this.tour_hero, this);
     RIGHT_KEY.onUp.add(() => {
       for (let i = 0; i < HERO_BUTTONS_LENGTH; ++i) {
-        HERO_BUTTONS[i].txt.setStyle(button_config.normal_style);
+        HERO_BUTTONS[i].txt.setStyle(NORMAL_STYLE);
       }
     }, this);
   }
@@ -163,7 +158,6 @@ class Hero_Scene extends Phaser.State {
 
   tour_hero(key) {
     const KEYCODE = Phaser.Keyboard;
-
     const HERO_BUTTONS = this.hero_buttons;
     const HEROS = this.heros;
     const HERO_INFOS = this.hero_infos;
