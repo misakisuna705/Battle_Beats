@@ -6,9 +6,9 @@ const cover_path = "assets/game/song/cover/";
 window.addEventListener(
   "DOMContentLoaded",
   () => {
-    const GAME = new Game(game_config);
+    const GAME = new Game(game_config.size);
 
-    GAME.state.start("Game_Login");
+    GAME.state.start(game_config.scene.game_init);
   },
   false
 );

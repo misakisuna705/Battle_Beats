@@ -1,69 +1,102 @@
 class Main_Scene extends Phaser.State {
   init() {
-    this.game.bgv.addToWorld(-400, 0, 0, 0, 1, 1);
+    //bgv
+    this.game.bgv.addToWorld(0, 0, 0, 0, 1, 1);
+    //active
+    this.active_button = 0;
   }
 
   create() {
     const GAME = this.game;
+    const WIDTH = GAME.width;
+    const HEIGHT = GAME.height;
+
+    const ADD = this.add;
+
+    const KEYBOARD = this.input.keyboard;
+    const KEYCODE = Phaser.Keyboard;
+
+    const ACTIVE = this.active_button;
+
     const BUTTON_CONF = button_config.main_scene;
+    const MODE_BUTTONS_CONF = BUTTON_CONF.mode_buttons;
     const ARTICLE_CONF = article_config.main_scene;
 
-    this.enter_button = new Button(
-      { game: GAME, callback: this.enter_scene, callbackContext: this, form: { fill: "#008cff" } },
+    const LENGTH = MODE_BUTTONS_CONF.length;
+
+    //==============================new==============================//
+
+    //enter button
+    const ENTER_BUTTON = (this.enter_button = new Button(
+      { game: GAME, x: (WIDTH / 16) * 15, y: (HEIGHT / 16) * 15, callback: this.enter_scene, callbackContext: this },
       BUTTON_CONF.enter_button
-    );
-
-    this.exit_button = new Button(
-      { game: GAME, callback: this.exit_scene, callbackContext: this, form: { fill: "#008cff" } },
-      BUTTON_CONF.exit_button
-    );
-
-    const MODE_BUTTONS = (this.mode_buttons = new Buttons(
-      { game: GAME, pre_callback: this.choose_pre_mode, nxt_callback: this.choose_nxt_mode, callbackContext: this },
-      BUTTON_CONF.mode_buttons
     ));
+    //exit button
+    const EXIT_BUTTON = (this.exit_button = new Button(
+      { game: GAME, x: WIDTH / 16, y: HEIGHT / 16, callback: this.exit_scene, callbackContext: this },
+      BUTTON_CONF.exit_button
+    ));
+    //mode
+    const MODE_BUTTONS = (this.mode_buttons = []);
+    const MODE_ARTICLES = (this.mode_articles = []);
 
-    const NORMAL_STYLE = MODE_BUTTONS.normal_style;
+    for (let i = 0; i < LENGTH; ++i) {
+      MODE_BUTTONS[i] = new Button(
+        { game: GAME, x: (WIDTH / 4) * 3, y: (HEIGHT / 8) * (i + 1), callback: this.select_mode, idx: i },
+        MODE_BUTTONS_CONF[i]
+      );
+      MODE_ARTICLES[i] = new Article({ game: GAME, x: WIDTH / 8, y: HEIGHT / 8 }, ARTICLE_CONF[i]);
+    }
+    //key
+    const UP_KEY = (this.up_key = KEYBOARD.addKey(KEYCODE.UP));
+    const DOWN_KEY = (this.down_key = KEYBOARD.addKey(KEYCODE.DOWN));
 
-    MODE_BUTTONS.addMultiple([
-      new Button(
-        { game: GAME, callback: this.choose_general_mode, callbackContext: this, form: { fill: MODE_BUTTONS.active_style.fill } },
-        BUTTON_CONF.general_mode_button
-      ),
-      new Button({ game: GAME, callback: this.choose_story_mode, callbackContext: this, form: NORMAL_STYLE }, BUTTON_CONF.story_mode_button),
-      new Button({ game: GAME, callback: this.choose_method_button, callbackContext: this, form: NORMAL_STYLE }, BUTTON_CONF.method_button),
-      new Button({ game: GAME, callback: this.choose_npc_button, callbackContext: this, form: NORMAL_STYLE }, BUTTON_CONF.npc_button)
-    ]);
+    //==============================add==============================//
 
-    this.mode_article = [
-      new Article({ game: GAME, x: 40, y: 120 }, ARTICLE_CONF.general_mode_article),
-      new Article({ game: GAME, x: 40, y: 120 }, ARTICLE_CONF.story_mode_article),
-      new Article({ game: GAME, x: 40, y: 120 }, ARTICLE_CONF.method_article),
-      new Article({ game: GAME, x: 40, y: 120 }, ARTICLE_CONF.npc_article)
-    ];
+    //enter button
+    ADD.existing(ENTER_BUTTON);
+    ADD.existing(ENTER_BUTTON.txt);
+    //exit button
+    ADD.existing(EXIT_BUTTON);
+    ADD.existing(EXIT_BUTTON.txt);
+    //mode
+    for (let i = 0; i < LENGTH; ++i) {
+      ADD.existing(MODE_BUTTONS[i]);
+      ADD.existing(MODE_BUTTONS[i].txt);
+      ADD.existing(MODE_ARTICLES[i]);
+    }
 
-    this.mode_article[0].visible = true;
+    //==============================set==============================//
+
+    //mode
+    MODE_BUTTONS[ACTIVE].txt.setStyle(button_config.active_style);
+    MODE_ARTICLES[ACTIVE].visible = true;
+
+    //==============================call==============================//
+
+    //key
+    UP_KEY.onDown.add(this.tour_mode, this);
+    DOWN_KEY.onDown.add(this.tour_mode, this);
   }
 
+  //==============================func==============================//
+
   enter_scene() {
-    const GAME = this.game;
+    const STATE = this.game.state;
+    const SCENE_CONF = game_config.scene;
 
-    switch (this.mode_buttons.active) {
+    switch (this.active_button) {
       case 0:
-        GAME.state.start("Song_Scene");
+        //STATE.start("Song_Scene");
         break;
-
       case 1:
         break;
 
       case 2:
         break;
 
-      case 3:
-        GAME.state.start("NPC_Scene");
-        break;
-
       default:
+        STATE.start(SCENE_CONF.hero_scene);
         break;
     }
   }
@@ -73,89 +106,49 @@ class Main_Scene extends Phaser.State {
       .auth()
       .signOut()
       .then(() => {
-        this.game.state.start("Game_Login");
+        this.game.state.start(game_config.scene.game_login);
       })
       .catch(error => {
         alert(error.message);
       });
   }
 
-  choose_pre_mode() {
-    const MODE_BUTTONS = this.mode_buttons;
-    const MODE_ARTICLE = this.mode_article;
+  select_mode() {
+    const STATE = this.game.state.getCurrentState();
+    const MODE_BUTTONS = STATE.mode_buttons;
+    const MODE_ARTICLES = STATE.mode_articles;
     const LENGTH = MODE_BUTTONS.length;
 
-    MODE_BUTTONS.getAt(MODE_BUTTONS.active).text.setStyle(MODE_BUTTONS.normal_style);
-    MODE_ARTICLE[MODE_BUTTONS.active].visible = false;
+    for (let i = 0; i < LENGTH; i++) {
+      MODE_BUTTONS[i].txt.setStyle(button_config.normal_style);
+      MODE_ARTICLES[i].visible = false;
+    }
 
-    MODE_BUTTONS.active = (MODE_BUTTONS.active - 1 + LENGTH) % LENGTH;
+    const ACTIVE = (STATE.active_button = this.idx);
 
-    MODE_BUTTONS.getAt(MODE_BUTTONS.active).text.setStyle(MODE_BUTTONS.active_style);
-    MODE_ARTICLE[MODE_BUTTONS.active].visible = true;
+    MODE_BUTTONS[ACTIVE].txt.setStyle(button_config.active_style);
+    MODE_ARTICLES[ACTIVE].visible = true;
   }
 
-  choose_nxt_mode() {
+  tour_mode() {
     const MODE_BUTTONS = this.mode_buttons;
-    const MODE_ARTICLE = this.mode_article;
+    const MODE_ARTICLE = this.mode_articles;
+    const LENGTH = MODE_BUTTONS.length;
 
-    MODE_BUTTONS.getAt(MODE_BUTTONS.active).text.setStyle(MODE_BUTTONS.normal_style);
-    MODE_ARTICLE[MODE_BUTTONS.active].visible = false;
+    MODE_BUTTONS[this.active_button].txt.setStyle(button_config.normal_style);
+    MODE_ARTICLE[this.active_button].visible = false;
 
-    MODE_BUTTONS.active = (MODE_BUTTONS.active + 1) % MODE_BUTTONS.length;
+    switch (this.up_key.isDown) {
+      case true:
+        this.active_button = (this.active_button - 1 + LENGTH) % LENGTH;
+        break;
 
-    MODE_BUTTONS.getAt(MODE_BUTTONS.active).text.setStyle(MODE_BUTTONS.active_style);
-    MODE_ARTICLE[MODE_BUTTONS.active].visible = true;
-  }
+      default:
+        this.active_button = (this.active_button + 1) % LENGTH;
+        break;
+    }
 
-  choose_general_mode() {
-    const MODE_BUTTONS = this.mode_buttons;
-    const MODE_ARTICLE = this.mode_article;
-
-    MODE_BUTTONS.getAt(MODE_BUTTONS.active).text.setStyle(MODE_BUTTONS.normal_style);
-    MODE_ARTICLE[MODE_BUTTONS.active].visible = false;
-
-    MODE_BUTTONS.active = 0;
-
-    MODE_BUTTONS.getAt(MODE_BUTTONS.active).text.setStyle(MODE_BUTTONS.active_style);
-    MODE_ARTICLE[MODE_BUTTONS.active].visible = true;
-  }
-
-  choose_story_mode() {
-    const MODE_BUTTONS = this.mode_buttons;
-    const MODE_ARTICLE = this.mode_article;
-
-    MODE_BUTTONS.getAt(MODE_BUTTONS.active).text.setStyle(MODE_BUTTONS.normal_style);
-    MODE_ARTICLE[MODE_BUTTONS.active].visible = false;
-
-    MODE_BUTTONS.active = 1;
-
-    MODE_BUTTONS.getAt(MODE_BUTTONS.active).text.setStyle(MODE_BUTTONS.active_style);
-    MODE_ARTICLE[MODE_BUTTONS.active].visible = true;
-  }
-
-  choose_method_button() {
-    const MODE_BUTTONS = this.mode_buttons;
-    const MODE_ARTICLE = this.mode_article;
-
-    MODE_BUTTONS.getAt(MODE_BUTTONS.active).text.setStyle(MODE_BUTTONS.normal_style);
-    MODE_ARTICLE[MODE_BUTTONS.active].visible = false;
-
-    MODE_BUTTONS.active = 2;
-
-    MODE_BUTTONS.getAt(MODE_BUTTONS.active).text.setStyle(MODE_BUTTONS.active_style);
-    MODE_ARTICLE[MODE_BUTTONS.active].visible = true;
-  }
-
-  choose_npc_button() {
-    const MODE_BUTTONS = this.mode_buttons;
-    const MODE_ARTICLE = this.mode_article;
-
-    MODE_BUTTONS.getAt(MODE_BUTTONS.active).text.setStyle(MODE_BUTTONS.normal_style);
-    MODE_ARTICLE[MODE_BUTTONS.active].visible = false;
-
-    MODE_BUTTONS.active = 3;
-
-    MODE_BUTTONS.getAt(MODE_BUTTONS.active).text.setStyle(MODE_BUTTONS.active_style);
-    MODE_ARTICLE[MODE_BUTTONS.active].visible = true;
+    MODE_BUTTONS[this.active_button].txt.setStyle(button_config.active_style);
+    MODE_ARTICLE[this.active_button].visible = true;
   }
 }

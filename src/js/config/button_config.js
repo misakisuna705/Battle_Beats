@@ -1,113 +1,92 @@
 const button_config = {
+  normal_style: {
+    fontSize: 64,
+    fill: "#008cff"
+  },
+
+  active_style: {
+    fontSize: 64,
+    fill: "#ffffff"
+  },
+
   game_login: {
     login_button: {
-      x: 240,
-      y: 560,
-      key: "login_button",
+      key: "login_button.png",
       keycode: Phaser.Keyboard.ENTER
     }
   },
 
   main_scene: {
     enter_button: {
-      x: 444,
-      y: 604,
       key: "enter_button",
+      keycode: Phaser.Keyboard.ENTER,
       word: "確認",
-      keycode: Phaser.Keyboard.ENTER
+      form: { fontSize: 64, fill: "#008cff" }
     },
 
     exit_button: {
-      x: 36,
-      y: 36,
       key: "exit_button",
+      keycode: Phaser.Keyboard.ESC,
       word: "登出",
-      keycode: Phaser.Keyboard.ESC
+      form: { fontSize: 64, fill: "#008cff" }
     },
 
-    mode_buttons: {
-      normal_style: {
-        fill: "#008cff"
+    mode_buttons: [
+      {
+        key: "mode_button",
+        word: "一般模式",
+        form: { fontSize: 64, fill: "#008cff" }
       },
-      active_style: {
-        fill: "#ffffff"
+
+      {
+        key: "mode_button",
+        word: "劇情模式",
+        form: { fontSize: 64, fill: "#008cff" }
       },
 
-      pre_keycode: Phaser.Keyboard.UP,
-      nxt_keycode: Phaser.Keyboard.DOWN
-    },
+      {
+        key: "mode_button",
+        word: "玩法說明",
+        form: { fontSize: 64, fill: "#008cff" }
+      },
 
-    general_mode_button: {
-      x: 360,
-      y: 120,
-      key: "mode_button",
-      word: "一般模式"
-    },
-
-    story_mode_button: {
-      x: 360,
-      y: 180,
-      key: "mode_button",
-      word: "劇情模式"
-    },
-
-    method_button: {
-      x: 360,
-      y: 240,
-      key: "mode_button",
-      word: "玩法說明"
-    },
-
-    npc_button: {
-      x: 360,
-      y: 300,
-      key: "mode_button",
-      word: "角色圖鑑"
-    }
+      {
+        key: "mode_button",
+        word: "角色圖鑑",
+        form: { fontSize: 64, fill: "#008cff" }
+      }
+    ]
   },
 
-  npc_scene: {
-    npc_buttons: {
-      normal_style: {
-        fill: "#008cff"
-      },
-      active_style: {
-        fill: "#ffffff"
-      },
-
-      pre_keycode: Phaser.Keyboard.LEFT,
-      nxt_keycode: Phaser.Keyboard.RIGHT
-    },
-
-    left_npc_button: {
-      x: 48,
-      y: 180,
-      key: "song_button",
-      word: "上一位"
-    },
-
-    right_npc_button: {
-      x: 432,
-      y: 180,
-      key: "song_button",
-      word: "下一位"
-    },
-
-    enter_button: {
-      x: 444,
-      y: 604,
-      key: "enter_button",
-      word: "確認",
-      keycode: Phaser.Keyboard.ENTER
-    },
-
+  hero_scene: {
     exit_button: {
-      x: 36,
-      y: 36,
       key: "exit_button",
+      keycode: Phaser.Keyboard.ESC,
       word: "返回",
-      keycode: Phaser.Keyboard.ESC
-    }
+      form: { fontSize: 64, fill: "#008cff" }
+    },
+
+    hero_buttons: [
+      {
+        key: "song_button",
+        word: "上一位",
+        form: { fontSize: 64, fill: "#008cff" }
+      },
+
+      {
+        key: "song_button",
+        word: "下一位",
+        form: { fontSize: 64, fill: "#008cff" }
+      }
+    ]
+
+    //enter_button: {
+    //x: 444,
+    //y: 604,
+    //key: "enter_button",
+    //word: "確認",
+    //keycode: Phaser.Keyboard.ENTER
+    //}
   },
 
   song_scene: {

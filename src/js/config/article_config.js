@@ -1,6 +1,6 @@
 const article_config = {
-  main_scene: {
-    general_mode_article: {
+  main_scene: [
+    {
       text:
         "期末考要到了\n" +
         "阿明和小美總是\n" +
@@ -14,10 +14,10 @@ const article_config = {
         "後來他才想起\n" +
         "battle beats中的一般模式\n" +
         "才是唸書前的最佳開胃菜...\n",
-      style: { fill: "#008cff", fontSize: 24 }
+      style: { fontSize: 48, fill: "#008cff" }
     },
 
-    story_mode_article: {
+    {
       text:
         "期末專題要demo了\n" +
         "阿明負責專題文案\n" +
@@ -33,10 +33,10 @@ const article_config = {
         "知道一切的靈感\n" +
         "都藏在battle beats劇情模式\n" +
         "未解鎖的章節中...\n",
-      style: { fill: "#008cff", fontSize: 24 }
+      style: { fontSize: 48, fill: "#008cff" }
     },
 
-    method_article: {
+    {
       text:
         "期末要上機考了\n" +
         "小美已經將練習題\n" +
@@ -49,10 +49,10 @@ const article_config = {
         "只要先把手指對準 D F J K\n" +
         "滑鼠、鍵盤幾次來回後按下 Enter\n" +
         "滿分輕鬆拿，半個小時就能 ESC\n",
-      style: { fill: "#008cff", fontSize: 24 }
+      style: { fontSize: 48, fill: "#008cff" }
     },
 
-    npc_article: {
+    {
       text:
         "期末考考完了\n" +
         "小美一如往常高分\n" +
@@ -67,7 +67,7 @@ const article_config = {
         "battle beats的圖鑑中\n" +
         "有著滿滿的老婆\n" +
         "以及尚未解鎖的情人...\n",
-      style: { fill: "#008cff", fontSize: 24 }
+      style: { fontSize: 48, fill: "#008cff" }
     }
-  }
+  ]
 };
