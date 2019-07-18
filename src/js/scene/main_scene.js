@@ -126,15 +126,14 @@ class Main_Scene extends Phaser.State {
     const MODE_ARTICLES = this.mode_articles;
     const LENGTH = MODE_BUTTONS.length;
 
-    for (let i = 0; i < LENGTH; i++) {
-      MODE_BUTTONS[i].txt.setStyle(button_config.normal_style);
-      MODE_ARTICLES[i].visible = false;
-    }
-
-    const ACTIVE = (this.active_button = btn.idx);
-
-    MODE_BUTTONS[ACTIVE].txt.setStyle(button_config.active_style);
-    MODE_ARTICLES[ACTIVE].visible = true;
+    //pre
+    MODE_BUTTONS[this.active_button].txt.setStyle(button_config.normal_style);
+    MODE_ARTICLES[this.active_button].visible = false;
+    //cur
+    this.active_button = btn.idx;
+    //nxt
+    MODE_BUTTONS[this.active_button].txt.setStyle(button_config.active_style);
+    MODE_ARTICLES[this.active_button].visible = true;
   }
 
   tour_mode(key) {
@@ -143,9 +142,10 @@ class Main_Scene extends Phaser.State {
     const MODE_ARTICLE = this.mode_articles;
     const LENGTH = MODE_BUTTONS.length;
 
+    //pre
     MODE_BUTTONS[this.active_button].txt.setStyle(button_config.normal_style);
     MODE_ARTICLE[this.active_button].visible = false;
-
+    //cur
     switch (key.keyCode) {
       case KEYCODE.UP:
         this.active_button = (this.active_button - 1 + LENGTH) % LENGTH;
@@ -158,7 +158,7 @@ class Main_Scene extends Phaser.State {
       default:
         break;
     }
-
+    //nxt
     MODE_BUTTONS[this.active_button].txt.setStyle(button_config.active_style);
     MODE_ARTICLE[this.active_button].visible = true;
   }

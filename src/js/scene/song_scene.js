@@ -98,10 +98,9 @@ class Song_Scene extends Phaser.State {
       }, this);
     }
     //song audio
-    SONG_AUDIOS[ACTIVE].play();
-
-    //if (!ACTIVE_AUDIO.isPlaying) {
-    //ACTIVE_AUDIO.play();
+    if (!SONG_AUDIOS[ACTIVE].isPlaying) {
+      SONG_AUDIOS[ACTIVE].play();
+    }
 
     //SONG_AUDIOS[ACTIVE].play();
     //let stopTime = ACTIVE_AUDIO.totalDuration;
