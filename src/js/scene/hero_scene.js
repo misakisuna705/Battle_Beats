@@ -93,16 +93,12 @@ class Hero_Scene extends Phaser.State {
     //left key
     LEFT_KEY.onDown.add(this.tour_hero, this);
     LEFT_KEY.onUp.add(() => {
-      for (let i = 0; i < HERO_BUTTONS_LENGTH; ++i) {
-        HERO_BUTTONS[i].txt.setStyle(NORMAL_STYLE);
-      }
+      HERO_BUTTONS[0].txt.setStyle(NORMAL_STYLE);
     }, this);
     //right key
     RIGHT_KEY.onDown.add(this.tour_hero, this);
     RIGHT_KEY.onUp.add(() => {
-      for (let i = 0; i < HERO_BUTTONS_LENGTH; ++i) {
-        HERO_BUTTONS[i].txt.setStyle(NORMAL_STYLE);
-      }
+      HERO_BUTTONS[1].txt.setStyle(NORMAL_STYLE);
     }, this);
   }
 
@@ -117,14 +113,12 @@ class Hero_Scene extends Phaser.State {
     const HERO_INFOS = this.hero_infos;
     const LENGTH = heros_config.length;
 
-    //pre
-
     //hero
+
+    //pre
     HEROS[this.active_hero].visible = false;
     HERO_INFOS[this.active_hero].visible = false;
-
     //cur
-
     switch (btn.idx) {
       case 0:
         this.active_hero = (this.active_hero - 1 + LENGTH) % LENGTH;
@@ -138,15 +132,14 @@ class Hero_Scene extends Phaser.State {
         break;
     }
     //nxt
-
-    //hero button
-    btn.txt.setStyle(button_config.active_style);
-    //hero
     HEROS[this.active_hero].visible = true;
     HERO_INFOS[this.active_hero].visible = true;
 
     HEROS[this.active_hero].atkKey.onHoldContext = HEROS[this.active_hero];
     HEROS[this.active_hero].atkKey.onHoldCallback = HEROS[this.active_hero].skill;
+
+    //hero button
+    btn.txt.setStyle(button_config.active_style);
   }
 
   tour_hero(key) {
@@ -164,24 +157,23 @@ class Hero_Scene extends Phaser.State {
 
     //cur
 
+    //hero button
     switch (key.keyCode) {
       case KEYCODE.LEFT:
-        //hero button
         HERO_BUTTONS[0].txt.setStyle(button_config.active_style);
-        //hero
         this.active_hero = (this.active_hero - 1 + LENGTH) % LENGTH;
         break;
 
       case KEYCODE.RIGHT:
-        //hero button
         HERO_BUTTONS[1].txt.setStyle(button_config.active_style);
-        //hero
         this.active_hero = (this.active_hero + 1) % LENGTH;
         break;
 
       default:
         break;
     }
+
+    //nxt
 
     //hero
     HEROS[this.active_hero].visible = true;

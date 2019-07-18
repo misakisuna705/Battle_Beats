@@ -52,6 +52,10 @@ class Song_Scene extends Phaser.State {
     const ENTER_KEY = (this.enter_key = KEYBOARD.addKey(KEYCODE.ENTER));
     //exit key
     const ESC_KEY = (this.esc_key = KEYBOARD.addKey(KEYCODE.ESC));
+    //left key
+    const LEFT_KEY = (this.left_key = KEYBOARD.addKey(KEYCODE.LEFT));
+    //right key
+    const RIGHT_KEY = (this.right_key = KEYBOARD.addKey(KEYCODE.RIGHT));
 
     //==============================add==============================//
 
@@ -114,6 +118,16 @@ class Song_Scene extends Phaser.State {
     ENTER_KEY.onDown.add(this.enter_scene, this);
     //esc key
     ESC_KEY.onDown.add(this.exit_scene, this);
+    //left key
+    LEFT_KEY.onDown.add(this.tour_song, this);
+    LEFT_KEY.onUp.add(() => {
+      SONG_BUTTONS[0].txt.setStyle(NORMAL_STYLE);
+    }, this);
+    //right key
+    RIGHT_KEY.onDown.add(this.tour_song, this);
+    RIGHT_KEY.onUp.add(() => {
+      SONG_BUTTONS[1].txt.setStyle(NORMAL_STYLE);
+    }, this);
   }
 
   //==============================func==============================//
@@ -139,16 +153,15 @@ class Song_Scene extends Phaser.State {
     const SONG_AUDIOS = GAME.songs;
     const LENGTH = song_config.length;
 
-    //pre
-
     //song cover
     //song info
+    //song audio
+
+    //pre
     SONG_COVERS[GAME.active_song].visible = false;
     SONG_INFOS[GAME.active_song].visible = false;
     SONG_AUDIOS[GAME.active_song].stop();
-
     //cur
-
     switch (btn.idx) {
       case 0:
         GAME.active_song = (GAME.active_song - 1 + LENGTH) % LENGTH;
@@ -161,15 +174,57 @@ class Song_Scene extends Phaser.State {
       default:
         break;
     }
+    //nxt
+    SONG_COVERS[GAME.active_song].visible = true;
+    SONG_INFOS[GAME.active_song].visible = true;
+    SONG_AUDIOS[GAME.active_song].play();
 
     //song button
     btn.txt.setStyle(button_config.active_style);
+  }
+
+  tour_song(key) {
+    const GAME = this.game;
+    const KEYCODE = Phaser.Keyboard;
+    const SONG_BUTTONS = this.song_buttons;
+    const SONG_COVERS = this.song_covers;
+    const SONG_INFOS = this.song_infos;
+    const SONG_AUDIOS = GAME.songs;
+    const LENGTH = song_config.length;
+
+    //pre
+
     //song cover
     //song info
+    //song audio
+    SONG_COVERS[GAME.active_song].visible = false;
+    SONG_INFOS[GAME.active_song].visible = false;
+    SONG_AUDIOS[GAME.active_song].stop();
+
+    //cur
+
+    //song button
+    switch (key.keyCode) {
+      case KEYCODE.LEFT:
+        SONG_BUTTONS[0].txt.setStyle(button_config.active_style);
+        GAME.active_song = (GAME.active_song - 1 + LENGTH) % LENGTH;
+        break;
+
+      case KEYCODE.RIGHT:
+        SONG_BUTTONS[1].txt.setStyle(button_config.active_style);
+        GAME.active_song = (GAME.active_song + 1) % LENGTH;
+        break;
+
+      default:
+    }
+
+    //nxt
+
+    //song cover
+    //song info
+    //song audio
     SONG_COVERS[GAME.active_song].visible = true;
     SONG_INFOS[GAME.active_song].visible = true;
     SONG_AUDIOS[GAME.active_song].play();
   }
-
-  tour_song(key) {}
 }
