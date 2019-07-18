@@ -115,53 +115,36 @@ const button_config = {
 
   level_scene: {
     enter_button: {
-      x: 444,
-      y: 604,
       key: "enter_button",
       word: "確認",
-      keycode: Phaser.Keyboard.ENTER
+      form: { fontSize: 64, fill: "#008cff" }
     },
 
     exit_button: {
-      x: 36,
-      y: 36,
       key: "exit_button",
       word: "返回",
-      keycode: Phaser.Keyboard.ESC
+      form: { fontSize: 64, fill: "#008cff" }
     },
 
-    level_buttons: {
-      normal_style: {
-        fill: "#008cff"
+    level_buttons: [
+      {
+        key: "mode_button",
+        word: "簡單",
+        form: { fontSize: 64, fill: "#008cff" }
       },
-      active_style: {
-        fill: "#ffffff"
+
+      {
+        key: "mode_button",
+        word: "一般",
+        form: { fontSize: 64, fill: "#008cff" }
       },
 
-      pre_keycode: Phaser.Keyboard.UP,
-      nxt_keycode: Phaser.Keyboard.DOWN
-    },
-
-    easy_level_button: {
-      x: 360,
-      y: 120,
-      key: "mode_button",
-      word: "簡單"
-    },
-
-    normal_level_button: {
-      x: 360,
-      y: 180,
-      key: "mode_button",
-      word: "一般"
-    },
-
-    hard_level_button: {
-      x: 360,
-      y: 240,
-      key: "mode_button",
-      word: "困難"
-    }
+      {
+        key: "mode_button",
+        word: "困難",
+        form: { fontSize: 64, fill: "#008cff" }
+      }
+    ]
   },
 
   game_start: {
