@@ -1,17 +1,16 @@
 song_config[0] = {
+  PreviewTime: 9434,
+  bpm: 145,
+  nX: 5,
+
   info: {
-    x: 240,
-    y: 200,
-    key: "infinite_synthesis.png",
-    Title: "only my railgun",
-    Artist: "fripSide",
-    Album: "infinite synthesis",
-    PreviewTime: 9434,
-    bpm: 145,
-    nX: 5
+    text: "歌名: only my railgun\n" + "歌手: fripSide\n" + "專輯: infinite synthesis\n",
+    style: { fontSize: 64, fill: "#008cff" }
   },
 
-  AudioFilename: "only_my_railgun.mp3",
+  cover: "infinite_synthesis.png",
+
+  audio: "only_my_railgun.mp3",
 
   beatmap: [
     [

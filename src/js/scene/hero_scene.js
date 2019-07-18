@@ -75,6 +75,8 @@ class Hero_Scene extends Phaser.State {
 
     //==============================call==============================//
 
+    //exit button
+    EXIT_BUTTON.onInputDown.add(this.exit_scene, this);
     //hero
     for (let i = 0; i < HEROS_LENGTH; ++i) {
       HEROS[i].animations.play("idle");
@@ -82,10 +84,8 @@ class Hero_Scene extends Phaser.State {
     //hero button
     for (let i = 0; i < HERO_BUTTONS_LENGTH; ++i) {
       HERO_BUTTONS[i].onInputDown.add(this.select_hero, this);
-      HERO_BUTTONS[i].onInputUp.add(() => {
-        for (let i = 0; i < HERO_BUTTONS_LENGTH; ++i) {
-          HERO_BUTTONS[i].txt.setStyle(NORMAL_STYLE);
-        }
+      HERO_BUTTONS[i].onInputUp.add(btn => {
+        btn.txt.setStyle(NORMAL_STYLE);
       }, this);
     }
     //esc key
@@ -109,22 +109,16 @@ class Hero_Scene extends Phaser.State {
   //==============================func==============================//
 
   exit_scene() {
-    this.game.state.start("Main_Scene");
+    this.game.state.start(game_config.scene.main_scene);
   }
 
   select_hero(btn) {
-    const HERO_BUTTONS = this.hero_buttons;
     const HEROS = this.heros;
     const HERO_INFOS = this.hero_infos;
-    const HERO_BUTTONS_LENGTH = HERO_BUTTONS.length;
-    const HEROS_LENGTH = HEROS.length;
+    const LENGTH = heros_config.length;
 
     //pre
 
-    //hero button
-    for (let i = 0; i < HERO_BUTTONS_LENGTH; ++i) {
-      HERO_BUTTONS[i].txt.setStyle(button_config.normal_style);
-    }
     //hero
     HEROS[this.active_hero].visible = false;
     HERO_INFOS[this.active_hero].visible = false;
@@ -133,21 +127,20 @@ class Hero_Scene extends Phaser.State {
 
     switch (btn.idx) {
       case 0:
-        this.active_hero = (this.active_hero - 1 + HEROS_LENGTH) % HEROS_LENGTH;
+        this.active_hero = (this.active_hero - 1 + LENGTH) % LENGTH;
         break;
 
       case 1:
-        this.active_hero = (this.active_hero + 1) % HEROS_LENGTH;
+        this.active_hero = (this.active_hero + 1) % LENGTH;
         break;
 
       default:
         break;
     }
-
     //nxt
 
     //hero button
-    HERO_BUTTONS[btn.idx].txt.setStyle(button_config.normal_style);
+    btn.txt.setStyle(button_config.active_style);
     //hero
     HEROS[this.active_hero].visible = true;
     HERO_INFOS[this.active_hero].visible = true;
@@ -161,15 +154,10 @@ class Hero_Scene extends Phaser.State {
     const HERO_BUTTONS = this.hero_buttons;
     const HEROS = this.heros;
     const HERO_INFOS = this.hero_infos;
-    const HERO_BUTTONS_LENGTH = HERO_BUTTONS.length;
-    const HEROS_LENGTH = HEROS.length;
+    const LENGTH = heros_config.length;
 
     //pre
 
-    //hero button
-    for (let i = 0; i < HERO_BUTTONS_LENGTH; ++i) {
-      HERO_BUTTONS[i].txt.setStyle(button_config.normal_style);
-    }
     //hero
     HEROS[this.active_hero].visible = false;
     HERO_INFOS[this.active_hero].visible = false;
@@ -181,14 +169,14 @@ class Hero_Scene extends Phaser.State {
         //hero button
         HERO_BUTTONS[0].txt.setStyle(button_config.active_style);
         //hero
-        this.active_hero = (this.active_hero - 1 + HEROS_LENGTH) % HEROS_LENGTH;
+        this.active_hero = (this.active_hero - 1 + LENGTH) % LENGTH;
         break;
 
       case KEYCODE.RIGHT:
         //hero button
         HERO_BUTTONS[1].txt.setStyle(button_config.active_style);
         //hero
-        this.active_hero = (this.active_hero + 1) % HEROS_LENGTH;
+        this.active_hero = (this.active_hero + 1) % LENGTH;
         break;
 
       default:

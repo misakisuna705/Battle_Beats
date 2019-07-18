@@ -22,8 +22,18 @@ class Img extends Phaser.Image {
   }
 }
 
+class Cover extends Phaser.Image {
+  constructor({ game, x, y, frame }, { key }) {
+    super(game, x, y, key, frame);
+
+    this.anchor.setTo(0.5, 0.5);
+
+    this.visible = false;
+  }
+}
+
 class Button extends Phaser.Button {
-  constructor({ game, x, y, callback, callbackContext, overFrame, outFrame, downFrame, upFrame, idx }, { key, keycode, word, form }) {
+  constructor({ game, x, y, callback, callbackContext, overFrame, outFrame, downFrame, upFrame, idx }, { key, word, form }) {
     super(game, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame);
 
     const GAME = this.game;
@@ -36,12 +46,6 @@ class Button extends Phaser.Button {
     //==============================set==============================//
 
     this.anchor.setTo(0.5, 0.5);
-
-    if (keycode != undefined) {
-      const PRESSKEY = (this.presskey = GAME.input.keyboard.addKey(keycode));
-
-      PRESSKEY.onDown.add(callback, callbackContext);
-    }
   }
 }
 

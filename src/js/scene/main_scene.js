@@ -91,16 +91,20 @@ class Main_Scene extends Phaser.State {
 
     switch (this.active_button) {
       case 0:
-        //STATE.start("Song_Scene");
+        STATE.start(SCENE_CONF.song_scene);
         break;
+
       case 1:
         break;
 
       case 2:
         break;
 
-      default:
+      case 3:
         STATE.start(SCENE_CONF.hero_scene);
+        break;
+
+      default:
         break;
     }
   }

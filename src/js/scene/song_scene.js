@@ -2,162 +2,174 @@ class Song_Scene extends Phaser.State {
   init() {
     const GAME = this.game;
 
+    //bgv
+    GAME.bgv.addToWorld(0, 0, 0, 0, 1, 1);
+    //bgm
+    GAME.bgm.stop();
+    //active
     if (GAME.active_song === -1) {
       GAME.active_song = 0;
     }
-
-    GAME.bgm.stop();
-    GAME.bgv.addToWorld(-400, 0, 0, 0, 1, 1);
   }
 
   create() {
     const GAME = this.game;
-    const ACTIVE_SONG = GAME.active_song;
-
+    const WIDTH = GAME.width;
+    const HEIGHT = GAME.height;
+    const ADD = this.add;
+    const KEYBOARD = this.input.keyboard;
     const KEYCODE = Phaser.Keyboard;
+    const ACTIVE = GAME.active_song;
     const BUTTON_CONF = button_config.song_scene;
+    const SONG_BUTTONS_CONF = BUTTON_CONF.song_buttons;
+    const SONG_BUTTONS_LENGTH = SONG_BUTTONS_CONF.length;
+    const SONG_AUDIOS = GAME.songs;
+    const SONGS_LENGTH = song_config.length;
+    const NORMAL_STYLE = button_config.normal_style;
 
-    this.enter_button = new Button(
-      { game: GAME, callback: this.enter_scene, callbackContext: this, form: { fill: "#008cff" } },
-      BUTTON_CONF.enter_button
-    );
+    //==============================new==============================//
 
-    this.exit_button = new Button(
-      { game: GAME, callback: this.exit_scene, callbackContext: this, form: { fill: "#008cff" } },
-      BUTTON_CONF.exit_button
-    );
+    //enter button
+    const ENTER_BUTTON = (this.enter_button = new Button({ game: GAME, x: (WIDTH / 16) * 15, y: (HEIGHT / 16) * 15 }, BUTTON_CONF.enter_button));
+    //exit button
+    const EXIT_BUTTON = (this.exit_button = new Button({ game: GAME, x: WIDTH / 16, y: HEIGHT / 16 }, BUTTON_CONF.exit_button));
+    //song button
+    const SONG_BUTTONS = (this.song_buttons = []);
 
-    const SONG_BUTTONS = (this.song_buttons = new Buttons(
-      { game: GAME, pre_callback: this.choose_pre_song, nxt_callback: this.choose_nxt_song, callbackContext: this },
-      BUTTON_CONF.song_buttons
-    ));
+    for (let i = 0; i < SONG_BUTTONS_LENGTH; ++i) {
+      SONG_BUTTONS[i] = new Button({ game: GAME, x: (WIDTH / 8) * (i * 6 + 1), y: HEIGHT / 2, idx: i }, SONG_BUTTONS_CONF[i]);
+    }
+    //song cover
+    //song info
+    const SONG_COVERS = (this.song_covers = []);
+    const SONG_INFOS = (this.song_infos = []);
 
-    const NORMAL_STYLE = SONG_BUTTONS.normal_style;
+    for (let i = 0; i < SONGS_LENGTH; ++i) {
+      SONG_COVERS[i] = new Cover({ game: GAME, x: WIDTH / 2, y: (HEIGHT / 8) * 3 }, { key: song_config[i].cover });
+      SONG_INFOS[i] = new Article({ game: GAME, x: (WIDTH / 32) * 11, y: (HEIGHT / 8) * 5 }, song_config[i].info);
+    }
+    //enter key
+    const ENTER_KEY = (this.enter_key = KEYBOARD.addKey(KEYCODE.ENTER));
+    //exit key
+    const ESC_KEY = (this.esc_key = KEYBOARD.addKey(KEYCODE.ESC));
 
-    SONG_BUTTONS.addMultiple([
-      new Button({ game: GAME, callback: this.choose_pre_song, callbackContext: this, form: NORMAL_STYLE }, BUTTON_CONF.left_song_button),
-      new Button({ game: GAME, callback: this.choose_nxt_song, callbackContext: this, form: NORMAL_STYLE }, BUTTON_CONF.right_song_button)
-    ]);
+    //==============================add==============================//
 
-    const SONG_INFOS = (this.song_infos = new Songs({ game: GAME }));
-
-    for (let i = 0; i < song_size; ++i) {
-      SONG_INFOS.add(new Song_Info({ game: GAME }, song_config[i].info));
+    //enter button
+    ADD.existing(ENTER_BUTTON);
+    ADD.existing(ENTER_BUTTON.txt);
+    //exit button
+    ADD.existing(EXIT_BUTTON);
+    ADD.existing(EXIT_BUTTON.txt);
+    //song button
+    for (let i = 0; i < SONG_BUTTONS_LENGTH; ++i) {
+      ADD.existing(SONG_BUTTONS[i]);
+      ADD.existing(SONG_BUTTONS[i].txt);
+    }
+    //song cover
+    //song info
+    for (let i = 0; i < SONGS_LENGTH; ++i) {
+      ADD.existing(SONG_COVERS[i]);
+      ADD.existing(SONG_INFOS[i]);
     }
 
-    if (!GAME.song_audios) {
-      GAME.song_audios = [];
-      for (let i = 0; i < song_size; i++) {
-        GAME.song_audios[i] = GAME.add.audio(song_config[i].AudioFilename, 1, true);
-      }
+    //==============================set==============================//
+
+    //song cover
+    //song info
+    SONG_COVERS[ACTIVE].visible = true;
+    SONG_INFOS[ACTIVE].visible = true;
+
+    //==============================call==============================//
+
+    //enter button
+    ENTER_BUTTON.onInputDown.add(this.enter_scene, this);
+    //exit button
+    EXIT_BUTTON.onInputDown.add(this.exit_scene, this);
+    //song button
+    for (let i = 0; i < SONG_BUTTONS_LENGTH; ++i) {
+      SONG_BUTTONS[i].onInputDown.add(this.select_song, this);
+      SONG_BUTTONS[i].onInputUp.add(() => {
+        SONG_BUTTONS[i].txt.setStyle(NORMAL_STYLE);
+      }, this);
     }
+    //song audio
+    SONG_AUDIOS[ACTIVE].play();
 
-    SONG_INFOS.getAt(ACTIVE_SONG).visible = true;
-    SONG_INFOS.getAt(ACTIVE_SONG).title.visible = true;
-    SONG_INFOS.getAt(ACTIVE_SONG).artist.visible = true;
-    SONG_INFOS.getAt(ACTIVE_SONG).album.visible = true;
+    //if (!ACTIVE_AUDIO.isPlaying) {
+    //ACTIVE_AUDIO.play();
 
-    const ACTIVE_AUDIO = GAME.song_audios[ACTIVE_SONG];
+    //SONG_AUDIOS[ACTIVE].play();
+    //let stopTime = ACTIVE_AUDIO.totalDuration;
+    //ACTIVE_AUDIO.stop();
+    //ACTIVE_AUDIO.addMarker(
+    //"preview",
+    //song_config[SONG_INFOS.active].info.PreviewTime / 1000,
+    //(stopTime * 1000 - song_config[SONG_INFOS.active].info.PreviewTime) / 1000
+    //);
+    //ACTIVE_AUDIO.play("preview");
+    //}
 
-    if (!ACTIVE_AUDIO.isPlaying) {
-      ACTIVE_AUDIO.play();
-      let stopTime = ACTIVE_AUDIO.totalDuration;
-      ACTIVE_AUDIO.stop();
-      ACTIVE_AUDIO.addMarker(
-        "preview",
-        song_config[SONG_INFOS.active].info.PreviewTime / 1000,
-        (stopTime * 1000 - song_config[SONG_INFOS.active].info.PreviewTime) / 1000
-      );
-      ACTIVE_AUDIO.play("preview");
-    }
+    //enter key
+    ENTER_KEY.onDown.add(this.enter_scene, this);
+    //esc key
+    ESC_KEY.onDown.add(this.exit_scene, this);
   }
 
+  //==============================func==============================//
+
   enter_scene() {
-    this.game.state.start("Level_Scene");
+    this.game.state.start(game_config.scene.level_scene);
   }
 
   exit_scene() {
     const GAME = this.game;
-    const SONG_INFOS = this.song_infos;
 
-    GAME.song_audios[GAME.active_song].stop();
-
+    GAME.songs[GAME.active_song].stop();
+    GAME.active_song = -1;
     GAME.bgm.play();
-    GAME.state.start("Main_Scene");
+
+    GAME.state.start(game_config.scene.main_scene);
   }
 
-  choose_pre_song() {
+  select_song(btn) {
     const GAME = this.game;
-    const SONG_AUDIOS = GAME.song_audios;
-    const SONG_BUTTONS = this.song_buttons;
+    const SONG_COVERS = this.song_covers;
     const SONG_INFOS = this.song_infos;
-    const LENGTH = SONG_INFOS.length;
+    const SONG_AUDIOS = GAME.songs;
+    const LENGTH = song_config.length;
 
-    SONG_BUTTONS.getAt(SONG_BUTTONS.active).text.setStyle(SONG_BUTTONS.normal_style);
-    SONG_BUTTONS.active = 0;
-    SONG_BUTTONS.getAt(0).text.setStyle(SONG_BUTTONS.active_style);
+    //pre
 
-    SONG_INFOS.getAt(SONG_INFOS.active).visible = false;
-    SONG_INFOS.getAt(SONG_INFOS.active).title.visible = false;
-    SONG_INFOS.getAt(SONG_INFOS.active).artist.visible = false;
-    SONG_INFOS.getAt(SONG_INFOS.active).album.visible = false;
+    //song cover
+    //song info
+    SONG_COVERS[GAME.active_song].visible = false;
+    SONG_INFOS[GAME.active_song].visible = false;
+    SONG_AUDIOS[GAME.active_song].stop();
 
-    SONG_AUDIOS[SONG_INFOS.active].stop();
+    //cur
 
-    SONG_INFOS.active = (SONG_INFOS.active - 1 + LENGTH) % LENGTH;
+    switch (btn.idx) {
+      case 0:
+        GAME.active_song = (GAME.active_song - 1 + LENGTH) % LENGTH;
+        break;
 
-    SONG_AUDIOS[SONG_INFOS.active].play();
-    let stopTime = SONG_AUDIOS[SONG_INFOS.active].totalDuration;
-    SONG_AUDIOS[SONG_INFOS.active].stop();
-    SONG_AUDIOS[SONG_INFOS.active].addMarker(
-      "preview",
-      song_config[SONG_INFOS.active].info.PreviewTime / 1000,
-      (stopTime * 1000 - song_config[SONG_INFOS.active].info.PreviewTime) / 1000
-    );
-    SONG_AUDIOS[SONG_INFOS.active].play("preview");
+      case 1:
+        GAME.active_song = (GAME.active_song + 1) % LENGTH;
+        break;
 
-    SONG_INFOS.getAt(SONG_INFOS.active).visible = true;
-    SONG_INFOS.getAt(SONG_INFOS.active).title.visible = true;
-    SONG_INFOS.getAt(SONG_INFOS.active).artist.visible = true;
-    SONG_INFOS.getAt(SONG_INFOS.active).album.visible = true;
+      default:
+        break;
+    }
 
-    GAME.active_song = SONG_INFOS.active;
+    //song button
+    btn.txt.setStyle(button_config.active_style);
+    //song cover
+    //song info
+    SONG_COVERS[GAME.active_song].visible = true;
+    SONG_INFOS[GAME.active_song].visible = true;
+    SONG_AUDIOS[GAME.active_song].play();
   }
 
-  choose_nxt_song() {
-    const GAME = this.game;
-    const SONG_AUDIOS = GAME.song_audios;
-    const SONG_BUTTONS = this.song_buttons;
-    const SONG_INFOS = this.song_infos;
-
-    SONG_BUTTONS.getAt(SONG_BUTTONS.active).text.setStyle(SONG_BUTTONS.normal_style);
-    SONG_BUTTONS.active = 1;
-    SONG_BUTTONS.getAt(1).text.setStyle(SONG_BUTTONS.active_style);
-
-    SONG_INFOS.getAt(SONG_INFOS.active).visible = false;
-    SONG_INFOS.getAt(SONG_INFOS.active).title.visible = false;
-    SONG_INFOS.getAt(SONG_INFOS.active).artist.visible = false;
-    SONG_INFOS.getAt(SONG_INFOS.active).album.visible = false;
-
-    SONG_AUDIOS[SONG_INFOS.active].stop();
-
-    SONG_INFOS.active = (SONG_INFOS.active + 1) % SONG_INFOS.length;
-
-    SONG_INFOS.getAt(SONG_INFOS.active).visible = true;
-    SONG_INFOS.getAt(SONG_INFOS.active).title.visible = true;
-    SONG_INFOS.getAt(SONG_INFOS.active).artist.visible = true;
-    SONG_INFOS.getAt(SONG_INFOS.active).album.visible = true;
-
-    SONG_AUDIOS[SONG_INFOS.active].play();
-    let stopTime = SONG_AUDIOS[SONG_INFOS.active].totalDuration;
-    SONG_AUDIOS[SONG_INFOS.active].stop();
-    SONG_AUDIOS[SONG_INFOS.active].addMarker(
-      "preview",
-      song_config[SONG_INFOS.active].info.PreviewTime / 1000,
-      (stopTime * 1000 - song_config[SONG_INFOS.active].info.PreviewTime) / 1000
-    );
-    SONG_AUDIOS[SONG_INFOS.active].play("preview");
-
-    GAME.active_song = SONG_INFOS.active;
-  }
+  tour_song(key) {}
 }

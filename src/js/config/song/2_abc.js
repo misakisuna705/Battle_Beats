@@ -1,17 +1,16 @@
 song_config[2] = {
+  PreviewTime: 9434,
+  bpm: 110.092,
+  nX: 7,
+
   info: {
-    x: 240,
-    y: 200,
-    key: "abc.png",
-    Title: "Highscore",
-    Artist: "Panda Eyes & Teminite",
-    Album: "???",
-    PreviewTime: 9434,
-    bpm: 110.092,
-    nX: 7
+    text: "歌名: Highscore\n" + "歌手: Panda Eyes & Teminite\n" + "專輯: ???\n",
+    style: { fontSize: 64, fill: "#008cff" }
   },
 
-  AudioFilename: "abc.mp3",
+  cover: "abc.png",
+
+  audio: "abc.mp3",
 
   beatmap: [
     [

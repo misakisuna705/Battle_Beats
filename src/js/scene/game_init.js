@@ -42,16 +42,22 @@ class Game_Init extends Phaser.State {
     //==============================new==============================//
 
     //bgv
-    GAME.bgv = new Phaser.Video(GAME, game_config.bgv);
+    const BGV = (GAME.bgv = new Phaser.Video(GAME, game_config.bgv));
     //bgm
-    GAME.bgm = GAME.sound.add(game_config.bgm, 1, true);
+    const BGM = (GAME.bgm = GAME.sound.add(game_config.bgm, 1, true));
     //song
+    GAME.songs = [];
+    //active song
     GAME.active_song = -1;
-    //level
+    //active level
     GAME.active_level = 0;
 
     //==============================call==============================//
 
+    //bgv
+    BGV.play(true);
+    //bgm
+    BGM.play();
     GAME.state.start(game_config.scene.game_load);
   }
 }

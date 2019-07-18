@@ -11,8 +11,7 @@ const button_config = {
 
   game_login: {
     login_button: {
-      key: "login_button.png",
-      keycode: Phaser.Keyboard.ENTER
+      key: "login_button.png"
     }
   },
 
@@ -57,6 +56,14 @@ const button_config = {
   },
 
   hero_scene: {
+    //enter_button: {
+    //x: 444,
+    //y: 604,
+    //key: "enter_button",
+    //word: "確認",
+    //keycode: Phaser.Keyboard.ENTER
+    //},
+
     exit_button: {
       key: "exit_button",
       word: "返回",
@@ -76,58 +83,34 @@ const button_config = {
         form: { fontSize: 64, fill: "#008cff" }
       }
     ]
-
-    //enter_button: {
-    //x: 444,
-    //y: 604,
-    //key: "enter_button",
-    //word: "確認",
-    //keycode: Phaser.Keyboard.ENTER
-    //}
   },
 
   song_scene: {
-    song_buttons: {
-      normal_style: {
-        fill: "#008cff"
-      },
-      active_style: {
-        fill: "#ffffff"
-      },
-
-      pre_keycode: Phaser.Keyboard.LEFT,
-      nxt_keycode: Phaser.Keyboard.RIGHT
-    },
-
-    left_song_button: {
-      x: 48,
-      y: 180,
-      key: "song_button",
-      word: "上一首"
-    },
-
-    right_song_button: {
-      x: 432,
-      y: 180,
-      key: "song_button",
-      word: "下一首"
-    },
-
     enter_button: {
-      x: 444,
-      y: 604,
       key: "enter_button",
       word: "確認",
-      keycode: Phaser.Keyboard.ENTER
+      form: { fontSize: 64, fill: "#008cff" }
     },
 
     exit_button: {
-      x: 36,
-      y: 36,
       key: "exit_button",
       word: "返回",
-      keycode: Phaser.Keyboard.ESC
-    }
+      form: { fontSize: 64, fill: "#008cff" }
+    },
+
+    song_buttons: [
+      {
+        key: "song_button",
+        word: "上一首",
+        form: { fontSize: 64, fill: "#008cff" }
+      },
+
+      {
+        key: "song_button",
+        word: "下一首",
+        form: { fontSize: 64, fill: "#008cff" }
+      }
+    ]
   },
 
   level_scene: {

@@ -38,6 +38,11 @@ const game_config = {
 
   assets: {
     game: "assets/game/",
-    game_load: "assets/game_load/"
+    game_load: "assets/game_load/",
+
+    song: {
+      cover: "assets/game/song/cover/",
+      audio: "assets/game/song/audio/"
+    }
   }
 };

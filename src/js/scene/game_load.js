@@ -6,8 +6,6 @@ class Game_Load extends Phaser.State {
     const LOAD = GAME.load;
     const LOADER_CONFIG = game_config.loader;
     const ADD = this.add;
-    const BGV = GAME.bgv;
-    const BGM = GAME.bgm;
 
     //==============================new==============================//
 
@@ -26,7 +24,7 @@ class Game_Load extends Phaser.State {
     //==============================add==============================//
 
     //bgv
-    BGV.addToWorld(0, 0, 0, 0, 1, 1);
+    GAME.bgv.addToWorld(0, 0, 0, 0, 1, 1);
     //title
     ADD.existing(TITLE);
     //loader
@@ -36,8 +34,6 @@ class Game_Load extends Phaser.State {
 
     //==============================call==============================//
 
-    //bgv
-    BGV.play(true);
     //loader
     LOAD.onFileComplete.add((progress, cacheKey, success, loaded, total) => {
       LOADING_RATE.setText("Loading ...   " + progress + "% ( " + loaded + " / " + total + " )");
@@ -45,12 +41,13 @@ class Game_Load extends Phaser.State {
     LOAD.onLoadComplete.add(() => {
       GAME.state.start(game_config.scene.game_login);
     }, this);
-    //bgm
-    BGM.play();
   }
 
   preload() {
     const LOAD = this.game.load;
+    const ASSETS = game_config.assets;
+    const SONG_ASSETS = ASSETS.song;
+    const SONGS_LENGTH = song_config.length;
 
     LOAD.setPreloadSprite(this.loading_status);
 
@@ -61,9 +58,9 @@ class Game_Load extends Phaser.State {
     LOAD.image("enter_button", "assets/game/button/enter_button.png");
     LOAD.image("exit_button", "assets/game/button/exit_button.png");
     //song
-    for (let i = 0; i < song_size; ++i) {
-      LOAD.image(song_config[i].info.key, cover_path + song_config[i].info.key);
-      LOAD.audio(song_config[i].AudioFilename, song_path + song_config[i].AudioFilename);
+    for (let i = 0; i < SONGS_LENGTH; ++i) {
+      LOAD.image(song_config[i].cover, SONG_ASSETS.cover + song_config[i].cover);
+      LOAD.audio(song_config[i].audio, SONG_ASSETS.audio + song_config[i].audio);
     }
     //hero
     LOAD.spritesheet("Senia", "assets/game/hero/senia.png", 500, 500);
@@ -100,5 +97,15 @@ class Game_Load extends Phaser.State {
     LOAD.spritesheet("number", "assets/play_scene/combo/number.png", 74, 81);
 
     LOAD.image("score_board", "assets/play_scene/score/score_board.png");
+  }
+
+  create() {
+    const GAME = this.game;
+
+    //==============================new==============================//
+
+    for (let i = 0; i < song_config.length; ++i) {
+      GAME.songs[i] = GAME.sound.add(song_config[i].audio, 1, true);
+    }
   }
 }
