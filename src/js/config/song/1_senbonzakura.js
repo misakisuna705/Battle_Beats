@@ -1,4 +1,5 @@
 song_config[1] = {
+  title: "千本櫻",
   PreviewTime: 0,
 
   info: {

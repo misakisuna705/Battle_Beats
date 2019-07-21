@@ -27,6 +27,7 @@ class Level_Scene extends Phaser.State {
     for (let i = 0; i < LEVEL_BUTTONS_LENGTH; ++i) {
       LEVEL_BUTTONS[i] = new Button({ game: GAME, x: (WIDTH / 4) * 3, y: (HEIGHT / 8) * (i + 1), idx: i }, LEVEL_BUTTONS_CONF[i]);
     }
+    const TITLE = (this.title = new Article({ game: GAME, x: WIDTH / 8, y: HEIGHT / 4 }, { text: "天梯", style: { fontSize: 64, fill: "#008cff" } }));
     //enter key
     const ENTER_KEY = (this.enter_key = KEYBOARD.addKey(KEYCODE.ENTER));
     //esc key
@@ -49,10 +50,13 @@ class Level_Scene extends Phaser.State {
       ADD.existing(LEVEL_BUTTONS[i]);
       ADD.existing(LEVEL_BUTTONS[i].txt);
     }
+    //title
+    ADD.existing(TITLE);
 
     //==============================set==============================//
 
     LEVEL_BUTTONS[this.game.active_level].txt.setStyle(button_config.active_style);
+    TITLE.visible = true;
 
     //==============================call==============================//
 
@@ -73,92 +77,43 @@ class Level_Scene extends Phaser.State {
     //down key
     DOWN_KEY.onDown.add(this.tour_level, this);
 
-    //const LEVEL_BUTTONS = (this.level_buttons = new Buttons(
-    //{ game: GAME, pre_callback: this.choose_pre_level, nxt_callback: this.choose_nxt_level, callbackContext: this },
-    //BUTTON_CONF.level_buttons
-    //));
+    //==============================rank==============================//
 
-    //const NORMAL_STYLE = LEVEL_BUTTONS.normal_style;
+    const RANKS = (this.ranks = []);
 
-    //LEVEL_BUTTONS.addMultiple([
-    //new Button(
-    //{ game: GAME, callback: this.choose_easy_level, callbackContext: this, form: LEVEL_BUTTONS.active_style },
-    //BUTTON_CONF.easy_level_button
-    //),
-    //new Button({ game: GAME, callback: this.choose_normal_level, callbackContext: this, form: NORMAL_STYLE }, BUTTON_CONF.normal_level_button),
-    //new Button({ game: GAME, callback: this.choose_hard_level, callbackContext: this, form: NORMAL_STYLE }, BUTTON_CONF.hard_level_button)
-    //]);
+    for (let i = 0; i < LEVEL_BUTTONS_LENGTH; ++i) {
+      this.get_ranks(i).then(snapshot => {
+        let arr = [];
 
-    //new Leader_Score({ game: this.game, x: 40, y: 100, text: "天梯", style: { fill: "#008cff", fontSize: 24 } });
+        snapshot.forEach(shot => {
+          arr.push(shot);
+        });
 
-    //this.easy_infos = [];
-    //this.easy_leaderboard = [];
-    //leader_board.get_scores(song_config[this.game.active_song].info.Title, "easy").then(snapshot => {
-    //snapshot.forEach(s => {
-    //this.easy_infos.push(s);
-    //});
+        arr.reverse();
 
-    //this.easy_infos.sort((l, r) => {
-    //return r.val() - l.val();
-    //});
+        const LENGTH = arr.length;
 
-    //for (let i = 0; i < this.easy_infos.length; i++) {
-    //this.easy_leaderboard[i] = new Leader_Score({
-    //game: this.game,
-    //x: 40,
-    //y: 120 + i * 40,
-    //text: this.easy_infos[i].key + ": " + this.easy_infos[i].val(),
-    //style: { fill: "#008cff", fontSize: 24 }
-    //});
-    //this.easy_leaderboard[i].visible = true;
-    //}
-    //});
+        //==============================new==============================//
 
-    //this.normal_infos = [];
-    //this.normal_leaderboard = [];
-    //leader_board.get_scores(song_config[this.game.active_song].info.Title, "normal").then(snapshot => {
-    //snapshot.forEach(s => {
-    //this.normal_infos.push(s);
-    //});
+        RANKS[i] = [];
+        for (let j = 0; j < LENGTH; ++j) {
+          RANKS[i][j] = new Article(
+            { game: GAME, x: WIDTH / 8, y: (HEIGHT / 8) * (j + 3) },
+            { text: arr[j].key + ": " + arr[j].val(), style: { fontSize: 64, fill: "#008cff" } }
+          );
 
-    //this.normal_infos.sort((l, r) => {
-    //return r.val() - l.val();
-    //});
+          //==============================add==============================//
 
-    //for (let i = 0; i < this.normal_infos.length; i++) {
-    //this.normal_leaderboard[i] = new Leader_Score({
-    //game: this.game,
-    //x: 40,
-    //y: 120 + i * 40,
-    //text: this.normal_infos[i].key + ": " + this.normal_infos[i].val(),
-    //style: { fill: "#008cff", fontSize: 24 }
-    //});
-    //}
-    //});
+          ADD.existing(RANKS[i][j]);
 
-    //this.hard_infos = [];
-    //this.hard_leaderboard = [];
-    //leader_board.get_scores(song_config[this.game.active_song].info.Title, "hard").then(snapshot => {
-    //snapshot.forEach(s => {
-    //this.hard_infos.push(s);
-    //});
+          //==============================set==============================//
 
-    //this.hard_infos.sort((l, r) => {
-    //return r.val() - l.val();
-    //});
-
-    //for (let i = 0; i < this.hard_infos.length; i++) {
-    //this.hard_leaderboard[i] = new Leader_Score({
-    //game: this.game,
-    //x: 40,
-    //y: 120 + i * 40,
-    //text: this.hard_infos[i].key + ": " + this.hard_infos[i].val(),
-    //style: { fill: "#008cff", fontSize: 24 }
-    //});
-    //}
-    //});
-
-    //this.infos = [this.easy_leaderboard, this.normal_leaderboard, this.hard_leaderboard];
+          if (i == 0) {
+            RANKS[i][j].visible = true;
+          }
+        }
+      });
+    }
   }
 
   enter_scene() {
@@ -182,13 +137,21 @@ class Level_Scene extends Phaser.State {
   select_level(btn) {
     const GAME = this.game;
     const LEVEL_BUTTONS = this.level_buttons;
-    const LENGTH = LEVEL_BUTTONS.length;
+    const RANKS = this.ranks;
 
     LEVEL_BUTTONS[GAME.active_level].txt.setStyle(button_config.normal_style);
+
+    for (let i = 0; i < RANKS[GAME.active_level].length; ++i) {
+      RANKS[GAME.active_level][i].visible = false;
+    }
 
     GAME.active_level = btn.idx;
 
     LEVEL_BUTTONS[GAME.active_level].txt.setStyle(button_config.active_style);
+
+    for (let i = 0; i < RANKS[GAME.active_level].length; ++i) {
+      RANKS[GAME.active_level][i].visible = true;
+    }
   }
 
   tour_level(key) {
@@ -196,8 +159,13 @@ class Level_Scene extends Phaser.State {
     const KEYCODE = Phaser.Keyboard;
     const LEVEL_BUTTONS = this.level_buttons;
     const LENGTH = LEVEL_BUTTONS.length;
+    const RANKS = this.ranks;
 
     LEVEL_BUTTONS[GAME.active_level].txt.setStyle(button_config.normal_style);
+
+    for (let i = 0; i < RANKS[GAME.active_level].length; ++i) {
+      RANKS[GAME.active_level][i].visible = false;
+    }
 
     switch (key.keyCode) {
       case KEYCODE.UP:
@@ -213,79 +181,39 @@ class Level_Scene extends Phaser.State {
     }
 
     LEVEL_BUTTONS[GAME.active_level].txt.setStyle(button_config.active_style);
-  }
 
-  choose_pre_level() {
-    for (let i = 0; i < this.infos[LEVEL_BUTTONS.active].length; i++) {
-      this.infos[LEVEL_BUTTONS.active][i].visible = false;
-    }
-
-    for (let i = 0; i < this.infos[LEVEL_BUTTONS.active].length; i++) {
-      this.infos[LEVEL_BUTTONS.active][i].visible = true;
+    for (let i = 0; i < RANKS[GAME.active_level].length; ++i) {
+      RANKS[GAME.active_level][i].visible = true;
     }
   }
 
-  choose_nxt_level() {
-    for (let i = 0; i < this.infos[LEVEL_BUTTONS.active].length; i++) {
-      this.infos[LEVEL_BUTTONS.active][i].visible = false;
+  get_ranks(level) {
+    const DB = firebase.database();
+
+    switch (level) {
+      case 0:
+        return DB.ref("/leaderboard/" + song_config[this.game.active_song].title + "/easy/")
+          .orderByValue()
+          .limitToLast(5)
+          .once("value");
+        break;
+
+      case 1:
+        return DB.ref("/leaderboard/" + song_config[this.game.active_song].title + "/normal/")
+          .orderByValue()
+          .limitToLast(5)
+          .once("value");
+        break;
+
+      case 2:
+        return DB.ref("/leaderboard/" + song_config[this.game.active_song].title + "/hard/")
+          .orderByValue()
+          .limitToLast(5)
+          .once("value");
+        break;
+
+      default:
+        break;
     }
-
-    for (let i = 0; i < this.infos[LEVEL_BUTTONS.active].length; i++) {
-      this.infos[LEVEL_BUTTONS.active][i].visible = true;
-    }
-  }
-
-  choose_easy_level() {
-    const LEVEL_BUTTONS = this.level_buttons;
-
-    for (let i = 0; i < this.infos[LEVEL_BUTTONS.active].length; i++) {
-      this.infos[LEVEL_BUTTONS.active][i].visible = false;
-    }
-
-    LEVEL_BUTTONS.getAt(LEVEL_BUTTONS.active).text.setStyle(LEVEL_BUTTONS.normal_style);
-    LEVEL_BUTTONS.active = 0;
-    LEVEL_BUTTONS.getAt(LEVEL_BUTTONS.active).text.setStyle(LEVEL_BUTTONS.active_style);
-
-    for (let i = 0; i < this.infos[LEVEL_BUTTONS.active].length; i++) {
-      this.infos[LEVEL_BUTTONS.active][i].visible = true;
-    }
-
-    this.game.active_level = LEVEL_BUTTONS.active;
-  }
-
-  choose_normal_level() {
-    const LEVEL_BUTTONS = this.level_buttons;
-
-    for (let i = 0; i < this.infos[LEVEL_BUTTONS.active].length; i++) {
-      this.infos[LEVEL_BUTTONS.active][i].visible = false;
-    }
-
-    LEVEL_BUTTONS.getAt(LEVEL_BUTTONS.active).text.setStyle(LEVEL_BUTTONS.normal_style);
-    LEVEL_BUTTONS.active = 1;
-    LEVEL_BUTTONS.getAt(LEVEL_BUTTONS.active).text.setStyle(LEVEL_BUTTONS.active_style);
-
-    for (let i = 0; i < this.infos[LEVEL_BUTTONS.active].length; i++) {
-      this.infos[LEVEL_BUTTONS.active][i].visible = true;
-    }
-
-    this.game.active_level = LEVEL_BUTTONS.active;
-  }
-
-  choose_hard_level() {
-    const LEVEL_BUTTONS = this.level_buttons;
-
-    for (let i = 0; i < this.infos[LEVEL_BUTTONS.active].length; i++) {
-      this.infos[LEVEL_BUTTONS.active][i].visible = false;
-    }
-
-    LEVEL_BUTTONS.getAt(LEVEL_BUTTONS.active).text.setStyle(LEVEL_BUTTONS.normal_style);
-    LEVEL_BUTTONS.active = 2;
-    LEVEL_BUTTONS.getAt(LEVEL_BUTTONS.active).text.setStyle(LEVEL_BUTTONS.active_style);
-
-    for (let i = 0; i < this.infos[LEVEL_BUTTONS.active].length; i++) {
-      this.infos[LEVEL_BUTTONS.active][i].visible = true;
-    }
-
-    this.game.active_level = LEVEL_BUTTONS.active;
   }
 }

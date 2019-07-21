@@ -48,13 +48,3 @@ class Button extends Phaser.Button {
     this.anchor.setTo(0.5, 0.5);
   }
 }
-
-class Leader_Score extends Phaser.Text {
-  constructor({ game, x, y, text, style }) {
-    super(game, x, y, text, style);
-
-    this.visible = false;
-
-    this.game.add.existing(this);
-  }
-}

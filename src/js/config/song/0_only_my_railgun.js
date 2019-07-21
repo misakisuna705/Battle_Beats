@@ -1,4 +1,5 @@
 song_config[0] = {
+  title: "only my railgun",
   PreviewTime: 9434,
   bpm: 145,
   nX: 5,

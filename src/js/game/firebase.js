@@ -47,16 +47,6 @@ const leader_board = {
     return database.ref("/leaderboard/" + song + "/" + mode + "/").update(updates);
   },
 
-  //get top five people's scores by song name and mode,and this function will return a promise function
-  //parameter num is refered to the number of people that you want to get,and its default number is 5
-  get_scores: function(song, mode, num = 5) {
-    return database
-      .ref("/leaderboard/" + song + "/" + mode + "/")
-      .orderByValue()
-      .limitToLast(num)
-      .once("value");
-  },
-
   //get current user's score by song name and mode,and this function will return a promise function
   get_my_score: function(song, mode) {
     let username = firebase.auth().currentUser.email;

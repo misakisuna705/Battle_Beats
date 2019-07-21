@@ -124,7 +124,6 @@ class Main_Scene extends Phaser.State {
   select_mode(btn) {
     const MODE_BUTTONS = this.mode_buttons;
     const MODE_ARTICLES = this.mode_articles;
-    const LENGTH = MODE_BUTTONS.length;
 
     //pre
     MODE_BUTTONS[this.active_button].txt.setStyle(button_config.normal_style);

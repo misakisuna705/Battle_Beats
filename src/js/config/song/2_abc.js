@@ -1,4 +1,5 @@
 song_config[2] = {
+  title: "Highscore",
   PreviewTime: 9434,
   bpm: 110.092,
   nX: 7,
