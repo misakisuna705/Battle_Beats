@@ -58,6 +58,7 @@ class Game_Init extends Phaser.State {
     BGV.play(true);
     //bgm
     BGM.play();
+
     GAME.state.start(game_config.scene.game_load);
   }
 }

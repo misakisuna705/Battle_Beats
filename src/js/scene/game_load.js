@@ -54,7 +54,7 @@ class Game_Load extends Phaser.State {
     //==============================load==============================//
 
     //game
-    LOAD.image("mask.png", "assets/game/mask.png");
+    //LOAD.image("mask.png", "assets/game/mask.png");
     LOAD.image("enter_button", "assets/game/button/enter_button.png");
     LOAD.image("exit_button", "assets/game/button/exit_button.png");
     //song

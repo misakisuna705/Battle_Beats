@@ -147,15 +147,15 @@ const button_config = {
     ]
   },
 
-  game_start: {
-    skip_button: {
-      x: 444,
-      y: 36,
-      key: "enter_button",
-      word: "跳過",
-      keycode: Phaser.Keyboard.SPACEBAR
-    }
-  },
+  //game_start: {
+  //skip_button: {
+  //x: 444,
+  //y: 36,
+  //key: "enter_button",
+  //word: "跳過",
+  //keycode: Phaser.Keyboard.SPACEBAR
+  //}
+  //},
 
   play_scene: {
     target_buttons: [

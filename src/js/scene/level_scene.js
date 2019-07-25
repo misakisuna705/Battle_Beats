@@ -55,7 +55,7 @@ class Level_Scene extends Phaser.State {
 
     //==============================set==============================//
 
-    LEVEL_BUTTONS[this.game.active_level].txt.setStyle(button_config.active_style);
+    LEVEL_BUTTONS[GAME.active_level].txt.setStyle(button_config.active_style);
     TITLE.visible = true;
 
     //==============================call==============================//
@@ -120,13 +120,12 @@ class Level_Scene extends Phaser.State {
     const GAME = this.game;
     const ACTIVE = GAME.songs[GAME.active_song];
 
-    GAME.songs[GAME.active_song].stop();
-
-    this.camera.fade(0x000000, 1000, false);
+    //this.camera.fade(0x000000, 1000, false);
 
     ACTIVE.fadeOut(1000);
     ACTIVE.onFadeComplete.add(() => {
       //GAME.state.start("Game_Start");
+      GAME.state.start(game_config.scene.play_scene);
     }, this);
   }
 
@@ -188,25 +187,26 @@ class Level_Scene extends Phaser.State {
   }
 
   get_ranks(level) {
+    const GAME = this.game;
     const DB = firebase.database();
 
     switch (level) {
       case 0:
-        return DB.ref("/leaderboard/" + song_config[this.game.active_song].title + "/easy/")
+        return DB.ref("/leaderboard/" + song_config[GAME.active_song].title + "/easy/")
           .orderByValue()
           .limitToLast(5)
           .once("value");
         break;
 
       case 1:
-        return DB.ref("/leaderboard/" + song_config[this.game.active_song].title + "/normal/")
+        return DB.ref("/leaderboard/" + song_config[GAME.active_song].title + "/normal/")
           .orderByValue()
           .limitToLast(5)
           .once("value");
         break;
 
       case 2:
-        return DB.ref("/leaderboard/" + song_config[this.game.active_song].title + "/hard/")
+        return DB.ref("/leaderboard/" + song_config[GAME.active_song].title + "/hard/")
           .orderByValue()
           .limitToLast(5)
           .once("value");
