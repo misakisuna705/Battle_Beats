@@ -158,34 +158,6 @@ const button_config = {
   //},
 
   play_scene: {
-    target_buttons: [
-      {
-        x: 96,
-        y: 560,
-        key: "target_button",
-        keycode: Phaser.Keyboard.D
-      },
-
-      {
-        x: 192,
-        y: 560,
-        key: "target_button",
-        keycode: Phaser.Keyboard.F
-      },
-
-      {
-        x: 288,
-        y: 560,
-        key: "target_button",
-        keycode: Phaser.Keyboard.J
-      },
-
-      {
-        x: 384,
-        y: 560,
-        key: "target_button",
-        keycode: Phaser.Keyboard.K
-      }
-    ]
+    target_buttons: [{ key: "target_button" }, { key: "target_button" }, { key: "target_button" }, { key: "target_button" }]
   }
 };

@@ -21,19 +21,15 @@ class Play_Scene extends Phaser.State {
     const NOTES = (this.notes = []);
     const TARGET_BUTTONS = (this.target_buttons = []);
 
-    const X_INIT = (this.x_init = []);
-    const Y_INIT = (this.y_init = HEIGHT / 2 + 60);
+    const X_INIT = (this.x_init = WIDTH / 2);
+    const Y_INIT = (this.y_init = HEIGHT / 2);
     const X_TARGET = (this.x_target = []);
     const Y_TARGET = (this.y_target = (HEIGHT / 8) * 7);
-    const VX_INIT = (this.vx_init = []);
-    const VY_INIT = (this.vy_init = 500);
+    const VX = (this.vx = []);
+    const VY = (this.vy = 500);
     const SX_FINAL = (this.sx_final = 1);
     const SY_FINAL = (this.sy_final = 1 - Y_INIT / HEIGHT);
-    const T_TARGET = (this.t_target = ((Y_TARGET - Y_INIT) / VY_INIT) * 1000);
-    const T_FINAL = (this.t_final = ((HEIGHT - Y_INIT) / VY_INIT) * 1000);
-    const DT = (this.dt = T_FINAL / 50);
-    const DSX = (this.dsx = SX_FINAL / DT);
-    const DSY = (this.dsy = SY_FINAL / DT);
+    const T_TARGET = (this.t_target = ((Y_TARGET - Y_INIT) / VY) * 1000);
     const SLOPE = (this.slope = []);
     const ANGLE = (this.angle = []);
 
@@ -42,10 +38,9 @@ class Play_Scene extends Phaser.State {
     //==============================new==============================//
 
     for (let i = 0; i < BUTTON_CONF_LENGTH; ++i) {
-      X_INIT[i] = WIDTH / 2 - 45 + i * 30;
       X_TARGET[i] = (WIDTH / 5) * (i + 1);
-      SLOPE[i] = (X_TARGET[i] - X_INIT[i]) / (Y_TARGET - Y_INIT);
-      VX_INIT[i] = VY_INIT * SLOPE[i];
+      SLOPE[i] = (X_TARGET[i] - X_INIT) / (Y_TARGET - Y_INIT);
+      VX[i] = VY * SLOPE[i];
       ANGLE[i] = -Math.atan(SLOPE[i]);
       //tail
       TAILS[i] = new Tails({ game: GAME, enableBody: true, idx: i });
@@ -68,7 +63,9 @@ class Play_Scene extends Phaser.State {
 
     //==============================set==============================//
 
-    //const velocity_ratio = 10; // the ratio of the initial velocity and the destination velocity
+    for (let i = 0; i < BUTTON_CONF_LENGTH; ++i) {
+      TARGET_BUTTONS[i].scale.setTo(SX_FINAL, SY_FINAL);
+    }
 
     //==============================call==============================//
 
@@ -94,15 +91,11 @@ class Play_Scene extends Phaser.State {
       this
     );
 
-    //EVENTS.add(this.pass_through_time, this.play, this);
-
     TIMER.start();
 
     //for (let i = 0; i < 4; i++) {
     //this.target_buttons[i].presskey.onUp.add(this.resetButton, this, 0, i);
     //}
-
-    //this.acceleration_x = [];
 
     //this.song_start_time = 0;
 
@@ -144,27 +137,34 @@ class Play_Scene extends Phaser.State {
   dispatch_note(idx) {
     const GAME = this.game;
     const BEAT = song_config[GAME.active_song].beatmap[GAME.active_level][idx];
-    const X_INIT = this.x_init[BEAT[0]];
+    const X_INIT = this.x_init;
     const Y_INIT = this.y_init;
-    const VX_INIT = this.vx_init[BEAT[0]];
-    const VY_INIT = this.vy_init;
-    const DT = this.dt;
-    const DSX = this.dsx;
-    const DSY = this.dsy;
+    const VX = this.vx[BEAT[0]];
+    const VY = this.vy;
+    const T_TARGET = this.t_target;
+    const DT = (this.dt = T_TARGET / 50);
 
     switch (BEAT.length) {
       case 2:
         const NOTE = this.notes[BEAT[0]].getFirstExists(false, false, X_INIT, Y_INIT);
+        const NOTE_SCALE = NOTE.scale;
 
-        NOTE.body.velocity.setTo(VX_INIT, VY_INIT);
-        NOTE.scale.setTo(DSX, DSY);
+        NOTE.body.velocity.setTo(VX, VY);
+
+        const NOTE_SX_FINAL = this.sx_final;
+        const NOTE_SY_FINAL = this.sy_final;
+        const NOTE_SX_INIT = 0.01;
+        const NOTE_SY_INIT = NOTE_SY_FINAL / 2;
+        const NOTE_DSX = (NOTE_SX_FINAL - NOTE_SX_INIT) / DT;
+        const NOTE_DSY = (NOTE_SY_FINAL - NOTE_SY_INIT) / DT;
+
+        NOTE_SCALE.setTo(NOTE_DSX, NOTE_DSY);
         NOTE.timer = this.time.create();
         NOTE.timer.repeat(
           50,
           DT,
           () => {
-            NOTE.scale.x += DSX;
-            NOTE.scale.y += DSY;
+            NOTE_SCALE.setTo(NOTE_SCALE.x + NOTE_DSX, NOTE_SCALE.y + NOTE_DSY);
           },
           this
         );
@@ -174,15 +174,31 @@ class Play_Scene extends Phaser.State {
 
       case 3:
         const TAIL = this.tails[BEAT[0]].getFirstExists(false, false, X_INIT, Y_INIT);
+        const TAIL_SCALE = TAIL.scale;
 
-        //TAIL.body.velocity.setTo(0, this.vy_init);
-        //TAIL.scale.setTo(1, ((TAIL.body.velocity.y / 1000) * (BEAT[2] - BEAT[1])) / TAIL.height);
-
-        TAIL.body.velocity.setTo(VX_INIT, VY_INIT);
+        TAIL.body.velocity.setTo(VX, VY);
         TAIL.rotation = this.angle[BEAT[0]];
-        TAIL.scale.setTo(1, 1);
-        TAIL.scale.setTo(1, ((TAIL.body.velocity.y / 1000) * (BEAT[2] - BEAT[1])) / TAIL.height / Math.cos(this.angle[BEAT[0]]));
+        TAIL_SCALE.setTo(1, 1);
 
+        const TAIL_SX_FINAL = 0.1;
+        const TAIL_SY_FINAL = ((VY / 1000) * (BEAT[2] - BEAT[1])) / TAIL.height / Math.cos(this.angle[BEAT[0]]);
+        const TAIL_SX_INIT = 0.01;
+        const TAIL_SY_INIT = TAIL_SY_FINAL / 2;
+        const TAIL_DSX = (TAIL_SX_FINAL - TAIL_SX_INIT) / DT;
+        const TAIL_DSY = (TAIL_SY_FINAL - TAIL_SY_INIT) / DT;
+
+        TAIL_SCALE.setTo(TAIL_SX_INIT, TAIL_SY_INIT);
+        TAIL.timer = this.time.create();
+        TAIL.timer.repeat(
+          50,
+          DT,
+          () => {
+            TAIL_SCALE.setTo(TAIL_SCALE.x + TAIL_DSX, TAIL_SCALE.y + TAIL_DSY);
+          },
+          this
+        );
+
+        TAIL.timer.start();
         break;
 
       default:

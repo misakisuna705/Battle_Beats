@@ -21,7 +21,7 @@ class Msk extends Phaser.Graphics {
     const GAME = this.game;
 
     this.beginFill(0xffffff);
-    this.drawRect(0, GAME.height / 2 + 60, GAME.width, GAME.height / 2 - 60);
+    this.drawRect(0, GAME.height / 2 + 30, GAME.width, GAME.height / 2 - 30);
   }
 }
 
@@ -66,7 +66,7 @@ class Notes extends Phaser.Group {
 
     //==============================new==============================//
 
-    for (let i = 0; i < 100; ++i) {
+    for (let i = 0; i < 25; ++i) {
       this.add(new Note({ game: this.game, key: "note", idx: idx }));
     }
 
@@ -127,10 +127,7 @@ class Tail extends Phaser.Sprite {
 
     this.mask = new Msk({ game: this.game, x: 0, y: 0 });
 
-    this.track;
-    this.bonus_time;
     this.timer;
-    this.bonus;
 
     this.ispressed = false;
     this.decrement = ((this.game.state.getCurrentState().init_velocity_y / 1000) * 20) / this.height;
