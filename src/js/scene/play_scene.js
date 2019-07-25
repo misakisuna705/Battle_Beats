@@ -17,41 +17,9 @@ class Play_Scene extends Phaser.State {
     const BUTTON_CONF = button_config.play_scene.target_buttons;
     const BUTTON_CONF_LENGTH = BUTTON_CONF.length;
 
-    this.physics.startSystem(Phaser.Physics.ARCADE);
-
-    //==============================new==============================//
-
-    //tail
     const TAILS = (this.tails = []);
-
-    for (let i = 0; i < BUTTON_CONF_LENGTH; ++i) {
-      TAILS[i] = new Tails({ game: GAME, enableBody: true, idx: i });
-    }
-    //note
     const NOTES = (this.notes = []);
-
-    for (let i = 0; i < BUTTON_CONF_LENGTH; ++i) {
-      NOTES[i] = new Notes({ game: GAME, enableBody: true, idx: i });
-    }
-    //target button
     const TARGET_BUTTONS = (this.target_buttons = []);
-
-    for (let i = 0; i < BUTTON_CONF_LENGTH; ++i) {
-      TARGET_BUTTONS[i] = new Button({ game: GAME, x: (WIDTH / 5) * (i + 1), y: (HEIGHT / 8) * 7 }, BUTTON_CONF[i]);
-    }
-    //timer
-    const TIMER = (this.timer = this.time.create());
-    //song
-    const BGM = (this.bgm = GAME.sound.add(song_config[GAME.active_song].audio, 1, false));
-
-    //==============================add==============================//
-
-    //target button
-    for (let i = 0; i < BUTTON_CONF_LENGTH; ++i) {
-      ADD.existing(TARGET_BUTTONS[i]);
-    }
-
-    //==============================set==============================//
 
     const X_INIT = (this.x_init = []);
     const Y_INIT = (this.y_init = HEIGHT / 2 + 60);
@@ -69,13 +37,36 @@ class Play_Scene extends Phaser.State {
     const SLOPE = (this.slope = []);
     const ANGLE = (this.angle = []);
 
+    this.physics.startSystem(Phaser.Physics.ARCADE);
+
+    //==============================new==============================//
+
     for (let i = 0; i < BUTTON_CONF_LENGTH; ++i) {
       X_INIT[i] = WIDTH / 2 - 45 + i * 30;
-      X_TARGET[i] = TARGET_BUTTONS[i].x;
+      X_TARGET[i] = (WIDTH / 5) * (i + 1);
       SLOPE[i] = (X_TARGET[i] - X_INIT[i]) / (Y_TARGET - Y_INIT);
       VX_INIT[i] = VY_INIT * SLOPE[i];
       ANGLE[i] = -Math.atan(SLOPE[i]);
+      //tail
+      TAILS[i] = new Tails({ game: GAME, enableBody: true, idx: i });
+      //note
+      NOTES[i] = new Notes({ game: GAME, enableBody: true, idx: i });
+      //target button
+      TARGET_BUTTONS[i] = new Button({ game: GAME, x: X_TARGET[i], y: Y_TARGET }, BUTTON_CONF[i]);
     }
+    //timer
+    const TIMER = (this.timer = this.time.create());
+    //song
+    const BGM = (this.bgm = GAME.sound.add(song_config[GAME.active_song].audio, 1, false));
+
+    //==============================add==============================//
+
+    //target button
+    for (let i = 0; i < BUTTON_CONF_LENGTH; ++i) {
+      ADD.existing(TARGET_BUTTONS[i]);
+    }
+
+    //==============================set==============================//
 
     //const velocity_ratio = 10; // the ratio of the initial velocity and the destination velocity
 
@@ -110,13 +101,6 @@ class Play_Scene extends Phaser.State {
     //for (let i = 0; i < 4; i++) {
     //this.target_buttons[i].presskey.onUp.add(this.resetButton, this, 0, i);
     //}
-
-    //this.track_start_height = 120;
-    //this.track_start_width = 220;
-    //this.track_end_height = BUTTON_CONF.target_buttons[0].y;
-    //this.track_length = this.track_end_height - this.track_start_height;
-
-    //this.tail_init_scale_x = 0.2;
 
     //this.acceleration_x = [];
 
