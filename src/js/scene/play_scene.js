@@ -366,9 +366,6 @@ class Play_Scene extends Phaser.State {
   update_point(note) {
     const GAME = this.game;
 
-    console.log(this);
-    console.log(note);
-
     switch (note.point) {
       case this.excellent_score:
         ++GAME.excellent;

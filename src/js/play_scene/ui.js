@@ -4,8 +4,8 @@ class Score extends Phaser.Image {
 
     //const GAME = this.game;
 
-    this.visible = false;
-    this.anchor.setTo(0.5, 0.5);
+    //this.visible = false;
+    //this.anchor.setTo(0.5, 0.5);
 
     //this.total_score = 0;
     //this.excellent_score = 0;
@@ -17,12 +17,12 @@ class Score extends Phaser.Image {
     //this.bad = 0;
     //this.miss = 0;
 
-    this.total_score_txt = new Txt({ game: GAME, x: 240, y: 36, text: "score: 0", style: { fill: "#ffffff" } });
+    //this.total_score_txt = new Txt({ game: GAME, x: 240, y: 36, text: "score: 0", style: { fill: "#ffffff" } });
     this.combo_controller = new Combo(this.game);
     this.boss_controller = new Boss({ game: this.game, x: boss_config.Px, y: boss_config.Py, key: boss_config.key });
     this.boss_controller.start();
 
-    GAME.add.existing(this);
+    //GAME.add.existing(this);
 
     this.hit_info = [];
     this.overall_info = [];
