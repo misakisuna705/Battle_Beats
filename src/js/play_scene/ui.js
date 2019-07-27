@@ -2,20 +2,20 @@ class Score extends Phaser.Image {
   constructor({ game, x, y, key, frame }) {
     super(game, x, y, key, frame);
 
-    const GAME = this.game;
+    //const GAME = this.game;
 
     this.visible = false;
     this.anchor.setTo(0.5, 0.5);
 
-    this.total_score = 0;
-    this.excellent_score = 0;
-    this.precision = 0;
-    this.combo = 0;
-    this.excellent = 0;
-    this.great = 0;
-    this.good = 0;
-    this.bad = 0;
-    this.miss = 0;
+    //this.total_score = 0;
+    //this.excellent_score = 0;
+    //this.precision = 0;
+    //this.combo = 0;
+    //this.excellent = 0;
+    //this.great = 0;
+    //this.good = 0;
+    //this.bad = 0;
+    //this.miss = 0;
 
     this.total_score_txt = new Txt({ game: GAME, x: 240, y: 36, text: "score: 0", style: { fill: "#ffffff" } });
     this.combo_controller = new Combo(this.game);

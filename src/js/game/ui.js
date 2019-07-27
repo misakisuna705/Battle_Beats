@@ -14,7 +14,7 @@ class Article extends Phaser.Text {
   }
 }
 
-class Timer_Board extends Phaser.Text {
+class Total_Timer extends Phaser.Text {
   constructor({ game, x, y }, { text, style }) {
     super(game, x, y, text, style);
 

@@ -51,6 +51,15 @@ class Game_Init extends Phaser.State {
     GAME.active_song = -1;
     //active level
     GAME.active_level = 0;
+    //score
+    GAME.total = 0;
+    GAME.excellent = 0;
+    GAME.great = 0;
+    GAME.good = 0;
+    GAME.bad = 0;
+    GAME.miss = 0;
+    GAME.precision = 0;
+    GAME.combo = 0;
 
     //==============================call==============================//
 

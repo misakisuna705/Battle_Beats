@@ -56,8 +56,8 @@ class Play_Scene extends Phaser.State {
       KEYBOARD.addKey(KEYCODE.J),
       KEYBOARD.addKey(KEYCODE.K)
     ]);
-    //timer_board
-    const TIMER_BOARD = (this.timer_board = new Timer_Board(
+    //total timer
+    const TOTAL_TIMER = (this.total_timer = new Total_Timer(
       { game: GAME, x: WIDTH / 16, y: HEIGHT / 16 },
       { text: "time: 0:00", style: { fontSize: 64, fill: "#ffffff" } }
     ));
@@ -67,15 +67,11 @@ class Play_Scene extends Phaser.State {
     this.good_score = 100;
     this.bad_score = 50;
     this.miss_score = 0;
-    //score_board
-    this.total = 0;
-    this.excellent = 0;
-    this.great = 0;
-    this.good = 0;
-    this.bad = 0;
-    this.miss = 0;
-    this.precision = 0;
-    this.combo = 0;
+    //total score
+    const TOTAL_SCORE = (this.total_score = new Txt(
+      { game: GAME, x: WIDTH / 2, y: HEIGHT / 16 },
+      { text: "score: 0", style: { fontSize: 64, fill: "#ffffff" } }
+    ));
     //song
     const BGM = (this.bgm = GAME.sound.add(song_config[GAME.active_song].audio, 1, false));
     //timer
@@ -87,8 +83,10 @@ class Play_Scene extends Phaser.State {
     for (let i = 0; i < BUTTON_CONF_LENGTH; ++i) {
       ADD.existing(TARGET_BUTTONS[i]);
     }
-    //timer_board
-    ADD.existing(TIMER_BOARD);
+    //total timer
+    ADD.existing(TOTAL_TIMER);
+    //total score
+    ADD.existing(TOTAL_SCORE);
 
     //==============================set==============================//
 
@@ -104,20 +102,24 @@ class Play_Scene extends Phaser.State {
       TIMER.add(BEATMAP[i][1], this.dispatch_beat, this, i);
     }
     for (let i = 0; i < BUTTON_CONF_LENGTH; ++i) {
+      //note
+      NOTES[i].forEach(note => {
+        note.events.onKilled.add(this.update_point, this);
+      }, this);
       //target button
       TARGET_BUTTONS[i].onInputDown.add(this.hit_note_with_btn, this);
       //target keys
       TARGET_KEYS[i].onDown.add(this.hit_note_with_key, this);
     }
-    //timer_board
+    //total timer
     TIMER.loop(
       Phaser.Timer.SECOND,
       () => {
-        TIMER_BOARD.render(TIMER.seconds);
+        TOTAL_TIMER.render(TIMER.seconds);
       },
       this
     );
-    ////song
+    //song
     TIMER.add(
       T_TARGET,
       () => {
@@ -153,9 +155,9 @@ class Play_Scene extends Phaser.State {
     //this.hugo.start();
   }
 
-  resetButton(key, i) {
-    this.target_buttons[i].frame = 0;
-  }
+  //resetButton(key, i) {
+  //this.target_buttons[i].frame = 0;
+  //}
 
   dispatch_beat(idx) {
     const GAME = this.game;
@@ -352,4 +354,9 @@ class Play_Scene extends Phaser.State {
   hold_tail_with_btn(btn) {}
 
   hold_tail_with_key(key) {}
+
+  update_point(note) {
+    console.log(this);
+    console.log(note);
+  }
 }
