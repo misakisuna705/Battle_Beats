@@ -35,43 +35,43 @@ class Score extends Phaser.Image {
   point_upgrade(point) {
     switch (point) {
       case 300:
-        ++this.excellent;
+        //++this.excellent;
         ++this.combo;
         this.combo_controller.hit(this.combo, 0);
         this.boss_controller.beAttacked(300);
         break;
 
       case 200:
-        ++this.great;
+        //++this.great;
         ++this.combo;
         this.combo_controller.hit(this.combo, 1);
         this.boss_controller.beAttacked(200);
         break;
 
       case 100:
-        ++this.good;
+        //++this.good;
         ++this.combo;
         this.combo_controller.hit(this.combo, 2);
         break;
 
       case 50:
-        ++this.bad;
+        //++this.bad;
         this.combo = 0;
         this.combo_controller.hit(this.combo, 3);
         break;
 
       case 0:
-        ++this.miss;
+        //++this.miss;
         this.combo = 0;
         this.combo_controller.hit(this.combo, 4);
         break;
     }
 
-    this.total_score += point;
-    this.excellent_score += 300;
-    this.precision = this.total_score / this.excellent_score;
+    //this.total_score += point;
+    //this.excellent_score += 300;
+    //this.precision = this.total_score / this.excellent_score;
 
-    this.total_score_txt.setText("score: " + this.total_score);
+    //this.total_score_txt.setText("score: " + this.total_score);
   }
 
   bonus_upgrade(bonus) {

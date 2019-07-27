@@ -62,6 +62,7 @@ class Play_Scene extends Phaser.State {
       { text: "time: 0:00", style: { fontSize: 64, fill: "#ffffff" } }
     ));
     //score
+    this.count = 0;
     this.excellent_score = 300;
     this.great_score = 200;
     this.good_score = 100;
@@ -71,6 +72,11 @@ class Play_Scene extends Phaser.State {
     const TOTAL_SCORE = (this.total_score = new Txt(
       { game: GAME, x: WIDTH / 2, y: HEIGHT / 16 },
       { text: "score: 0", style: { fontSize: 64, fill: "#ffffff" } }
+    ));
+    //total precision
+    const TOTAL_PRECISION = (this.total_precision = new Txt(
+      { game: GAME, x: (WIDTH / 16) * 13, y: HEIGHT / 16 },
+      { text: "precision:100%", style: { fontSize: 64, fill: "#ffffff" } }
     ));
     //song
     const BGM = (this.bgm = GAME.sound.add(song_config[GAME.active_song].audio, 1, false));
@@ -87,6 +93,8 @@ class Play_Scene extends Phaser.State {
     ADD.existing(TOTAL_TIMER);
     //total score
     ADD.existing(TOTAL_SCORE);
+    //total precision
+    ADD.existing(TOTAL_PRECISION);
 
     //==============================set==============================//
 
@@ -356,7 +364,43 @@ class Play_Scene extends Phaser.State {
   hold_tail_with_key(key) {}
 
   update_point(note) {
+    const GAME = this.game;
+
     console.log(this);
     console.log(note);
+
+    switch (note.point) {
+      case this.excellent_score:
+        ++GAME.excellent;
+        break;
+
+      case this.great_score:
+        ++GAME.great;
+        break;
+
+      case this.good_score:
+        ++GAME.good;
+        break;
+
+      case this.bad_score:
+        ++GAME.bad;
+        break;
+
+      case this.miss_score:
+        ++GAME.miss;
+        break;
+
+      default:
+        break;
+    }
+
+    GAME.total += note.point;
+    this.count += this.excellent_score;
+    GAME.precision = GAME.total / this.count;
+
+    this.total_score.setText("score: " + GAME.total);
+    this.total_precision.setText("precision: " + (GAME.precision * 100).toFixed(2) + "%");
+
+    note.point = 0;
   }
 }

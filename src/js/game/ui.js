@@ -107,7 +107,7 @@ class Note extends Phaser.Sprite {
 
     this.timer = undefined;
     this.target_time = undefined;
-    this.point = undefined;
+    this.point = 0;
 
     //this.events.onKilled.add(this.hit, this);
   }
