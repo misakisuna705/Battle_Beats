@@ -14,6 +14,26 @@ class Article extends Phaser.Text {
   }
 }
 
+class Timer_Board extends Phaser.Text {
+  constructor({ game, x, y }, { text, style }) {
+    super(game, x, y, text, style);
+
+    this.anchor.setTo(0, 0.5);
+  }
+
+  render(seconds) {
+    let str;
+
+    if (seconds % 60 < 10) {
+      str = ":0";
+    } else {
+      str = ":";
+    }
+
+    this.setText("time: " + parseInt(seconds / 60) + str + (parseInt(seconds) % 60));
+  }
+}
+
 class Msk extends Phaser.Graphics {
   constructor({ game, x, y }) {
     super(game, x, y);
@@ -85,10 +105,14 @@ class Note extends Phaser.Sprite {
   constructor({ game, x, y, key, frame }) {
     super(game, x, y, key, frame);
 
-    this.timer;
+    this.timer = undefined;
+    this.target_time = undefined;
+    this.point = undefined;
 
     //this.events.onKilled.add(this.hit, this);
   }
+
+  dispatch() {}
 
   //hit() {
   //this.game.state.getCurrentState().score.point_upgrade(this.point);

@@ -1,37 +1,3 @@
-class Timer extends Phaser.Text {
-  constructor({ game, x, y, text, style }) {
-    super(game, x, y, text, style);
-
-    const GAME = this.game;
-
-    GAME.add.existing(this);
-    GAME.time.events.loop(Phaser.Timer.SECOND, this.count, this);
-
-    this.anchor.setTo(0, 0.5);
-
-    this.second = 0;
-    this.minute = 0;
-  }
-
-  count() {
-    ++this.second;
-
-    if (this.second % 60 === 0) {
-      ++this.minute;
-      this.second = 0;
-    }
-
-    const MINUTE = this.minute;
-    const SECOND = this.second;
-
-    if (SECOND < 10) {
-      this.setText("time: " + MINUTE + ":0" + SECOND);
-    } else {
-      this.setText("time: " + MINUTE + ":" + SECOND);
-    }
-  }
-}
-
 class Score extends Phaser.Image {
   constructor({ game, x, y, key, frame }) {
     super(game, x, y, key, frame);
