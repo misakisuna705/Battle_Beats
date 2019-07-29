@@ -81,9 +81,9 @@ class Game_Load extends Phaser.State {
     //game start
     LOAD.video("only_my_railgun.mp4", "assets/game_start/only_my_railgun.mp4");
     //play scene
-    LOAD.image("bg_front", "assets/play_scene/bg/bg_front.png");
-    LOAD.image("bg_middle", "assets/play_scene/bg/bg_middle.png");
-    LOAD.image("bg_back", "assets/play_scene/bg/bg_back.png");
+    LOAD.image("bg_back.png", "assets/play_scene/bg/bg_back.png");
+    //LOAD.image("bg_front", "assets/play_scene/bg/bg_front.png");
+    //LOAD.image("bg_middle", "assets/play_scene/bg/bg_middle.png");
 
     //LOAD.spritesheet("target_button", "assets/play_scene/target_button.png", 100, 50, 2);
     LOAD.image("target_button", "assets/play_scene/target_button.png");

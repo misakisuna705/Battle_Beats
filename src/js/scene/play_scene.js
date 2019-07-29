@@ -31,6 +31,9 @@ class Play_Scene extends Phaser.State {
     const SX_FINAL = (this.sx_final = 1);
     const SY_FINAL = (this.sy_final = 1 - Y_INIT / HEIGHT);
     const T_TARGET = (this.t_target = ((Y_TARGET - Y_INIT) / VY) * 1000);
+    //bg
+    //const BG = (this.bg = new Phaser.Image(GAME, 0, 0, "bg_back.png"));
+    //ADD.existing(BG);
     //tail
     const TAILS = (this.tails = []);
     //note
@@ -299,48 +302,32 @@ class Play_Scene extends Phaser.State {
 
     let NOTE = undefined;
     let t = Infinity;
+    let idx = undefined;
 
     switch (key.keyCode) {
       case KEYCODE.D:
-        this.notes[0].getAll("exists", true).forEach(note => {
-          if (note.target_time < t) {
-            t = note.target_time;
-            NOTE = note;
-          }
-        });
+        idx = 0;
         break;
-
       case KEYCODE.F:
-        this.notes[1].getAll("exists", true).forEach(note => {
-          if (note.target_time < t) {
-            t = note.target_time;
-            NOTE = note;
-          }
-        });
+        idx = 1;
         break;
-
       case KEYCODE.J:
-        this.notes[2].getAll("exists", true).forEach(note => {
-          if (note.target_time < t) {
-            t = note.target_time;
-            NOTE = note;
-          }
-        });
+        idx = 2;
         break;
-
-      case KEYCODE.KD:
-        this.notes[3].getAll("exists", true).forEach(note => {
-          if (note.target_time < t) {
-            t = note.target_time;
-            NOTE = note;
-          }
-        });
+      case KEYCODE.K:
+        idx = 3;
         break;
     }
 
+    this.notes[idx].getAll("exists", true).forEach(note => {
+      if (note.target_time < t) {
+        t = note.target_time;
+        NOTE = note;
+      }
+    });
+
     if (NOTE) {
       const GAP = Math.abs(this.timer.ms - this.t_target - NOTE.target_time);
-
       if (GAP < 300) {
         if (GAP < 30) {
           NOTE.point = this.excellent_score;
@@ -351,7 +338,6 @@ class Play_Scene extends Phaser.State {
         } else {
           NOTE.point = this.bad_score;
         }
-
         NOTE.kill();
       } else {
         NOTE.point = this.miss_score;
@@ -396,7 +382,8 @@ class Play_Scene extends Phaser.State {
     GAME.precision = GAME.total / this.count;
 
     this.total_score.setText("score: " + GAME.total);
-    this.total_precision.setText("precision: " + (GAME.precision * 100).toFixed(2) + "%");
+    //this.total_precision.setText("precision: " + (GAME.precision * 100).toFixed(2) + "%");
+    this.total_precision.setText(GAME.total + " " + this.count);
 
     note.point = 0;
   }
