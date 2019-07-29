@@ -97,7 +97,6 @@ class Notes extends Phaser.Group {
     this.setAll("outOfBoundsKill", true);
     this.setAll("anchor.x", 0.5);
     this.setAll("anchor.y", 0.5);
-    //this.setAll("anchor.y", 1);
   }
 }
 
@@ -108,24 +107,32 @@ class Note extends Phaser.Sprite {
     this.timer = undefined;
     this.target_time = undefined;
     this.point = 0;
-
-    //this.events.onKilled.add(this.hit, this);
   }
 
-  dispatch() {}
+  dispatch(vx, vy, SX_FINAL, SY_FINAL, t_target, target_time) {
+    const SCALE = this.scale;
+    const SX_INIT = 0.01;
+    const SY_INIT = SY_FINAL / 2;
+    const DSX = (SX_FINAL - SX_INIT) / (t_target / 50);
+    const DSY = (SY_FINAL - SY_INIT) / (t_target / 50);
 
-  //hit() {
-  //this.game.state.getCurrentState().score.point_upgrade(this.point);
+    this.body.velocity.setTo(vx, vy);
+    SCALE.setTo(DSX, DSY);
+    this.target_time = target_time;
 
-  //if (this.tail) {
-  //this.tail.hit();
-  //}
-  //}
-  //update_scale() {
-  //const state = this.game.state.getCurrentState();
-  //this.scale.x += state.note_enlarge_scale_x;
-  //this.scale.y += state.note_enlarge_scale_y;
-  //}
+    const TIMER = (this.timer = this.game.time.create());
+
+    TIMER.repeat(
+      50,
+      t_target / 50,
+      () => {
+        SCALE.setTo(SCALE.x + DSX, SCALE.y + DSY);
+      },
+      this
+    );
+
+    TIMER.start();
+  }
 }
 
 class Tails extends Phaser.Group {
@@ -141,7 +148,6 @@ class Tails extends Phaser.Group {
     this.setAll("outOfBoundsKill", true);
     this.setAll("anchor.x", 0.5);
     this.setAll("anchor.y", 1);
-    //this.setAll("anchor.y", 1);
   }
 }
 
@@ -151,64 +157,41 @@ class Tail extends Phaser.Sprite {
 
     this.mask = new Msk({ game: this.game, x: 0, y: 0 });
 
-    this.timer;
+    this.timer = undefined;
     this.target_time = undefined;
     this.bonus_timer = undefined;
     this.bonus = 0;
-
-    //this.ispressed = false;
-    //this.decrement = ((this.game.state.getCurrentState().init_velocity_y / 1000) * 20) / this.height;
-    //this.events.onKilled.add(function() {
-    //console.log("kill");
-    //}, this);
   }
 
-  //hit() {
-  //this.ispressed = true;
+  dispatch(vx, vy, t_target, arrive_time, leave_time, angle) {
+    const SCALE = this.scale;
 
-  //this.timer = this.game.time.create();
+    SCALE.setTo(1, 1);
 
-  //this.timer.repeat(
-  //20,
-  //this.bonus_time / 20,
-  //() => {
-  //if (this.ispressed) {
-  //if (this.game.state.getCurrentState().target_buttons[this.index].presskey.isDown) {
-  //this.body.velocity.y = 0;
-  //this.body.velocity.x = 0;
+    const SX_FINAL = 0.1;
+    const SY_FINAL = ((vy / 1000) * (leave_time - arrive_time)) / this.height / Math.cos(angle);
+    const SX_INIT = 0.01;
+    const SY_INIT = SY_FINAL / 2;
+    const DSX = (SX_FINAL - SX_INIT) / (t_target / 50);
+    const DSY = (SY_FINAL - SY_INIT) / (t_target / 50);
 
-  //if (this.scale.y < 0) {
-  //this.scale.y = 0;
-  //} else {
-  //this.scale.y -= this.decrement;
-  //}
+    this.rotation = angle;
+    this.body.velocity.setTo(vx, vy);
+    SCALE.setTo(SX_INIT, SY_INIT);
+    this.target_time = arrive_time;
+    this.bonus_time = leave_time - arrive_time;
 
-  //this.game.state.getCurrentState().score.bonus_upgrade(this.bonus);
-  //} else {
-  //this.ispressed = false;
-  //const state = this.game.state.getCurrentState();
-  //this.body.velocity.y = this.game.state.getCurrentState().init_velocity_y;
-  //this.body.velocity.x = this.game.state.getCurrentState().init_velocity_x[this.index];
-  //}
-  //}
-  //},
-  //this
-  //);
+    const TIMER = (this.timer = this.game.time.create());
 
-  //this.timer.onComplete.add(() => {
-  //if (this.game.state.getCurrentState().target_buttons[this.index].presskey.isDown) {
-  //this.scale.y = 0;
-  //console.log(this.exists);
-  //console.log(this.alive);
-  //console.log(this.visible);
-  //this.kill();
-  //}
-  //});
+    TIMER.repeat(
+      50,
+      t_target / 50,
+      () => {
+        SCALE.setTo(SCALE.x + DSX, SCALE.y + DSY);
+      },
+      this
+    );
 
-  //this.timer.start();
-  //}
-  //update_scale() {
-  //const state = this.game.state.getCurrentState();
-  //this.scale.y += this.tail_enlarge_scale_y;
-  //}
+    TIMER.start();
+  }
 }

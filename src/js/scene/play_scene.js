@@ -174,7 +174,6 @@ class Play_Scene extends Phaser.State {
 
   dispatch_beat(idx) {
     const GAME = this.game;
-    const TIME = this.time;
     const BEAT = song_config[GAME.active_song].beatmap[GAME.active_level][idx];
     const X_INIT = this.x_init;
     const Y_INIT = this.y_init;
@@ -184,30 +183,7 @@ class Play_Scene extends Phaser.State {
 
     switch (BEAT.length) {
       case 2:
-        const NOTE = this.notes[BEAT[0]].getFirstExists(false, false, X_INIT, Y_INIT);
-        const NOTE_SCALE = NOTE.scale;
-
-        const NOTE_SX_FINAL = this.sx_final;
-        const NOTE_SY_FINAL = this.sy_final;
-        const NOTE_SX_INIT = 0.01;
-        const NOTE_SY_INIT = NOTE_SY_FINAL / 2;
-        const NOTE_DSX = (NOTE_SX_FINAL - NOTE_SX_INIT) / (T_TARGET / 50);
-        const NOTE_DSY = (NOTE_SY_FINAL - NOTE_SY_INIT) / (T_TARGET / 50);
-
-        NOTE.body.velocity.setTo(VX, VY);
-        NOTE_SCALE.setTo(NOTE_DSX, NOTE_DSY);
-        NOTE.target_time = BEAT[1];
-        NOTE.timer = TIME.create();
-        NOTE.timer.repeat(
-          50,
-          T_TARGET / 50,
-          () => {
-            NOTE_SCALE.setTo(NOTE_SCALE.x + NOTE_DSX, NOTE_SCALE.y + NOTE_DSY);
-          },
-          this
-        );
-
-        NOTE.timer.start();
+        this.notes[BEAT[0]].getFirstExists(false, false, X_INIT, Y_INIT).dispatch(VX, VY, this.sx_final, this.sy_final, T_TARGET, BEAT[1]);
         break;
 
       case 3:
@@ -220,52 +196,11 @@ class Play_Scene extends Phaser.State {
           ANGLE[i] = -Math.atan((X_TARGET[i] - X_INIT) / (Y_TARGET - Y_INIT));
         }
 
-        const TAIL = this.tails[BEAT[0]].getFirstExists(false, false, X_INIT, Y_INIT);
-        const TAIL_SCALE = TAIL.scale;
-
-        TAIL_SCALE.setTo(1, 1);
-
-        const TAIL_SX_FINAL = 0.1;
-        const TAIL_SY_FINAL = ((VY / 1000) * (BEAT[2] - BEAT[1])) / TAIL.height / Math.cos(ANGLE[BEAT[0]]);
-        const TAIL_SX_INIT = 0.01;
-        const TAIL_SY_INIT = TAIL_SY_FINAL / 2;
-        const TAIL_DSX = (TAIL_SX_FINAL - TAIL_SX_INIT) / (T_TARGET / 50);
-        const TAIL_DSY = (TAIL_SY_FINAL - TAIL_SY_INIT) / (T_TARGET / 50);
-
-        TAIL.rotation = ANGLE[BEAT[0]];
-        TAIL.body.velocity.setTo(VX, VY);
-        TAIL_SCALE.setTo(TAIL_SX_INIT, TAIL_SY_INIT);
-        TAIL.target_time = BEAT[1];
-        TAIL.bonus_time = BEAT[2] - BEAT[1];
-        TAIL.timer = TIME.create();
-        TAIL.timer.repeat(
-          50,
-          T_TARGET / 50,
-          () => {
-            TAIL_SCALE.setTo(TAIL_SCALE.x + TAIL_DSX, TAIL_SCALE.y + TAIL_DSY);
-          },
-          this
-        );
-
-        TAIL.timer.start();
+        this.tails[BEAT[0]].getFirstExists(false, false, X_INIT, Y_INIT).dispatch(VX, VY, T_TARGET, BEAT[1], BEAT[2], ANGLE[BEAT[0]]);
         break;
 
       default:
         break;
-    }
-  }
-
-  dph_note(index) {
-    nearest_note.point = 0;
-
-    if (BEAT.length === 3) {
-      TAIL.bonus_time = BEAT[2] - TIME;
-
-      TAIL.events.onKilled.add(() => {
-        TAIL.scale_timer.stop();
-      }, this);
-    } else {
-      nearest_note.tail = null;
     }
   }
 
@@ -447,6 +382,10 @@ class Play_Scene extends Phaser.State {
           TAIL.bonus = this.bad_score / 10;
         }
 
+        const DSY = TAIL.scale.y / (TAIL.bonus_time / 50);
+        TAIL.scale.y -= DSY;
+        //TAIL.scale.y -= DSY;
+
         TAIL.bonus_timer = this.time.create();
 
         TAIL.bonus_timer.repeat(
@@ -455,9 +394,18 @@ class Play_Scene extends Phaser.State {
           () => {
             switch (key.isDown) {
               case true:
+                TAIL.body.velocity.setTo(0, 0);
+
+                if (TAIL.scale.y < 0) {
+                  TAIL.scale.y = 0;
+                } else {
+                  TAIL.scale.y -= DSY;
+                }
+
                 this.update_bonus(TAIL);
                 break;
               case false:
+                TAIL.body.velocity.setTo(this.vx[idx], this.vy);
                 break;
               default:
                 break;
@@ -468,6 +416,7 @@ class Play_Scene extends Phaser.State {
 
         TAIL.bonus_timer.onComplete.add(() => {
           TAIL.bonus = 0;
+          TAIL.kill();
         });
 
         TAIL.bonus_timer.start();

@@ -74,12 +74,12 @@ class Score extends Phaser.Image {
     //this.total_score_txt.setText("score: " + this.total_score);
   }
 
-  bonus_upgrade(bonus) {
-    this.total_score += bonus;
-    this.excellent_score += bonus;
+  //bonus_upgrade(bonus) {
+  //this.total_score += bonus;
+  //this.excellent_score += bonus;
 
-    this.total_score_txt.setText("score: " + this.total_score);
-  }
+  //this.total_score_txt.setText("score: " + this.total_score);
+  //}
 
   score_upload() {
     let song = song_config[this.game.active_song].info.Title;
