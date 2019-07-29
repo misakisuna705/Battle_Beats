@@ -119,10 +119,10 @@ class Play_Scene extends Phaser.State {
       }, this);
       //target button
       TARGET_BUTTONS[i].onInputDown.add(this.hit_note_with_btn, this);
-      TARGET_BUTTONS[i].onInputDown.add(this.hold_tail_with_btn, this);
+      TARGET_BUTTONS[i].onInputDown.add(this.hold_tail, this);
       //target keys
       TARGET_KEYS[i].onDown.add(this.hit_note_with_key, this);
-      TARGET_KEYS[i].onDown.add(this.hold_tail_with_key, this);
+      TARGET_KEYS[i].onDown.add(this.hold_tail, this);
     }
     //total timer
     TIMER.loop(
@@ -262,53 +262,36 @@ class Play_Scene extends Phaser.State {
     }
   }
 
-  hold_tail_with_btn(btn) {
-    let TAIL = undefined;
-    let t = Infinity;
-
-    this.tails[btn.idx].getAll("exists", true).forEach(tail => {
-      if (tail.target_time < t) {
-        t = tail.target_time;
-        TAIL = tail;
-      }
-    });
-
-    if (TAIL) {
-      TAIL.set_bonus(this.timer.ms, this.t_target, btn, this.vx[btn.idx], this.vy);
-    }
-  }
-
-  hold_tail_with_key(key) {
+  hold_tail(obj) {
     const KEYCODE = Phaser.Keyboard;
 
-    let TAIL = undefined;
-    let t = Infinity;
+    console.log(obj);
+
     let idx = undefined;
 
-    switch (key.keyCode) {
-      case KEYCODE.D:
-        idx = 0;
-        break;
-      case KEYCODE.F:
-        idx = 1;
-        break;
-      case KEYCODE.J:
-        idx = 2;
-        break;
-      case KEYCODE.K:
-        idx = 3;
-        break;
+    if (obj.idx != undefined) {
+      idx = obj.idx;
+    } else {
+      switch (obj.keyCode) {
+        case KEYCODE.D:
+          idx = 0;
+          break;
+        case KEYCODE.F:
+          idx = 1;
+          break;
+        case KEYCODE.J:
+          idx = 2;
+          break;
+        case KEYCODE.K:
+          idx = 3;
+          break;
+      }
     }
 
-    this.tails[idx].getAll("exists", true).forEach(tail => {
-      if (tail.target_time < t) {
-        t = tail.target_time;
-        TAIL = tail;
-      }
-    });
+    const TAIL = this.tails[idx].get_first_arrived();
 
     if (TAIL) {
-      TAIL.set_bonus(this.timer.ms, this.t_target, key, this.vx[idx], this.vy);
+      TAIL.set_bonus(this.timer.ms, this.t_target, obj, this.vx[idx], this.vy);
     }
   }
 

@@ -169,6 +169,20 @@ class Tails extends Phaser.Group {
     this.setAll("anchor.x", 0.5);
     this.setAll("anchor.y", 1);
   }
+
+  get_first_arrived() {
+    let time = Infinity;
+    let tail = undefined;
+
+    this.getAll("exists", true).forEach(child => {
+      if (child.target_time < time) {
+        time = child.target_time;
+        tail = child;
+      }
+    });
+
+    return tail;
+  }
 }
 
 class Tail extends Phaser.Sprite {
@@ -238,15 +252,15 @@ class Tail extends Phaser.Sprite {
         50,
         this.bonus_time / 50,
         () => {
-          let isDown;
+          let isDown = undefined;
 
-          if (obj.input) {
+          if (obj.input != undefined) {
             isDown = obj.input.pointerDown();
           } else {
             isDown = obj.isDown;
           }
 
-          switch (isDown) {
+          switch (isDown === true) {
             case true:
               this.body.velocity.setTo(0, 0);
 
