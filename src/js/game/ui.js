@@ -133,6 +133,26 @@ class Note extends Phaser.Sprite {
 
     TIMER.start();
   }
+
+  set_point(time, t_target) {
+    const GAP = Math.abs(time - t_target - this.target_time);
+
+    if (GAP < 300) {
+      if (GAP < 30) {
+        this.point = 300;
+      } else if (GAP < 150) {
+        this.point = 200;
+      } else if (GAP < 270) {
+        this.point = 100;
+      } else {
+        this.point = 50;
+      }
+
+      this.kill();
+    } else {
+      this.point = 0;
+    }
+  }
 }
 
 class Tails extends Phaser.Group {
@@ -193,5 +213,71 @@ class Tail extends Phaser.Sprite {
     );
 
     TIMER.start();
+  }
+
+  set_bonus(time, t_target, obj, vx, vy) {
+    const GAP = Math.abs(time - t_target - this.target_time);
+
+    if (GAP < 300) {
+      if (GAP < 30) {
+        this.bonus = 300 / 10;
+      } else if (GAP < 150) {
+        this.bonus = 200 / 10;
+      } else if (GAP < 270) {
+        this.bonus = 100 / 10;
+      } else {
+        this.bonus = 50 / 10;
+      }
+
+      const DSY = this.scale.y / (this.bonus_time / 50);
+      this.scale.y -= DSY;
+
+      this.bonus_timer = this.game.time.create();
+
+      this.bonus_timer.repeat(
+        50,
+        this.bonus_time / 50,
+        () => {
+          let isDown;
+
+          if (obj.input) {
+            isDown = obj.input.pointerDown();
+          } else {
+            isDown = obj.isDown;
+          }
+
+          switch (isDown) {
+            case true:
+              this.body.velocity.setTo(0, 0);
+
+              if (this.scale.y < 0) {
+                this.scale.y = 0;
+              } else {
+                this.scale.y -= DSY;
+              }
+
+              this.game.state.getCurrentState().update_bonus(this);
+              break;
+
+            case false:
+              this.body.velocity.setTo(vx, vy);
+              break;
+
+            default:
+              break;
+          }
+        },
+        this
+      );
+
+      this.bonus_timer.onComplete.add(() => {
+        this.bonus = 0;
+        this.kill();
+      });
+
+      this.bonus_timer.start();
+    } else {
+      this.bonus = 0;
+    }
   }
 }

@@ -183,7 +183,11 @@ class Play_Scene extends Phaser.State {
 
     switch (BEAT.length) {
       case 2:
-        this.notes[BEAT[0]].getFirstExists(false, false, X_INIT, Y_INIT).dispatch(VX, VY, this.sx_final, this.sy_final, T_TARGET, BEAT[1]);
+        const NOTE = this.notes[BEAT[0]].getFirstExists(false, false, X_INIT, Y_INIT);
+
+        if (NOTE) {
+          NOTE.dispatch(VX, VY, this.sx_final, this.sy_final, T_TARGET, BEAT[1]);
+        }
         break;
 
       case 3:
@@ -196,7 +200,11 @@ class Play_Scene extends Phaser.State {
           ANGLE[i] = -Math.atan((X_TARGET[i] - X_INIT) / (Y_TARGET - Y_INIT));
         }
 
-        this.tails[BEAT[0]].getFirstExists(false, false, X_INIT, Y_INIT).dispatch(VX, VY, T_TARGET, BEAT[1], BEAT[2], ANGLE[BEAT[0]]);
+        const TAIL = this.tails[BEAT[0]].getFirstExists(false, false, X_INIT, Y_INIT);
+
+        if (TAIL) {
+          TAIL.dispatch(VX, VY, T_TARGET, BEAT[1], BEAT[2], ANGLE[BEAT[0]]);
+        }
         break;
 
       default:
@@ -216,23 +224,7 @@ class Play_Scene extends Phaser.State {
     });
 
     if (NOTE) {
-      const GAP = Math.abs(this.timer.ms - this.t_target - NOTE.target_time);
-
-      if (GAP < 300) {
-        if (GAP < 30) {
-          NOTE.point = 300;
-        } else if (GAP < 150) {
-          NOTE.point = 200;
-        } else if (GAP < 270) {
-          NOTE.point = 100;
-        } else {
-          NOTE.point = 50;
-        }
-
-        NOTE.kill();
-      } else {
-        NOTE.point = 0;
-      }
+      NOTE.set_point(this.timer.ms, this.t_target);
     }
   }
 
@@ -266,21 +258,7 @@ class Play_Scene extends Phaser.State {
     });
 
     if (NOTE) {
-      const GAP = Math.abs(this.timer.ms - this.t_target - NOTE.target_time);
-      if (GAP < 300) {
-        if (GAP < 30) {
-          NOTE.point = this.excellent_score;
-        } else if (GAP < 150) {
-          NOTE.point = this.great_score;
-        } else if (GAP < 270) {
-          NOTE.point = this.good_score;
-        } else {
-          NOTE.point = this.bad_score;
-        }
-        NOTE.kill();
-      } else {
-        NOTE.point = this.miss_score;
-      }
+      NOTE.set_point(this.timer.ms, this.t_target);
     }
   }
 
@@ -296,46 +274,7 @@ class Play_Scene extends Phaser.State {
     });
 
     if (TAIL) {
-      const GAP = Math.abs(this.timer.ms - this.t_target - TAIL.target_time);
-
-      if (GAP < 300) {
-        if (GAP < 30) {
-          TAIL.bonus = this.excellent_score / 10;
-        } else if (GAP < 150) {
-          TAIL.bonus = this.great_score / 10;
-        } else if (GAP < 270) {
-          TAIL.bonus = this.good_score / 10;
-        } else {
-          TAIL.bonus = this.bad_score / 10;
-        }
-
-        TAIL.bonus_timer = this.time.create();
-
-        TAIL.bonus_timer.repeat(
-          50,
-          TAIL.bonus_time / 50,
-          () => {
-            switch (btn.input.pointerDown()) {
-              case true:
-                this.update_bonus(TAIL);
-                break;
-              case false:
-                break;
-              default:
-                break;
-            }
-          },
-          this
-        );
-
-        TAIL.bonus_timer.onComplete.add(() => {
-          TAIL.bonus = 0;
-        });
-
-        TAIL.bonus_timer.start();
-      } else {
-        TAIL.bonus = 0;
-      }
+      TAIL.set_bonus(this.timer.ms, this.t_target, btn, this.vx[btn.idx], this.vy);
     }
   }
 
@@ -369,60 +308,7 @@ class Play_Scene extends Phaser.State {
     });
 
     if (TAIL) {
-      const GAP = Math.abs(this.timer.ms - this.t_target - TAIL.target_time);
-
-      if (GAP < 300) {
-        if (GAP < 30) {
-          TAIL.bonus = this.excellent_score / 10;
-        } else if (GAP < 150) {
-          TAIL.bonus = this.great_score / 10;
-        } else if (GAP < 270) {
-          TAIL.bonus = this.good_score / 10;
-        } else {
-          TAIL.bonus = this.bad_score / 10;
-        }
-
-        const DSY = TAIL.scale.y / (TAIL.bonus_time / 50);
-        TAIL.scale.y -= DSY;
-        //TAIL.scale.y -= DSY;
-
-        TAIL.bonus_timer = this.time.create();
-
-        TAIL.bonus_timer.repeat(
-          50,
-          TAIL.bonus_time / 50,
-          () => {
-            switch (key.isDown) {
-              case true:
-                TAIL.body.velocity.setTo(0, 0);
-
-                if (TAIL.scale.y < 0) {
-                  TAIL.scale.y = 0;
-                } else {
-                  TAIL.scale.y -= DSY;
-                }
-
-                this.update_bonus(TAIL);
-                break;
-              case false:
-                TAIL.body.velocity.setTo(this.vx[idx], this.vy);
-                break;
-              default:
-                break;
-            }
-          },
-          this
-        );
-
-        TAIL.bonus_timer.onComplete.add(() => {
-          TAIL.bonus = 0;
-          TAIL.kill();
-        });
-
-        TAIL.bonus_timer.start();
-      } else {
-        TAIL.bonus = 0;
-      }
+      TAIL.set_bonus(this.timer.ms, this.t_target, key, this.vx[idx], this.vy);
     }
   }
 
