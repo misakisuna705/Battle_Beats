@@ -121,6 +121,12 @@ class Note extends Phaser.Sprite {
     this.timer = undefined;
     this.target_time = undefined;
     this.point = 0;
+
+    this.events.onKilled.add(this.rst, this);
+  }
+
+  rst() {
+    this.point = 0;
   }
 
   dispatch(vx, vy, SX_FINAL, SY_FINAL, t_target, target_time) {
@@ -209,12 +215,17 @@ class Tail extends Phaser.Sprite {
     this.target_time = undefined;
     this.bonus_timer = undefined;
     this.bonus = 0;
+
+    this.events.onKilled.add(this.rst, this);
+  }
+
+  rst() {
+    this.bonus = 0;
+    this.scale.setTo(1, 1);
   }
 
   dispatch(vx, vy, t_target, arrive_time, leave_time, angle) {
     const SCALE = this.scale;
-
-    SCALE.setTo(1, 1);
 
     const SX_FINAL = 0.1;
     const SY_FINAL = ((vy / 1000) * (leave_time - arrive_time)) / this.height / Math.cos(angle);
@@ -243,7 +254,7 @@ class Tail extends Phaser.Sprite {
     TIMER.start();
   }
 
-  set_bonus(time, t_target, obj, vx, vy) {
+  set_bonus(time, t_target, device, vx, vy) {
     const GAP = Math.abs(time - t_target - this.target_time);
 
     if (GAP < 300) {
@@ -268,10 +279,10 @@ class Tail extends Phaser.Sprite {
         () => {
           let isDown = undefined;
 
-          if (obj.input != undefined) {
-            isDown = obj.input.pointerDown();
+          if (device.input != undefined) {
+            isDown = device.input.pointerDown();
           } else {
-            isDown = obj.isDown;
+            isDown = device.isDown;
           }
 
           switch (isDown === true) {
@@ -299,7 +310,6 @@ class Tail extends Phaser.Sprite {
       );
 
       this.bonus_timer.onComplete.add(() => {
-        this.bonus = 0;
         this.kill();
       });
 

@@ -110,19 +110,18 @@ class Play_Scene extends Phaser.State {
 
     //beat
     for (let i = 0; i < BEATMAP_LENGTH; ++i) {
-      TIMER.add(BEATMAP[i][1], this.dispatch_beat, this, i);
+      TIMER.add(BEATMAP[i][1], this.dispatch, this, i);
     }
+
     for (let i = 0; i < BUTTON_CONF_LENGTH; ++i) {
       //note
       NOTES[i].forEach(note => {
         note.events.onKilled.add(this.update_point, this);
       }, this);
       //target button
-      TARGET_BUTTONS[i].onInputDown.add(this.hit_note, this);
-      TARGET_BUTTONS[i].onInputDown.add(this.hold_tail, this);
+      TARGET_BUTTONS[i].onInputDown.add(this.tap, this, 0, NOTES, TAILS);
       //target keys
-      TARGET_KEYS[i].onDown.add(this.hit_note, this);
-      TARGET_KEYS[i].onDown.add(this.hold_tail, this);
+      TARGET_KEYS[i].onDown.add(this.tap, this, 0, NOTES, TAILS);
     }
     //total timer
     TIMER.loop(
@@ -172,7 +171,7 @@ class Play_Scene extends Phaser.State {
   //this.target_buttons[i].frame = 0;
   //}
 
-  dispatch_beat(idx) {
+  dispatch(idx) {
     const GAME = this.game;
     const BEAT = song_config[GAME.active_song].beatmap[GAME.active_level][idx];
     const X_INIT = this.x_init;
@@ -191,19 +190,10 @@ class Play_Scene extends Phaser.State {
         break;
 
       case 3:
-        const BUTTON_CONF_LENGTH = button_config.play_scene.target_buttons.length;
-        const X_TARGET = this.x_target;
-        const Y_TARGET = this.y_target;
-        const ANGLE = [];
-
-        for (let i = 0; i < BUTTON_CONF_LENGTH; ++i) {
-          ANGLE[i] = -Math.atan((X_TARGET[i] - X_INIT) / (Y_TARGET - Y_INIT));
-        }
-
         const TAIL = this.tails[BEAT[0]].getFirstExists(false, false, X_INIT, Y_INIT);
 
         if (TAIL) {
-          TAIL.dispatch(VX, VY, T_TARGET, BEAT[1], BEAT[2], ANGLE[BEAT[0]]);
+          TAIL.dispatch(VX, VY, T_TARGET, BEAT[1], BEAT[2], -Math.atan((this.x_target[BEAT[0]] - X_INIT) / (this.y_target - Y_INIT)));
         }
         break;
 
@@ -212,15 +202,15 @@ class Play_Scene extends Phaser.State {
     }
   }
 
-  get_track(obj) {
+  get_track(device) {
     const KEYCODE = Phaser.Keyboard;
 
     let track = undefined;
 
-    if (obj.idx != undefined) {
-      track = obj.idx;
+    if (device.idx != undefined) {
+      track = device.idx;
     } else {
-      switch (obj.keyCode) {
+      switch (device.keyCode) {
         case KEYCODE.D:
           track = 0;
           break;
@@ -239,21 +229,23 @@ class Play_Scene extends Phaser.State {
     return track;
   }
 
-  hit_note(obj) {
-    const TRACK = this.get_track(obj);
+  tap(device, notes, tails) {
+    const TRACK = this.get_track(device);
     const NOTE = this.notes[TRACK].get_first_arrived();
-
-    if (NOTE) {
-      NOTE.set_point(this.timer.ms, this.t_target);
-    }
-  }
-
-  hold_tail(obj) {
-    const TRACK = this.get_track(obj);
     const TAIL = this.tails[TRACK].get_first_arrived();
 
-    if (TAIL) {
-      TAIL.set_bonus(this.timer.ms, this.t_target, obj, this.vx[TRACK], this.vy);
+    if (NOTE && TAIL) {
+      if (NOTE.target_time > TAIL.target_time) {
+        NOTE.set_point(this.timer.ms, this.t_target);
+      } else if (NOTE.target_time < TAIL.target_time) {
+        TAIL.set_bonus(this.timer.ms, this.t_target, device, this.vx[TRACK], this.vy);
+      } else {
+      }
+    } else if (NOTE) {
+      NOTE.set_point(this.timer.ms, this.t_target);
+    } else if (TAIL) {
+      TAIL.set_bonus(this.timer.ms, this.t_target, device, this.vx[TRACK], this.vy);
+    } else {
     }
   }
 
@@ -290,10 +282,7 @@ class Play_Scene extends Phaser.State {
     GAME.precision = GAME.total / this.count;
 
     this.total_score.setText("score: " + GAME.total);
-    //this.total_precision.setText("precision: " + (GAME.precision * 100).toFixed(2) + "%");
-    this.total_precision.setText(GAME.total + " " + this.count);
-
-    note.point = 0;
+    this.total_precision.setText("precision: " + (GAME.precision * 100).toFixed(2) + "%");
   }
 
   update_bonus(tail) {
@@ -301,9 +290,9 @@ class Play_Scene extends Phaser.State {
 
     GAME.total += tail.bonus;
     this.count += tail.bonus;
+    GAME.precision = GAME.total / this.count;
 
     this.total_score.setText("score: " + GAME.total);
-    //this.total_precision.setText("precision: " + (GAME.precision * 100).toFixed(2) + "%");
-    this.total_precision.setText(GAME.total + " " + this.count);
+    this.total_precision.setText("precision: " + (GAME.precision * 100).toFixed(2) + "%");
   }
 }
