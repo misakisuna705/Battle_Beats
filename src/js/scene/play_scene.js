@@ -266,7 +266,7 @@ class Play_Scene extends Phaser.State {
       this.count += this.excellent_score;
     } else if (beat.bonus != undefined) {
       score = beat.bonus;
-      this.count += beat.bonus;
+      this.count += this.excellent_score / 10;
     }
 
     GAME.total += score;
