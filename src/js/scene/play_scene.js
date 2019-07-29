@@ -119,8 +119,10 @@ class Play_Scene extends Phaser.State {
       }, this);
       //target button
       TARGET_BUTTONS[i].onInputDown.add(this.hit_note_with_btn, this);
+      TARGET_BUTTONS[i].onInputDown.add(this.hold_tail_with_btn, this);
       //target keys
       TARGET_KEYS[i].onDown.add(this.hit_note_with_key, this);
+      TARGET_KEYS[i].onDown.add(this.hold_tail_with_key, this);
     }
     //total timer
     TIMER.loop(
@@ -233,6 +235,8 @@ class Play_Scene extends Phaser.State {
         TAIL.rotation = ANGLE[BEAT[0]];
         TAIL.body.velocity.setTo(VX, VY);
         TAIL_SCALE.setTo(TAIL_SX_INIT, TAIL_SY_INIT);
+        TAIL.target_time = BEAT[1];
+        TAIL.bonus_time = BEAT[2] - BEAT[1];
         TAIL.timer = TIME.create();
         TAIL.timer.repeat(
           50,
@@ -345,9 +349,133 @@ class Play_Scene extends Phaser.State {
     }
   }
 
-  hold_tail_with_btn(btn) {}
+  hold_tail_with_btn(btn) {
+    let TAIL = undefined;
+    let t = Infinity;
 
-  hold_tail_with_key(key) {}
+    this.tails[btn.idx].getAll("exists", true).forEach(tail => {
+      if (tail.target_time < t) {
+        t = tail.target_time;
+        TAIL = tail;
+      }
+    });
+
+    if (TAIL) {
+      const GAP = Math.abs(this.timer.ms - this.t_target - TAIL.target_time);
+
+      if (GAP < 300) {
+        if (GAP < 30) {
+          TAIL.bonus = this.excellent_score / 10;
+        } else if (GAP < 150) {
+          TAIL.bonus = this.great_score / 10;
+        } else if (GAP < 270) {
+          TAIL.bonus = this.good_score / 10;
+        } else {
+          TAIL.bonus = this.bad_score / 10;
+        }
+
+        TAIL.bonus_timer = this.time.create();
+
+        TAIL.bonus_timer.repeat(
+          50,
+          TAIL.bonus_time / 50,
+          () => {
+            switch (btn.input.pointerDown()) {
+              case true:
+                this.update_bonus(TAIL);
+                break;
+              case false:
+                break;
+              default:
+                break;
+            }
+          },
+          this
+        );
+
+        TAIL.bonus_timer.onComplete.add(() => {
+          TAIL.bonus = 0;
+        });
+
+        TAIL.bonus_timer.start();
+      } else {
+        TAIL.bonus = 0;
+      }
+    }
+  }
+
+  hold_tail_with_key(key) {
+    const KEYCODE = Phaser.Keyboard;
+
+    let TAIL = undefined;
+    let t = Infinity;
+    let idx = undefined;
+
+    switch (key.keyCode) {
+      case KEYCODE.D:
+        idx = 0;
+        break;
+      case KEYCODE.F:
+        idx = 1;
+        break;
+      case KEYCODE.J:
+        idx = 2;
+        break;
+      case KEYCODE.K:
+        idx = 3;
+        break;
+    }
+
+    this.tails[idx].getAll("exists", true).forEach(tail => {
+      if (tail.target_time < t) {
+        t = tail.target_time;
+        TAIL = tail;
+      }
+    });
+
+    if (TAIL) {
+      const GAP = Math.abs(this.timer.ms - this.t_target - TAIL.target_time);
+
+      if (GAP < 300) {
+        if (GAP < 30) {
+          TAIL.bonus = this.excellent_score / 10;
+        } else if (GAP < 150) {
+          TAIL.bonus = this.great_score / 10;
+        } else if (GAP < 270) {
+          TAIL.bonus = this.good_score / 10;
+        } else {
+          TAIL.bonus = this.bad_score / 10;
+        }
+
+        TAIL.bonus_timer = this.time.create();
+
+        TAIL.bonus_timer.repeat(
+          50,
+          TAIL.bonus_time / 50,
+          () => {
+            switch (key.isDown) {
+              case true:
+                this.update_bonus(TAIL);
+                break;
+              case false:
+                break;
+              default:
+                break;
+            }
+          },
+          this
+        );
+
+        TAIL.bonus_timer.onComplete.add(() => {
+          TAIL.bonus = 0;
+        });
+
+        TAIL.bonus_timer.start();
+      } else {
+        TAIL.bonus = 0;
+      }
+    }
+  }
 
   update_point(note) {
     const GAME = this.game;
@@ -386,5 +514,16 @@ class Play_Scene extends Phaser.State {
     this.total_precision.setText(GAME.total + " " + this.count);
 
     note.point = 0;
+  }
+
+  update_bonus(tail) {
+    const GAME = this.game;
+
+    GAME.total += tail.bonus;
+    this.count += tail.bonus;
+
+    this.total_score.setText("score: " + GAME.total);
+    //this.total_precision.setText("precision: " + (GAME.precision * 100).toFixed(2) + "%");
+    this.total_precision.setText(GAME.total + " " + this.count);
   }
 }

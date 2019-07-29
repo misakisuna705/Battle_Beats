@@ -152,9 +152,12 @@ class Tail extends Phaser.Sprite {
     this.mask = new Msk({ game: this.game, x: 0, y: 0 });
 
     this.timer;
+    this.target_time = undefined;
+    this.bonus_timer = undefined;
+    this.bonus = 0;
 
-    this.ispressed = false;
-    this.decrement = ((this.game.state.getCurrentState().init_velocity_y / 1000) * 20) / this.height;
+    //this.ispressed = false;
+    //this.decrement = ((this.game.state.getCurrentState().init_velocity_y / 1000) * 20) / this.height;
     //this.events.onKilled.add(function() {
     //console.log("kill");
     //}, this);
