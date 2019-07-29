@@ -118,10 +118,10 @@ class Play_Scene extends Phaser.State {
         note.events.onKilled.add(this.update_point, this);
       }, this);
       //target button
-      TARGET_BUTTONS[i].onInputDown.add(this.hit_note_with_btn, this);
+      TARGET_BUTTONS[i].onInputDown.add(this.hit_note, this);
       TARGET_BUTTONS[i].onInputDown.add(this.hold_tail, this);
       //target keys
-      TARGET_KEYS[i].onDown.add(this.hit_note_with_key, this);
+      TARGET_KEYS[i].onDown.add(this.hit_note, this);
       TARGET_KEYS[i].onDown.add(this.hold_tail, this);
     }
     //total timer
@@ -212,50 +212,36 @@ class Play_Scene extends Phaser.State {
     }
   }
 
-  hit_note_with_btn(btn) {
-    let NOTE = undefined;
-    let t = Infinity;
-
-    this.notes[btn.idx].getAll("exists", true).forEach(note => {
-      if (note.target_time < t) {
-        t = note.target_time;
-        NOTE = note;
-      }
-    });
-
-    if (NOTE) {
-      NOTE.set_point(this.timer.ms, this.t_target);
-    }
-  }
-
-  hit_note_with_key(key) {
+  get_track(obj) {
     const KEYCODE = Phaser.Keyboard;
 
-    let NOTE = undefined;
-    let t = Infinity;
-    let idx = undefined;
+    let track = undefined;
 
-    switch (key.keyCode) {
-      case KEYCODE.D:
-        idx = 0;
-        break;
-      case KEYCODE.F:
-        idx = 1;
-        break;
-      case KEYCODE.J:
-        idx = 2;
-        break;
-      case KEYCODE.K:
-        idx = 3;
-        break;
+    if (obj.idx != undefined) {
+      track = obj.idx;
+    } else {
+      switch (obj.keyCode) {
+        case KEYCODE.D:
+          track = 0;
+          break;
+        case KEYCODE.F:
+          track = 1;
+          break;
+        case KEYCODE.J:
+          track = 2;
+          break;
+        case KEYCODE.K:
+          track = 3;
+          break;
+      }
     }
 
-    this.notes[idx].getAll("exists", true).forEach(note => {
-      if (note.target_time < t) {
-        t = note.target_time;
-        NOTE = note;
-      }
-    });
+    return track;
+  }
+
+  hit_note(obj) {
+    const TRACK = this.get_track(obj);
+    const NOTE = this.notes[TRACK].get_first_arrived();
 
     if (NOTE) {
       NOTE.set_point(this.timer.ms, this.t_target);
@@ -263,35 +249,11 @@ class Play_Scene extends Phaser.State {
   }
 
   hold_tail(obj) {
-    const KEYCODE = Phaser.Keyboard;
-
-    console.log(obj);
-
-    let idx = undefined;
-
-    if (obj.idx != undefined) {
-      idx = obj.idx;
-    } else {
-      switch (obj.keyCode) {
-        case KEYCODE.D:
-          idx = 0;
-          break;
-        case KEYCODE.F:
-          idx = 1;
-          break;
-        case KEYCODE.J:
-          idx = 2;
-          break;
-        case KEYCODE.K:
-          idx = 3;
-          break;
-      }
-    }
-
-    const TAIL = this.tails[idx].get_first_arrived();
+    const TRACK = this.get_track(obj);
+    const TAIL = this.tails[TRACK].get_first_arrived();
 
     if (TAIL) {
-      TAIL.set_bonus(this.timer.ms, this.t_target, obj, this.vx[idx], this.vy);
+      TAIL.set_bonus(this.timer.ms, this.t_target, obj, this.vx[TRACK], this.vy);
     }
   }
 

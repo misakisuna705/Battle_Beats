@@ -98,6 +98,20 @@ class Notes extends Phaser.Group {
     this.setAll("anchor.x", 0.5);
     this.setAll("anchor.y", 0.5);
   }
+
+  get_first_arrived() {
+    let time = Infinity;
+    let note = undefined;
+
+    this.getAll("exists", true).forEach(child => {
+      if (child.target_time < time) {
+        time = child.target_time;
+        note = child;
+      }
+    });
+
+    return note;
+  }
 }
 
 class Note extends Phaser.Sprite {
