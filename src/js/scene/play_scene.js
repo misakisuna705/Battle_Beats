@@ -114,9 +114,14 @@ class Play_Scene extends Phaser.State {
     }
 
     for (let i = 0; i < BUTTON_CONF_LENGTH; ++i) {
+      //tail
+      TAILS[i].forEach(tail => {
+        tail.events.onKilled.add(this.update_score, this);
+      }, this);
       //note
       NOTES[i].forEach(note => {
-        note.events.onKilled.add(this.update_point, this);
+        //note.events.onKilled.add(this.update_combo, this);
+        note.events.onKilled.add(this.update_score, this);
       }, this);
       //target button
       TARGET_BUTTONS[i].onInputDown.add(this.tap, this, 0, NOTES, TAILS);
@@ -185,6 +190,7 @@ class Play_Scene extends Phaser.State {
         const NOTE = this.notes[BEAT[0]].getFirstExists(false, false, X_INIT, Y_INIT);
 
         if (NOTE) {
+          NOTE.rst();
           NOTE.dispatch(VX, VY, this.sx_final, this.sy_final, T_TARGET, BEAT[1]);
         }
         break;
@@ -193,6 +199,7 @@ class Play_Scene extends Phaser.State {
         const TAIL = this.tails[BEAT[0]].getFirstExists(false, false, X_INIT, Y_INIT);
 
         if (TAIL) {
+          TAIL.rst();
           TAIL.dispatch(VX, VY, T_TARGET, BEAT[1], BEAT[2], -Math.atan((this.x_target[BEAT[0]] - X_INIT) / (this.y_target - Y_INIT)));
         }
         break;
@@ -249,7 +256,27 @@ class Play_Scene extends Phaser.State {
     }
   }
 
-  update_point(note) {
+  update_score(beat) {
+    const GAME = this.game;
+
+    let score = undefined;
+
+    if (beat.point != undefined) {
+      score = beat.point;
+      this.count += this.excellent_score;
+    } else if (beat.bonus != undefined) {
+      score = beat.bonus;
+      this.count += beat.bonus;
+    }
+
+    GAME.total += score;
+    GAME.precision = GAME.total / this.count;
+
+    this.total_score.setText("score: " + GAME.total);
+    this.total_precision.setText("precision: " + (GAME.precision * 100).toFixed(2) + "%");
+  }
+
+  update_combo(note) {
     const GAME = this.game;
 
     switch (note.point) {
@@ -276,23 +303,5 @@ class Play_Scene extends Phaser.State {
       default:
         break;
     }
-
-    GAME.total += note.point;
-    this.count += this.excellent_score;
-    GAME.precision = GAME.total / this.count;
-
-    this.total_score.setText("score: " + GAME.total);
-    this.total_precision.setText("precision: " + (GAME.precision * 100).toFixed(2) + "%");
-  }
-
-  update_bonus(tail) {
-    const GAME = this.game;
-
-    GAME.total += tail.bonus;
-    this.count += tail.bonus;
-    GAME.precision = GAME.total / this.count;
-
-    this.total_score.setText("score: " + GAME.total);
-    this.total_precision.setText("precision: " + (GAME.precision * 100).toFixed(2) + "%");
   }
 }

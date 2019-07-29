@@ -121,8 +121,6 @@ class Note extends Phaser.Sprite {
     this.timer = undefined;
     this.target_time = undefined;
     this.point = 0;
-
-    this.events.onKilled.add(this.rst, this);
   }
 
   rst() {
@@ -215,8 +213,6 @@ class Tail extends Phaser.Sprite {
     this.target_time = undefined;
     this.bonus_timer = undefined;
     this.bonus = 0;
-
-    this.events.onKilled.add(this.rst, this);
   }
 
   rst() {
@@ -295,7 +291,7 @@ class Tail extends Phaser.Sprite {
                 this.scale.y -= DSY;
               }
 
-              this.game.state.getCurrentState().update_bonus(this);
+              this.game.state.getCurrentState().update_score(this);
               break;
 
             case false:
