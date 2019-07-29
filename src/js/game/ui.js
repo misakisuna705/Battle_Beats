@@ -120,7 +120,7 @@ class Note extends Phaser.Sprite {
 
     this.timer = undefined;
     this.target_time = undefined;
-    this.point = 0;
+    this.point = undefined;
   }
 
   rst() {
@@ -212,7 +212,7 @@ class Tail extends Phaser.Sprite {
     this.timer = undefined;
     this.target_time = undefined;
     this.bonus_timer = undefined;
-    this.bonus = 0;
+    this.bonus = undefined;
   }
 
   rst() {
