@@ -117,11 +117,12 @@ class Play_Scene extends Phaser.State {
       //tail
       TAILS[i].forEach(tail => {
         tail.events.onKilled.add(this.update_score, this);
+        tail.events.onKilled.add(this.update_combo, this);
       }, this);
       //note
       NOTES[i].forEach(note => {
-        //note.events.onKilled.add(this.update_combo, this);
         note.events.onKilled.add(this.update_score, this);
+        note.events.onKilled.add(this.update_combo, this);
       }, this);
       //target button
       TARGET_BUTTONS[i].onInputDown.add(this.tap_score, this, 0, NOTES, TAILS);
@@ -302,10 +303,18 @@ class Play_Scene extends Phaser.State {
     this.total_precision.setText("precision: " + (GAME.precision * 100).toFixed(2) + "%");
   }
 
-  update_combo(note) {
+  update_combo(beat) {
     const GAME = this.game;
 
-    switch (note.point) {
+    let score = undefined;
+
+    if (beat.point != undefined) {
+      score = beat.point;
+    } else if (beat.bonus != undefined) {
+      score = beat.bonus * 10;
+    }
+
+    switch (score) {
       case this.excellent_score:
         ++GAME.excellent;
         break;
