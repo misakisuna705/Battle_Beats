@@ -4,6 +4,13 @@ class Play_Scene extends Phaser.State {
     this.game.bgv.addToWorld(0, 0, 0, 0, 1, 1);
     //physic
     this.physics.startSystem(Phaser.Physics.ARCADE);
+    //score
+    this.count = 0;
+    this.excellent_score = 300;
+    this.great_score = 200;
+    this.good_score = 100;
+    this.bad_score = 50;
+    this.miss_score = 0;
   }
 
   create() {
@@ -64,22 +71,25 @@ class Play_Scene extends Phaser.State {
       { game: GAME, x: WIDTH / 16, y: HEIGHT / 16 },
       { text: "time: 0:00", style: { fontSize: 64, fill: "#ffffff" } }
     ));
-    //score
-    this.count = 0;
-    this.excellent_score = 300;
-    this.great_score = 200;
-    this.good_score = 100;
-    this.bad_score = 50;
-    this.miss_score = 0;
     //total score
-    const TOTAL_SCORE = (this.total_score = new Txt(
+    const TOTAL_SCORE = (this.total_score = new Total_Score(
       { game: GAME, x: WIDTH / 2, y: HEIGHT / 16 },
       { text: "score: 0", style: { fontSize: 64, fill: "#ffffff" } }
     ));
     //total precision
-    const TOTAL_PRECISION = (this.total_precision = new Txt(
+    const TOTAL_PRECISION = (this.total_precision = new Total_Precision(
       { game: GAME, x: (WIDTH / 16) * 13, y: HEIGHT / 16 },
-      { text: "precision:100%", style: { fontSize: 64, fill: "#ffffff" } }
+      { text: "precision: 100.00%", style: { fontSize: 64, fill: "#ffffff" } }
+    ));
+    //total combo
+    const TOTAL_COMBO = (this.total_combo = new Total_Combo(
+      { game: GAME, x: WIDTH / 5, y: HEIGHT / 2 },
+      { text: "0", style: { fontSize: 64, fill: "#ffffff" } }
+    ));
+    //accuracy
+    const ACCURACY = (this.accuracy = new Accuracy(
+      { game: GAME, x: (WIDTH / 5) * 4, y: HEIGHT / 2 },
+      { text: "excellent", style: { fontSize: 64, fill: "#ffffff" } }
     ));
     //song
     const BGM = (this.bgm = GAME.sound.add(song_config[GAME.active_song].audio, 1, false));
@@ -98,6 +108,10 @@ class Play_Scene extends Phaser.State {
     ADD.existing(TOTAL_SCORE);
     //total precision
     ADD.existing(TOTAL_PRECISION);
+    //total combo
+    ADD.existing(TOTAL_COMBO);
+    //accuracy
+    ADD.existing(ACCURACY);
 
     //==============================set==============================//
 
@@ -283,9 +297,7 @@ class Play_Scene extends Phaser.State {
     }
   }
 
-  update_score(beat) {
-    const GAME = this.game;
-
+  get_score(beat) {
     let score = undefined;
 
     if (beat.point != undefined) {
@@ -296,47 +308,63 @@ class Play_Scene extends Phaser.State {
       this.count += beat.bonus;
     }
 
-    GAME.total += score;
-    GAME.precision = GAME.total / this.count;
+    return score;
+  }
 
-    this.total_score.setText("score: " + GAME.total);
-    this.total_precision.setText("precision: " + (GAME.precision * 100).toFixed(2) + "%");
+  update_score(beat) {
+    const GAME = this.game;
+    const SCORE = this.get_score(beat);
+
+    this.total_score.render(SCORE);
+    this.total_precision.render(this.count);
   }
 
   update_combo(beat) {
     const GAME = this.game;
+    const SCORE = this.get_score(beat);
 
-    let score = undefined;
+    let accuracy = undefined;
 
-    if (beat.point != undefined) {
-      score = beat.point;
-    } else if (beat.bonus != undefined) {
-      score = beat.bonus * 10;
-    }
-
-    switch (score) {
+    switch (SCORE) {
       case this.excellent_score:
+      case this.excellent_score / 10:
         ++GAME.excellent;
+        ++GAME.combo;
+        accuracy = "Excellent";
         break;
 
       case this.great_score:
+      case this.great_score / 10:
         ++GAME.great;
+        ++GAME.combo;
+        accuracy = "Great";
         break;
 
       case this.good_score:
+      case this.good_score / 10:
         ++GAME.good;
+        ++GAME.combo;
+        accuracy = "Good";
         break;
 
       case this.bad_score:
+      case this.bad_score / 10:
         ++GAME.bad;
+        ++GAME.combo;
+        accuracy = "Bad";
         break;
 
-      case this.miss_score:
+      case this.miss_score / 10:
         ++GAME.miss;
+        GAME.combo = 0;
+        accuracy = "Miss";
         break;
 
       default:
         break;
     }
+
+    this.total_combo.render();
+    this.accuracy.render(accuracy);
   }
 }

@@ -34,6 +34,68 @@ class Total_Timer extends Phaser.Text {
   }
 }
 
+class Total_Score extends Phaser.Text {
+  constructor({ game, x, y }, { text, style }) {
+    super(game, x, y, text, style);
+
+    this.anchor.setTo(0.5, 0.5);
+  }
+
+  render(score) {
+    const GAME = this.game;
+
+    GAME.total += score;
+
+    this.setText("score: " + GAME.total);
+  }
+}
+
+class Total_Precision extends Phaser.Text {
+  constructor({ game, x, y }, { text, style }) {
+    super(game, x, y, text, style);
+
+    this.anchor.setTo(0.5, 0.5);
+  }
+
+  render(count) {
+    const GAME = this.game;
+
+    GAME.precision = GAME.total / count;
+
+    this.setText("precision: " + (GAME.precision * 100).toFixed(2) + "%");
+  }
+}
+
+class Total_Combo extends Phaser.Text {
+  constructor({ game, x, y }, { text, style }) {
+    super(game, x, y, text, style);
+
+    this.tween = game.add.tween(this.scale).to({ x: 1.5, y: 1.5 }, 30, Phaser.Easing.Linear.None);
+
+    this.anchor.setTo(0.5, 0.5);
+  }
+
+  render() {
+    this.setText(this.game.combo);
+    this.tween.yoyo(true).start();
+  }
+}
+
+class Accuracy extends Phaser.Text {
+  constructor({ game, x, y }, { text, style }) {
+    super(game, x, y, text, style);
+
+    this.tween = game.add.tween(this.scale).to({ x: 1.5, y: 1.5 }, 30, Phaser.Easing.Linear.None);
+
+    this.anchor.setTo(0.5, 0.5);
+  }
+
+  render(str) {
+    this.setText(str);
+    this.tween.yoyo(true).start();
+  }
+}
+
 class Msk extends Phaser.Graphics {
   constructor({ game, x, y }) {
     super(game, x, y);
