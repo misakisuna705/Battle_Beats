@@ -124,9 +124,9 @@ class Play_Scene extends Phaser.State {
         note.events.onKilled.add(this.update_score, this);
       }, this);
       //target button
-      TARGET_BUTTONS[i].onInputDown.add(this.tap, this, 0, NOTES, TAILS);
+      TARGET_BUTTONS[i].onInputDown.add(this.tap_score, this, 0, NOTES, TAILS);
       //target keys
-      TARGET_KEYS[i].onDown.add(this.tap, this, 0, NOTES, TAILS);
+      TARGET_KEYS[i].onDown.add(this.tap_score, this, 0, NOTES, TAILS);
     }
     //total timer
     TIMER.loop(
@@ -236,23 +236,49 @@ class Play_Scene extends Phaser.State {
     return track;
   }
 
-  tap(device, notes, tails) {
+  tap_score(device, notes, tails) {
     const TRACK = this.get_track(device);
     const NOTE = this.notes[TRACK].get_first_arrived();
     const TAIL = this.tails[TRACK].get_first_arrived();
 
+    let beat = undefined;
+
     if (NOTE && TAIL) {
       if (NOTE.target_time > TAIL.target_time) {
-        NOTE.set_point(this.timer.ms, this.t_target);
-      } else if (NOTE.target_time < TAIL.target_time) {
-        TAIL.set_bonus(this.timer.ms, this.t_target, device, this.vx[TRACK], this.vy);
+        beat = NOTE;
       } else {
+        beat = TAIL;
       }
     } else if (NOTE) {
-      NOTE.set_point(this.timer.ms, this.t_target);
+      beat = NOTE;
     } else if (TAIL) {
-      TAIL.set_bonus(this.timer.ms, this.t_target, device, this.vx[TRACK], this.vy);
+      beat = TAIL;
     } else {
+    }
+
+    if (beat != undefined) {
+      const GAP = Math.abs(this.timer.ms - this.t_target - beat.target_time);
+
+      let score = undefined;
+
+      if (GAP < 300) {
+        if (GAP < 30) {
+          score = this.excellent_score;
+        } else if (GAP < 150) {
+          score = this.great_score;
+        } else if (GAP < 270) {
+          score = this.good_score;
+        } else {
+          score = this.bad_score;
+        }
+
+        if (beat === NOTE) {
+          beat.set_point(score);
+        } else if (beat === TAIL) {
+          beat.set_bonus(device, this.vx[TRACK], this.vy, score / 10);
+        } else {
+        }
+      }
     }
   }
 
@@ -266,7 +292,7 @@ class Play_Scene extends Phaser.State {
       this.count += this.excellent_score;
     } else if (beat.bonus != undefined) {
       score = beat.bonus;
-      this.count += this.excellent_score / 10;
+      this.count += beat.bonus;
     }
 
     GAME.total += score;

@@ -152,24 +152,9 @@ class Note extends Phaser.Sprite {
     TIMER.start();
   }
 
-  set_point(time, t_target) {
-    const GAP = Math.abs(time - t_target - this.target_time);
-
-    if (GAP < 300) {
-      if (GAP < 30) {
-        this.point = 300;
-      } else if (GAP < 150) {
-        this.point = 200;
-      } else if (GAP < 270) {
-        this.point = 100;
-      } else {
-        this.point = 50;
-      }
-
-      this.kill();
-    } else {
-      this.point = 0;
-    }
+  set_point(score) {
+    this.point = score;
+    this.kill();
   }
 }
 
@@ -250,68 +235,56 @@ class Tail extends Phaser.Sprite {
     TIMER.start();
   }
 
-  set_bonus(time, t_target, device, vx, vy) {
-    const GAP = Math.abs(time - t_target - this.target_time);
+  set_bonus(device, vx, vy, score) {
+    this.bonus = score;
 
-    if (GAP < 300) {
-      if (GAP < 30) {
-        this.bonus = 300 / 10;
-      } else if (GAP < 150) {
-        this.bonus = 200 / 10;
-      } else if (GAP < 270) {
-        this.bonus = 100 / 10;
-      } else {
-        this.bonus = 50 / 10;
-      }
+    const DSY = this.scale.y / (this.bonus_time / 50);
+    this.scale.y -= DSY;
 
-      const DSY = this.scale.y / (this.bonus_time / 50);
-      this.scale.y -= DSY;
+    this.bonus_timer = this.game.time.create();
 
-      this.bonus_timer = this.game.time.create();
+    this.bonus_timer.repeat(
+      50,
+      this.bonus_time / 50,
+      () => {
+        let isDown = undefined;
 
-      this.bonus_timer.repeat(
-        50,
-        this.bonus_time / 50,
-        () => {
-          let isDown = undefined;
+        if (device.input != undefined) {
+          isDown = device.input.pointerDown();
+        } else {
+          isDown = device.isDown;
+        }
 
-          if (device.input != undefined) {
-            isDown = device.input.pointerDown();
-          } else {
-            isDown = device.isDown;
-          }
+        switch (isDown === true) {
+          case true:
+            this.body.velocity.setTo(0, 0);
 
-          switch (isDown === true) {
-            case true:
-              this.body.velocity.setTo(0, 0);
+            if (this.scale.y < 0) {
+              this.scale.y = 0;
+            } else {
+              this.scale.y -= DSY;
+            }
 
-              if (this.scale.y < 0) {
-                this.scale.y = 0;
-              } else {
-                this.scale.y -= DSY;
-              }
+            this.game.state.getCurrentState().update_score(this);
+            break;
 
-              this.game.state.getCurrentState().update_score(this);
-              break;
+          case false:
+            this.bonus = 0;
 
-            case false:
-              this.body.velocity.setTo(vx, vy);
-              break;
+            this.body.velocity.setTo(vx, vy);
+            break;
 
-            default:
-              break;
-          }
-        },
-        this
-      );
+          default:
+            break;
+        }
+      },
+      this
+    );
 
-      this.bonus_timer.onComplete.add(() => {
-        this.kill();
-      });
+    this.bonus_timer.onComplete.add(() => {
+      this.kill();
+    });
 
-      this.bonus_timer.start();
-    } else {
-      this.bonus = 0;
-    }
+    this.bonus_timer.start();
   }
 }
