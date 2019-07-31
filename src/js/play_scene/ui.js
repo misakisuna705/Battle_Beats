@@ -34,40 +34,6 @@ class Score extends Phaser.Image {
     }
   }
 
-  score_upload() {
-    let song = song_config[this.game.active_song].info.Title;
-
-    let level;
-
-    switch (this.game.active_level) {
-      case 0:
-        level = "easy";
-        break;
-
-      case 1:
-        level = "normal";
-        break;
-
-      case 2:
-        level = "hard";
-        break;
-    }
-
-    console.log(song);
-    console.log(level);
-    console.log(this.total_score);
-
-    leader_board
-      .push_score(song, level, this.total_score)
-      .then(() => {
-        this.score_show();
-      })
-      .catch(e => {
-        console.log(e);
-        this.score_show();
-      });
-  }
-
   score_show() {
     this.visible = true;
 

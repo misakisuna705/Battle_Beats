@@ -20,7 +20,8 @@ const game_config = {
     song_scene: "Song_Scene",
     level_scene: "Level_Scene",
     game_start: "game_start",
-    play_scene: "Play_Scene"
+    play_scene: "Play_Scene",
+    score_scene: "Score_Scene"
   },
 
   loader: {

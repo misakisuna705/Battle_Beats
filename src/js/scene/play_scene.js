@@ -161,17 +161,14 @@ class Play_Scene extends Phaser.State {
     );
     //timer
     TIMER.start();
-
     //song
-    //BGM.onStop.add(() => {
-    //this.score.score_upload();
-    //}, this);
+    BGM.onStop.add(() => {
+      this.upload_score();
+    }, this);
 
     //for (let i = 0; i < 4; i++) {
     //this.target_buttons[i].presskey.onUp.add(this.resetButton, this, 0, i);
     //}
-
-    //this.score = new Score({ game: GAME, x: 240, y: 240, key: "score_board" });
 
     //this.senia = new HERO(120, 120, 80, 180, GAME, this, hero_config[0], Phaser.Keyboard.D, false);
     //this.seti = new HERO(120, 120, 80, 280, GAME, this, hero_config[1], Phaser.Keyboard.F, false);
@@ -236,12 +233,15 @@ class Play_Scene extends Phaser.State {
         case KEYCODE.D:
           track = 0;
           break;
+
         case KEYCODE.F:
           track = 1;
           break;
+
         case KEYCODE.J:
           track = 2;
           break;
+
         case KEYCODE.K:
           track = 3;
           break;
@@ -366,5 +366,27 @@ class Play_Scene extends Phaser.State {
 
     this.total_combo.render();
     this.accuracy.render(accuracy);
+  }
+
+  upload_score() {
+    const USER = firebase.auth().currentUser.email.split("@")[0];
+    const DAT = [];
+
+    DAT[USER] = GAME.total;
+
+    firebase
+      .database()
+      .ref("/leaderboard/" + song_config[GAME.active_song].title + "/" + GAME.active_level + "/")
+      .update(DAT[USER])
+      .then(() => {
+        this.exit_scene();
+      })
+      .catch(error => {
+        alert(error);
+      });
+  }
+
+  exit_scene() {
+    GAME.state.start(game_config.scene.score_scene);
   }
 }

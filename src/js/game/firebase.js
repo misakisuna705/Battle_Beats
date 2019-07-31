@@ -33,19 +33,13 @@
 var database = firebase.database();
 
 const leader_board = {
-  //push your score into leaderboard,and this function will return a promise function
-  push_score: function(song, mode, score) {
-    //let username = firebase.auth().currentUser.email;
-    //username = username.split("@")[0];
-    //let updates = {};
-    //updates["/leaderboard/" + song + "/" + mode + "/" + username] = Number(score);
-    //return database.ref().update(updates);
-    let username = firebase.auth().currentUser.email;
-    username = username.split("@")[0];
-    let updates = {};
-    updates[username] = score;
-    return database.ref("/leaderboard/" + song + "/" + mode + "/").update(updates);
-  },
+  //push_score: function(song, mode, score) {
+  //let username = firebase.auth().currentUser.email;
+  //username = username.split("@")[0];
+  //let updates = {};
+  //updates[username] = score;
+  //return database.ref("/leaderboard/" + song + "/" + mode + "/").update(updates);
+  //},
 
   //get current user's score by song name and mode,and this function will return a promise function
   get_my_score: function(song, mode) {
