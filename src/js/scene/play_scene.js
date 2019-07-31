@@ -319,8 +319,6 @@ class Play_Scene extends Phaser.State {
 
     this.total_score.render(SCORE);
     this.total_precision.render(this.count);
-
-    console.log(GAME.total + " " + this.count);
   }
 
   update_combo(beat) {
