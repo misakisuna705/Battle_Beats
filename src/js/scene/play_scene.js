@@ -12,6 +12,8 @@ class Play_Scene extends Phaser.State {
     this.bad_score = 50;
     this.miss_score = 0;
     this.combo = 0;
+
+    this.exit_scene();
   }
 
   create() {
