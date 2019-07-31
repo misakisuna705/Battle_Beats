@@ -11,6 +11,7 @@ class Play_Scene extends Phaser.State {
     this.good_score = 100;
     this.bad_score = 50;
     this.miss_score = 0;
+    this.score = 0;
     this.combo = 0;
   }
 
@@ -314,19 +315,20 @@ class Play_Scene extends Phaser.State {
 
   update_score(beat) {
     const GAME = this.game;
-    const SCORE = this.get_score(beat);
+    const SCORE = (this.score = this.get_score(beat));
 
     this.total_score.render(SCORE);
     this.total_precision.render(this.count);
+
+    console.log(GAME.total + " " + this.count);
   }
 
   update_combo(beat) {
     const GAME = this.game;
-    const SCORE = this.get_score(beat);
 
     let accuracy = undefined;
 
-    switch (SCORE) {
+    switch (this.score) {
       case this.excellent_score:
       case this.excellent_score / 10:
         ++GAME.excellent;

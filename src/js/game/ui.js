@@ -103,8 +103,6 @@ class Accuracy extends Phaser.Text {
 class Grade extends Phaser.Text {
   constructor({ game, x, y }, { text, style }) {
     super(game, x, y, text, style);
-
-    this.anchor.setTo(0.5, 0.5);
   }
 
   render() {}
