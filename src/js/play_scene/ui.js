@@ -4,13 +4,6 @@ class Score extends Phaser.Image {
 
     this.boss_controller = new Boss({ game: this.game, x: boss_config.Px, y: boss_config.Py, key: boss_config.key });
     this.boss_controller.start();
-
-    this.hit_info = [];
-    this.overall_info = [];
-    for (let i = 0; i < 5; ++i) {
-      this.hit_info[i] = new Article({ game: GAME, x: this.x - 180, y: this.y - 80 + 40 * i }, scoreboard_config.hit_info[i]);
-      this.overall_info[i] = new Article({ game: GAME, x: this.x - 20, y: this.y - 80 + 40 * i }, scoreboard_config.overall_info[i]);
-    }
   }
 
   point_upgrade(point) {
@@ -32,47 +25,6 @@ class Score extends Phaser.Image {
       case 0:
         break;
     }
-  }
-
-  score_show() {
-    this.visible = true;
-
-    for (let i = 0; i < 5; ++i) {
-      switch (i) {
-        case 0:
-          this.hit_info[i].setText("excellent: " + this.excellent);
-          this.overall_info[i].setText("combo: " + this.combo);
-          break;
-
-        case 1:
-          this.hit_info[i].setText("great: " + this.great);
-          this.overall_info[i].setText("score: " + this.total_score);
-          break;
-
-        case 2:
-          this.hit_info[i].setText("good: " + this.good);
-          this.overall_info[i].setText("precision: " + (this.precision * 100).toFixed(2) + "%");
-          break;
-
-        case 3:
-          this.hit_info[i].setText("bad: " + this.bad);
-          this.overall_info[i].setText("rank: ");
-          break;
-
-        default:
-          this.hit_info[i].setText("miss: " + this.miss);
-          this.overall_info[i].setText("result: ");
-          break;
-      }
-
-      this.hit_info[i].visible = true;
-      this.overall_info[i].visible = true;
-    }
-
-    this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(() => {
-      this.game.bgm.play();
-      this.game.state.start("Main_Scene");
-    }, this);
   }
 }
 
