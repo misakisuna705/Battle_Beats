@@ -79,9 +79,9 @@ class Game_Load extends Phaser.State {
     //level_scene
     LOAD.image("level_button", "assets/level_scene/level_button.png");
     //game start
-    LOAD.video("only_my_railgun.mp4", "assets/game_start/only_my_railgun.mp4");
+    //LOAD.video("only_my_railgun.mp4", "assets/game_start/only_my_railgun.mp4");
     //play scene
-    LOAD.image("bg_back.png", "assets/play_scene/bg/bg_back.png");
+    //LOAD.image("bg_back.png", "assets/play_scene/bg/bg_back.png");
     //LOAD.image("bg_front", "assets/play_scene/bg/bg_front.png");
     //LOAD.image("bg_middle", "assets/play_scene/bg/bg_middle.png");
 
@@ -90,14 +90,14 @@ class Game_Load extends Phaser.State {
     LOAD.image("note", "assets/play_scene/note.png");
     LOAD.image("tail", "assets/play_scene/tail.png");
 
-    LOAD.image("excellent", "assets/play_scene/precision/excellent.png");
-    LOAD.image("great", "assets/play_scene/precision/great.png");
-    LOAD.image("good", "assets/play_scene/precision/good.png");
-    LOAD.image("bad", "assets/play_scene/precision/bad.png");
-    LOAD.image("miss", "assets/play_scene/precision/miss.png");
-    LOAD.spritesheet("number", "assets/play_scene/combo/number.png", 74, 81);
+    //LOAD.image("excellent", "assets/play_scene/precision/excellent.png");
+    //LOAD.image("great", "assets/play_scene/precision/great.png");
+    //LOAD.image("good", "assets/play_scene/precision/good.png");
+    //LOAD.image("bad", "assets/play_scene/precision/bad.png");
+    //LOAD.image("miss", "assets/play_scene/precision/miss.png");
+    //LOAD.spritesheet("number", "assets/play_scene/combo/number.png", 74, 81);
 
-    LOAD.image("score_board", "assets/play_scene/score/score_board.png");
+    LOAD.image("score_board.png", "assets/play_scene/score_board.png");
   }
 
   create() {

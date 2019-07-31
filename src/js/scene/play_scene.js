@@ -11,6 +11,7 @@ class Play_Scene extends Phaser.State {
     this.good_score = 100;
     this.bad_score = 50;
     this.miss_score = 0;
+    this.combo = 0;
   }
 
   create() {
@@ -329,34 +330,34 @@ class Play_Scene extends Phaser.State {
       case this.excellent_score:
       case this.excellent_score / 10:
         ++GAME.excellent;
-        ++GAME.combo;
+        ++this.combo;
         accuracy = "Excellent";
         break;
 
       case this.great_score:
       case this.great_score / 10:
         ++GAME.great;
-        ++GAME.combo;
+        ++this.combo;
         accuracy = "Great";
         break;
 
       case this.good_score:
       case this.good_score / 10:
         ++GAME.good;
-        ++GAME.combo;
+        ++this.combo;
         accuracy = "Good";
         break;
 
       case this.bad_score:
       case this.bad_score / 10:
         ++GAME.bad;
-        ++GAME.combo;
+        ++this.combo;
         accuracy = "Bad";
         break;
 
       case this.miss_score / 10:
         ++GAME.miss;
-        GAME.combo = 0;
+        this.combo = 0;
         accuracy = "Miss";
         break;
 
@@ -364,20 +365,21 @@ class Play_Scene extends Phaser.State {
         break;
     }
 
-    this.total_combo.render();
+    this.total_combo.render(this.combo);
     this.accuracy.render(accuracy);
   }
 
   upload_score() {
+    const GAME = this.game;
     const USER = firebase.auth().currentUser.email.split("@")[0];
-    const DAT = [];
+    const DAT = {};
 
     DAT[USER] = GAME.total;
 
     firebase
       .database()
       .ref("/leaderboard/" + song_config[GAME.active_song].title + "/" + GAME.active_level + "/")
-      .update(DAT[USER])
+      .update(DAT)
       .then(() => {
         this.exit_scene();
       })
@@ -387,6 +389,6 @@ class Play_Scene extends Phaser.State {
   }
 
   exit_scene() {
-    GAME.state.start(game_config.scene.score_scene);
+    this.game.state.start(game_config.scene.score_scene);
   }
 }

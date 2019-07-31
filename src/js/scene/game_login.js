@@ -36,9 +36,9 @@ class Game_Login extends Phaser.State {
     ENTER_KEY.onDown.add(this.login, this);
     //auth
     firebase.auth().onAuthStateChanged(user => {
-      //if (user) {
-      GAME.state.start(game_config.scene.main_scene);
-      //}
+      if (user) {
+        GAME.state.start(game_config.scene.main_scene);
+      }
     });
   }
 

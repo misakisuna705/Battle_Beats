@@ -75,9 +75,13 @@ class Total_Combo extends Phaser.Text {
     this.anchor.setTo(0.5, 0.5);
   }
 
-  render() {
-    this.setText(this.game.combo);
+  render(combo) {
+    this.setText(combo);
     this.tween.yoyo(true).start();
+
+    if (combo > this.game.combo) {
+      this.game.combo = combo;
+    }
   }
 }
 
@@ -94,6 +98,14 @@ class Accuracy extends Phaser.Text {
     this.setText(str);
     this.tween.yoyo(true).start();
   }
+}
+
+class Grade extends Phaser.Text {
+  constructor({ game, x, y }, { text, style }) {
+    super(game, x, y, text, style);
+  }
+
+  render() {}
 }
 
 class Msk extends Phaser.Graphics {
