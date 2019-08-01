@@ -27,7 +27,10 @@ class Level_Scene extends Phaser.State {
     for (let i = 0; i < LEVEL_BUTTONS_LENGTH; ++i) {
       LEVEL_BUTTONS[i] = new Button({ game: GAME, x: (WIDTH / 4) * 3, y: (HEIGHT / 8) * (i + 1), idx: i }, LEVEL_BUTTONS_CONF[i]);
     }
-    const TITLE = (this.title = new Article({ game: GAME, x: WIDTH / 8, y: HEIGHT / 4 }, { text: "天梯", style: { fontSize: 64, fill: "#008cff" } }));
+    //rank title
+    const RANK_TITLE = (this.rank_title = new Phaser.Text(GAME, WIDTH / 8, (HEIGHT / 16) * 3, "排行", { fontSize: 64, fill: "#008cff" }));
+    //grade title
+    const GRADE_TITLE = (this.grade_title = new Phaser.Text(GAME, WIDTH / 8, (HEIGHT / 16) * 11, "個人", { fontSize: 64, fill: "#008cff" }));
     //enter key
     const ENTER_KEY = (this.enter_key = KEYBOARD.addKey(KEYCODE.ENTER));
     //esc key
@@ -50,13 +53,14 @@ class Level_Scene extends Phaser.State {
       ADD.existing(LEVEL_BUTTONS[i]);
       ADD.existing(LEVEL_BUTTONS[i].txt);
     }
-    //title
-    ADD.existing(TITLE);
+    //rank title
+    ADD.existing(RANK_TITLE);
+    //grade title
+    ADD.existing(GRADE_TITLE);
 
     //==============================set==============================//
 
     LEVEL_BUTTONS[GAME.active_level].txt.setStyle(button_config.active_style);
-    TITLE.visible = true;
 
     //==============================call==============================//
 
@@ -78,11 +82,13 @@ class Level_Scene extends Phaser.State {
     DOWN_KEY.onDown.add(this.tour_level, this);
 
     //==============================rank==============================//
+    //==============================grade==============================//
 
     const RANKS = (this.ranks = []);
+    const GRADE = (this.grade = []);
 
     for (let i = 0; i < LEVEL_BUTTONS_LENGTH; ++i) {
-      this.get_ranks(i).then(snapshot => {
+      this.download_ranks(i).then(snapshot => {
         let arr = [];
 
         snapshot.forEach(shot => {
@@ -98,7 +104,7 @@ class Level_Scene extends Phaser.State {
         RANKS[i] = [];
         for (let j = 0; j < LENGTH; ++j) {
           RANKS[i][j] = new Article(
-            { game: GAME, x: WIDTH / 8, y: (HEIGHT / 8) * (j + 3) },
+            { game: GAME, x: WIDTH / 8, y: (HEIGHT / 16) * (j + 5) },
             { text: arr[j].key + ": " + arr[j].val(), style: { fontSize: 64, fill: "#008cff" } }
           );
 
@@ -113,6 +119,27 @@ class Level_Scene extends Phaser.State {
           }
         }
       });
+
+      this.download_grade(i).then(snapshot => {
+        //==============================new==============================//
+
+        if (snapshot) {
+          GRADE[i] = new Article(
+            { game: GAME, x: WIDTH / 8, y: (HEIGHT / 16) * 13 },
+            { text: snapshot.val(), style: { fontSize: 64, fill: "#008cff" } }
+          );
+        }
+
+        //==============================add==============================//
+
+        ADD.existing(GRADE[i]);
+
+        //==============================set==============================//
+
+        if (i == 0) {
+          GRADE[i].visible = true;
+        }
+      });
     }
   }
 
@@ -122,35 +149,43 @@ class Level_Scene extends Phaser.State {
 
     //this.camera.fade(0x000000, 1000, false);
 
-    ACTIVE.fadeOut(1000);
-    ACTIVE.onFadeComplete.add(() => {
-      //GAME.state.start("Game_Start");
-      GAME.state.start(game_config.scene.play_scene);
-    }, this);
+    //ACTIVE.fadeOut(1000);
+    //ACTIVE.onFadeComplete.add(() => {
+    //GAME.state.start("Game_Start");
+    ACTIVE.stop();
+    this.game.state.start(game_config.scene.play_scene);
+    //}, this);
   }
 
   exit_scene() {
-    this.game.state.start("Song_Scene");
+    this.game.state.start(game_config.scene.song_scene);
   }
 
   select_level(btn) {
     const GAME = this.game;
     const LEVEL_BUTTONS = this.level_buttons;
     const RANKS = this.ranks;
+    const GRADE = this.grade;
 
+    //level button
     LEVEL_BUTTONS[GAME.active_level].txt.setStyle(button_config.normal_style);
-
+    //rank
     for (let i = 0; i < RANKS[GAME.active_level].length; ++i) {
       RANKS[GAME.active_level][i].visible = false;
     }
+    //grade
+    GRADE[GAME.active_level].visible = false;
 
     GAME.active_level = btn.idx;
 
+    //level button
     LEVEL_BUTTONS[GAME.active_level].txt.setStyle(button_config.active_style);
-
+    //rank
     for (let i = 0; i < RANKS[GAME.active_level].length; ++i) {
       RANKS[GAME.active_level][i].visible = true;
     }
+    //grade
+    GRADE[GAME.active_level].visible = true;
   }
 
   tour_level(key) {
@@ -159,12 +194,16 @@ class Level_Scene extends Phaser.State {
     const LEVEL_BUTTONS = this.level_buttons;
     const LENGTH = LEVEL_BUTTONS.length;
     const RANKS = this.ranks;
+    const GRADE = this.grade;
 
+    //level button
     LEVEL_BUTTONS[GAME.active_level].txt.setStyle(button_config.normal_style);
-
+    //rank
     for (let i = 0; i < RANKS[GAME.active_level].length; ++i) {
       RANKS[GAME.active_level][i].visible = false;
     }
+    //grade
+    GRADE[GAME.active_level].visible = false;
 
     switch (key.keyCode) {
       case KEYCODE.UP:
@@ -179,14 +218,17 @@ class Level_Scene extends Phaser.State {
         break;
     }
 
+    //level button
     LEVEL_BUTTONS[GAME.active_level].txt.setStyle(button_config.active_style);
-
+    //rank
     for (let i = 0; i < RANKS[GAME.active_level].length; ++i) {
       RANKS[GAME.active_level][i].visible = true;
     }
+    //grade
+    GRADE[GAME.active_level].visible = true;
   }
 
-  get_ranks(level) {
+  download_ranks(level) {
     const GAME = this.game;
     const DB = firebase.database();
 
@@ -215,5 +257,12 @@ class Level_Scene extends Phaser.State {
       default:
         break;
     }
+  }
+
+  download_grade(level) {
+    const GAME = this.game;
+    const USER = firebase.auth().currentUser.email.split("@")[0];
+
+    return database.ref("/leaderboard/" + song_config[GAME.active_song].title + "/" + level + "/" + USER).once("value");
   }
 }
